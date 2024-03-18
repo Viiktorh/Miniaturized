@@ -73,8 +73,38 @@ public:
 
 	UCameraComponent* GetPrimaryCameraComponent() const;
 
+	/*Health*/
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Health")
+	float Health;
+
+	/*Respawn*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Respawn")
+	FVector RespawnLocation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Respawn")
+	float RespawnDelay;
+
+
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	/*Health and respawn*/
+
+	UFUNCTION(BlueprintCallable)
+	void TakeDamage(float DamageDealt);
+
+	UFUNCTION(BlueprintCallable)
+	void Heal(float HealingRestored);
+
+	UFUNCTION(BlueprintCallable)
+	void Die();
+
+	UFUNCTION(BlueprintCallable)
+	void Respawn();
+
+	FTimerHandle RespawnTimerHandle;
 
 };

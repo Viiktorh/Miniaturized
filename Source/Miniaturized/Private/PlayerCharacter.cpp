@@ -34,6 +34,11 @@ APlayerCharacter::APlayerCharacter()
 
 	/*Skeletal Mesh Component*/
 	PlayerCharacterMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharMesh"));
+
+	/*Health*/
+	Health = 1.0f;
+	RespawnLocation = FVector(0.0f, 0.0f, 0.0f);
+	RespawnDelay = 5.0f;
 }
 
 void APlayerCharacter::Move(const FInputActionValue& Value)
@@ -93,6 +98,41 @@ void APlayerCharacter::BeginPlay()
 			Subsystem->AddMappingContext(IMC, 0);
 		}
 	}
+
+	/*Respawn. Location resets */
+	RespawnLocation = GetActorLocation();
+}
+
+/*float decided in blueprint*/
+void APlayerCharacter::TakeDamage(float DamageDealt)
+{
+	Health -= DamageDealt;
+	if (Health <= 0.0f) {
+		Die();
+	}
+}
+
+/*float decided in blueprint*/
+void APlayerCharacter::Heal(float HealingRestored)
+{
+	Health += HealingRestored;
+	if (Health >= 1.0f) {
+		Health = 1.0f;
+	}
+}
+
+/*calls respawn function with delay so the animation can be played later*/
+void APlayerCharacter::Die()
+{
+	GetWorld()->GetTimerManager().SetTimer(RespawnTimerHandle, this, &APlayerCharacter::Respawn, RespawnDelay, false);
+}
+
+/*resets health, location and timer */
+void APlayerCharacter::Respawn()
+{
+	Health = 1.0f;
+	SetActorLocation(RespawnLocation);
+	GetWorldTimerManager().ClearTimer(RespawnTimerHandle);
 }
 
 // Called every frame
