@@ -8,6 +8,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
+#include "GameFramework/SpringArmComponent.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -15,10 +16,22 @@ APlayerCharacter::APlayerCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	// Rotate the character with the camera left/right rotation.
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationYaw = true;
+	bUseControllerRotationRoll = false;
+
+	/*Spring Arm Component*/
+	// Create a camera boom (pulls in towards the player if there is a collision)
+	CameraSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
+	CameraSpringArm->SetupAttachment(RootComponent);
+	CameraSpringArm->TargetArmLength = 600.0f; // The camera follows at this distance behind the character	
+	CameraSpringArm->bUsePawnControlRotation = true; // Rotate the arm based on the controller
+
 	/*Camera Component*/
 	PrimaryCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
-	PrimaryCameraComponent->SetupAttachment(GetCapsuleComponent());
-	PrimaryCameraComponent->bUsePawnControlRotation = true;
+	PrimaryCameraComponent->SetupAttachment(CameraSpringArm, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
+	PrimaryCameraComponent->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
 	/*Skeletal Mesh Component*/
 	PlayerCharacterMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharMesh"));
@@ -26,7 +39,7 @@ APlayerCharacter::APlayerCharacter()
 
 void APlayerCharacter::Move(const FInputActionValue& Value)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Emerald, TEXT("Triggering the move Function"));
+	GEngine->AddOnScreenDebugMessage(-1, 0.2f, FColor::Emerald, TEXT("Triggering the move Function"));
 
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
@@ -44,7 +57,7 @@ void APlayerCharacter::LookAround(const FInputActionValue& Value)
 	if (Controller != nullptr)
 	{
 		AddControllerYawInput(LookAroundVector.X);
-		AddControllerPitchInput((LookAroundVector.Y));
+		AddControllerPitchInput(LookAroundVector.Y);
 	}
 }
 

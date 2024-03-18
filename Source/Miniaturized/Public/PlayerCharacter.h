@@ -7,6 +7,7 @@
 #include "GameFramework/Character.h"
 #include "PlayerCharacter.generated.h"
 
+class USpringArmComponent;
 struct FInputActionValue;
 class UCameraComponent;
 class UInputAction;
@@ -34,6 +35,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UCameraComponent* PrimaryCameraComponent;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	USpringArmComponent* CameraSpringArm;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USkeletalMeshComponent* PlayerCharacterMesh;
 
@@ -55,6 +59,8 @@ public:
 	void Move(const FInputActionValue& Value);
 
 	void LookAround(const FInputActionValue& Value);
+
+	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraSpringArm; }
 
 	/*
 	* Weapon
