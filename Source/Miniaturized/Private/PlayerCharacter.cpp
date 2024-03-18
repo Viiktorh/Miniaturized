@@ -8,7 +8,6 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
-#include "GameFramework/SpringArmComponent.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -30,8 +29,8 @@ APlayerCharacter::APlayerCharacter()
 
 	/*Camera Component*/
 	PrimaryCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
-	PrimaryCameraComponent->SetupAttachment(CameraSpringArm, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
-	PrimaryCameraComponent->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+	PrimaryCameraComponent->SetupAttachment(GetCapsuleComponent());
+	PrimaryCameraComponent->bUsePawnControlRotation = true;
 
 	/*Skeletal Mesh Component*/
 	PlayerCharacterMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharMesh"));
@@ -39,7 +38,7 @@ APlayerCharacter::APlayerCharacter()
 
 void APlayerCharacter::Move(const FInputActionValue& Value)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 0.2f, FColor::Emerald, TEXT("Triggering the move Function"));
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Emerald, TEXT("Triggering the move Function"));
 
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
@@ -57,7 +56,7 @@ void APlayerCharacter::LookAround(const FInputActionValue& Value)
 	if (Controller != nullptr)
 	{
 		AddControllerYawInput(LookAroundVector.X);
-		AddControllerPitchInput(LookAroundVector.Y);
+		AddControllerPitchInput((LookAroundVector.Y));
 	}
 }
 
