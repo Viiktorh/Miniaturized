@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "EnhancedInputSubsystemInterface.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "PlayerCharacter.generated.h"
 
 struct FInputActionValue;
@@ -33,6 +34,9 @@ public:
 	*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UCameraComponent* PrimaryCameraComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	USpringArmComponent* CameraSpringArm;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USkeletalMeshComponent* PlayerCharacterMesh;
