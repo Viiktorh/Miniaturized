@@ -73,6 +73,15 @@ public:
 
 	UCameraComponent* GetPrimaryCameraComponent() const;
 
+	/*Ammo*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	float CurrentAmmo;
+	float Min_Ammo;
+	float Max_Ammo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	float BatteryChargeDelay;
+
 	/*Health*/
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Health")
@@ -106,5 +115,14 @@ protected:
 	void Respawn();
 
 	FTimerHandle RespawnTimerHandle;
+
+	/*Ammo and shooting*/
+	UFUNCTION(BlueprintCallable)
+	void GetAmmo(float CollectedAmmo);
+
+	UFUNCTION(BlueprintCallable)
+	void LoosingCharge();
+
+	FTimerHandle BatteryChargeHandle;
 
 };

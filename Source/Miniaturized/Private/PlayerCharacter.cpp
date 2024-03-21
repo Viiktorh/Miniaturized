@@ -27,6 +27,13 @@ APlayerCharacter::APlayerCharacter()
 	Health = 1.0f;
 	RespawnLocation = FVector(0.0f, 0.0f, 0.0f);
 	RespawnDelay = 5.0f;
+
+	/*Weapon and ammo*/
+	CurrentAmmo=0.0f;
+	Min_Ammo=0.0f;
+	Max_Ammo=3.0f;
+	BatteryChargeDelay = 30.0f;
+
 }
 
 void APlayerCharacter::Move(const FInputActionValue& Value)
@@ -121,6 +128,29 @@ void APlayerCharacter::Respawn()
 	Health = 1.0f;
 	SetActorLocation(RespawnLocation);
 	GetWorldTimerManager().ClearTimer(RespawnTimerHandle);
+}
+
+void APlayerCharacter::GetAmmo(float CollectedAmmo)
+{
+	CurrentAmmo += CollectedAmmo;
+	if (CurrentAmmo >= Max_Ammo) {
+		CurrentAmmo = 3.0f;
+	}
+	GetWorld()->GetTimerManager().SetTimer(BatteryChargeHandle, this, &APlayerCharacter::LoosingCharge, BatteryChargeDelay, false);
+
+}
+
+void APlayerCharacter::LoosingCharge()
+{
+	if (CurrentAmmo > Min_Ammo) {
+		CurrentAmmo -= 0.3f;
+	}
+	
+	else {
+		CurrentAmmo = 0.0f;
+		GetWorldTimerManager().ClearTimer(BatteryChargeHandle);
+	}
+	
 }
 
 // Called every frame
