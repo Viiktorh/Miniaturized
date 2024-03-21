@@ -29,7 +29,7 @@ APlayerCharacter::APlayerCharacter()
 
 	/*Camera Component*/
 	PrimaryCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
-	PrimaryCameraComponent->SetupAttachment(GetCapsuleComponent());
+	PrimaryCameraComponent->AttachToComponent(CameraSpringArm, FAttachmentTransformRules::KeepRelativeTransform);
 	PrimaryCameraComponent->bUsePawnControlRotation = true;
 
 	/*Skeletal Mesh Component*/
