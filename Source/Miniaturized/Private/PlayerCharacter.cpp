@@ -65,6 +65,7 @@ void APlayerCharacter::LookAround(const FInputActionValue& Value)
 	}
 }
 
+
 void APlayerCharacter::SetHasWeapon(bool bHasNewWeapon)
 {
 	bHasWeapon = bHasNewWeapon;
@@ -139,6 +140,8 @@ void APlayerCharacter::Respawn()
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+
 
 }
 
