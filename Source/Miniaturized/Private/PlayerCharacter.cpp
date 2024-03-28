@@ -32,7 +32,7 @@ APlayerCharacter::APlayerCharacter()
 	CurrentAmmo=0.0f;
 	Min_Ammo=0.0f;
 	Max_Ammo=3.0f;
-	BatteryChargeDelay = 30.0f;
+	BatteryChargeDelay = 3.0f;
 
 }
 
@@ -94,6 +94,7 @@ void APlayerCharacter::BeginPlay()
 		}
 	}
 
+
 	/*Respawn. Location resets */
 	RespawnLocation = GetActorLocation();
 }
@@ -136,7 +137,7 @@ void APlayerCharacter::GetAmmo(float CollectedAmmo)
 	if (CurrentAmmo >= Max_Ammo) {
 		CurrentAmmo = 3.0f;
 	}
-	GetWorld()->GetTimerManager().SetTimer(BatteryChargeHandle, this, &APlayerCharacter::LoosingCharge, BatteryChargeDelay, false);
+	GetWorld()->GetTimerManager().SetTimer(BatteryChargeHandle, this, &APlayerCharacter::LoosingCharge, BatteryChargeDelay, true);
 
 }
 
@@ -157,7 +158,6 @@ void APlayerCharacter::LoosingCharge()
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input

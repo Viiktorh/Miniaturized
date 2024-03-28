@@ -76,7 +76,11 @@ public:
 	/*Ammo*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	float CurrentAmmo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	float Min_Ammo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	float Max_Ammo;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
