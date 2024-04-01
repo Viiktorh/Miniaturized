@@ -10,7 +10,7 @@ ATrigger::ATrigger()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	//Create a collider to trigger
+	//Create a collider for trigger
 	BoxCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionTrigger"));
 	BoxCollider->SetBoxExtent(FVector(32.0f, 32.0f, 32.0f));
 	BoxCollider->SetCollisionProfileName("Trigger");
@@ -32,10 +32,15 @@ void ATrigger::BeginPlay()
 
 void ATrigger::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor)
 {
+	if (this->Tags.IsEmpty())
+	{
+		UE_LOG(LogTemp, Warning, (TEXT("NO TAGS ON TRIGGER")));
+		return;
+	}
 	if (OtherActor && OtherActor != this)
 	{
 		APlayerCharacter* character = Cast<APlayerCharacter>(OtherActor);
-		character->TurnSpringarmToSideView();
+		character->TurnToDifferentView(this->Tags[0].ToString());
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Emerald, TEXT("Begin Overlapp"));
 
 	}
@@ -43,10 +48,15 @@ void ATrigger::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor)
 
 void ATrigger::OnOverlapEnd(AActor* OverlappedActor, AActor* OtherActor)
 {
+	if (this->Tags.IsEmpty())
+	{
+		UE_LOG(LogTemp, Warning, (TEXT("NO TAGS ON TRIGGER")));
+		return;
+	}
 	if (OtherActor && OtherActor != this)
 	{
 		APlayerCharacter* character = Cast<APlayerCharacter>(OtherActor);
-		character->ReturnSpringarmToStartingPos();
+		character->ReturnSpringarmToDefault(this->Tags[0].ToString());
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Emerald, TEXT("End Overlapp"));
 
 	}

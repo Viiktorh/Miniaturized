@@ -29,11 +29,27 @@ APlayerCharacter::APlayerCharacter()
 	CameraSpringArm->bUsePawnControlRotation = true; // Rotate the arm based on the controller
 	CameraSpringArm->bEnableCameraLag = true;//Makes the camera movement feel smoother
 
+	/*Second Springarm Component*/
+	SecondSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SecondCameraBoom"));
+	SecondSpringArm->SetupAttachment(RootComponent);
+	SecondSpringArm->TargetArmLength = SecondSpringArmDistance;
+	SecondSpringArm->bUsePawnControlRotation = true;
+	SecondSpringArm->bEnableCameraLag = true;
+
 	/*Camera Component*/
 	PrimaryCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
 	PrimaryCameraComponent->SetupAttachment(CameraSpringArm, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	PrimaryCameraComponent->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 	PrimaryCameraComponent->AttachToComponent(CameraSpringArm, FAttachmentTransformRules::KeepRelativeTransform);//Attach camera to the springarm and set it relative to it as well
+
+	/*Second camera component*/
+	SecondCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("SecondCameraComponent"));
+	SecondCameraComponent->SetupAttachment(SecondSpringArm, USpringArmComponent::SocketName);
+	SecondCameraComponent->bUsePawnControlRotation = false;
+	SecondCameraComponent->AttachToComponent(SecondSpringArm, FAttachmentTransformRules::KeepRelativeTransform);
+	//Deactivated by default
+	SecondCameraComponent->Deactivate();
+
 	/*Skeletal Mesh Component*/
 	PlayerCharacterMesh = GetMesh();
 	PlayerCharacterMesh->SetGenerateOverlapEvents(true);//Must be true for trigger to work properly
@@ -155,12 +171,8 @@ void APlayerCharacter::ReturnSpringarmWithTimer()
 
 }
 
-//Called by trigger
-void APlayerCharacter::TurnSpringarmToSideView()
+void APlayerCharacter::SwitchToTerrariumImc() const
 {
-	//Turn camera to sideview and change IMC
-	
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &APlayerCharacter::ChangeSpringarmWithTimer, Delay, true);
 	if (PlayerController)
 	{
 		if (Subsystem)
@@ -169,13 +181,10 @@ void APlayerCharacter::TurnSpringarmToSideView()
 			Subsystem->AddMappingContext(IMC_Terrarium, 0);
 		}
 	}
-	
 }
-//Called by trigger
-void APlayerCharacter::ReturnSpringarmToStartingPos()
+
+void APlayerCharacter::SwitchToDefaultImc() const
 {
-	//Return control and camera to default
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &APlayerCharacter::ReturnSpringarmWithTimer, Delay, true);
 	if (PlayerController)
 	{
 		if (Subsystem)
@@ -183,5 +192,49 @@ void APlayerCharacter::ReturnSpringarmToStartingPos()
 			Subsystem->RemoveMappingContext(IMC_Terrarium);
 			Subsystem->AddMappingContext(IMC, 0);
 		}
+	}
+}
+
+//Called by trigger
+void APlayerCharacter::TurnToDifferentView(FString Tag)
+{
+	if (Tag.Len() == 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No Tag found, add tag to trigger"));
+	}
+	
+	if(Tag == "Terrarium")
+	{
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &APlayerCharacter::ChangeSpringarmWithTimer, Delay, true);
+		SwitchToTerrariumImc();
+	}
+
+	if (Tag == "InnerTerrarium")
+	{
+		SwitchToDefaultImc();
+		SecondCameraComponent->Activate();
+		PrimaryCameraComponent->Deactivate();
+	}
+	
+}
+//Called by trigger
+void APlayerCharacter::ReturnSpringarmToDefault(FString Tag)
+{
+	if (Tag.Len() == 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No Tag found, add tag to trigger"));
+	}
+	if (Tag == "Terrarium")
+	{
+		//Return control and camera to default
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &APlayerCharacter::ReturnSpringarmWithTimer, Delay, true);
+		SwitchToDefaultImc();
+		
+	}
+	if (Tag == "InnerTerrarium")
+	{
+		SwitchToTerrariumImc();
+		SecondCameraComponent->Deactivate();
+		PrimaryCameraComponent->Activate();
 	}
 }

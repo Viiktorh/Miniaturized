@@ -42,6 +42,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USkeletalMeshComponent* PlayerCharacterMesh;
 
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UCameraComponent* SecondCameraComponent;
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = Camera)
+	USpringArmComponent* SecondSpringArm;
+
 	/*
 	 * Input Mapping Context and Actions
 	*/
@@ -94,13 +100,16 @@ public:
 	APlayerController* PlayerController;
 	UEnhancedInputLocalPlayerSubsystem* Subsystem;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sideview position")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SideviewRotation")
 	FRotator SideViewRotation = FRotator(0, 0, -100);
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sideview position")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FirstSpringarm")
 	float StartSpringArmDistance = 500.0f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sideview position")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SecondSpringarm")
+	float SecondSpringArmDistance = 300.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SideviewDistance")
 	float SideViewSpringArmDistance = 800.0f;
 
 	
@@ -114,10 +123,10 @@ public:
 	float Delay = 0.01f;
 
 	//Repositions springarm and switches controls
-	void TurnSpringarmToSideView();
+	void TurnToDifferentView(FString Tag);
 
 	//Returns springarm and control to default
-	void ReturnSpringarmToStartingPos();
+	void ReturnSpringarmToDefault(FString Tag);
 
 	/*Rotates the springarm relative to its parent and increases the springarm target length.
 	 *Turns off collision on the springarm. When it reaches its desired location, timer that is also used is cleared*/
@@ -126,6 +135,11 @@ public:
 	/*Rotates the springarm back to its start position relative to its parent and decreases the springarm target length.
 	 *Turns on collision on the springarm. When it reaches its desired location, timer that is used is cleared*/
 	void ReturnSpringarmWithTimer();
+
+	//Switch inputmapping
+	void SwitchToTerrariumImc() const;
+	void SwitchToDefaultImc() const;
+
 
 
 protected:
