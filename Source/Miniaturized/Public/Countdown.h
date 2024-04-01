@@ -29,16 +29,19 @@ public:
 
 	void CountdownFinished();
 
-	float Time=20.0f;
+	float Time=120.0f;
 
 	FTimerHandle CountdownTimer;
 
 	UTextRenderComponent* CountdownText = nullptr;
 
 	UPROPERTY(EditAnywhere)
-	USoundBase* CountdownMusic{ nullptr };
+	USoundBase* CountdownSound{ nullptr };
 
 	bool bCanPickupPotion;
+	FString FormattedTime;
+
+	
 
 
 

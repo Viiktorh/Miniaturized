@@ -71,6 +71,7 @@ UCameraComponent* APlayerCharacter::GetPrimaryCameraComponent() const
 // Called when the game starts or when spawned
 void APlayerCharacter::BeginPlay()
 {
+	
 	Super::BeginPlay();
 
 	//Adding the Input Context
