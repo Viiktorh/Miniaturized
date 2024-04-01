@@ -10,7 +10,7 @@
 
 UWeaponComponent::UWeaponComponent()
 {
-	GuntipOffset = FVector(100.f, 0.f, 10.f);
+	GuntipOffset = FVector(100.f, 10.f, 10.f);
 }
 
 void UWeaponComponent::AttachComponentToPlayer(APlayerCharacter* TargetCharacter)
@@ -53,25 +53,28 @@ void UWeaponComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 void UWeaponComponent::FireWeapon()
 {
 	FHitResult OutHit;
+
+	//Determines where the Beam start and end locations.
 	APlayerController* PlayerController = Cast<APlayerController>(Character->GetController());
-	FVector BeamStart = Character->GetActorLocation();
 	FRotator BeamRotation = PlayerController->PlayerCameraManager->GetCameraRotation();
-	BeamStart.Z += 0.f;
-	BeamStart.X += 0.f;
+	FVector BeamStart = Character->GetActorLocation() + BeamRotation.RotateVector(GuntipOffset);
 	FVector ForwardVector = PlayerController->PlayerCameraManager->GetActorForwardVector();
-	FVector UpVector = PlayerController->PlayerCameraManager->GetActorUpVector();
 	FVector End = ((ForwardVector * 1800.f) + BeamStart);
+	//Initialize Collision parameters
 	FCollisionQueryParams CollisionParams;
+
+	//Let the line trace ignore the Character 
+	CollisionParams.AddIgnoredActor(Character);
 
 	DrawDebugLine(GetWorld(), BeamStart, End, FColor::Blue, false, 1, 5);
 	
-	bool isHit = Character->ActorLineTraceSingle(OutHit, BeamStart, End, ECC_WorldStatic, CollisionParams);
+	bool isHit = Character->ActorLineTraceSingle(OutHit, BeamStart, End, ECC_Pawn, CollisionParams);
 
 	if(isHit)
 	{
 		if(GEngine)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("Hitting Component: %s"), *OutHit.GetComponent()->GetName()));
+			GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("Hitting Component: %s"), *OutHit.GetActor()->GetName()));
 		}
 	}
 

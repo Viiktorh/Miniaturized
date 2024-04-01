@@ -43,7 +43,7 @@ APlayerCharacter::APlayerCharacter()
 
 void APlayerCharacter::Move(const FInputActionValue& Value)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Emerald, TEXT("Triggering the move Function"));
+	GEngine->AddOnScreenDebugMessage(-1, 0.3f, FColor::Emerald, TEXT("Triggering the move Function"));
 
 	FVector2D MovementVector = Value.Get<FVector2D>();
 

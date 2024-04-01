@@ -32,6 +32,12 @@ public:
 	FVector GuntipOffset;
 
 	/*
+	 * Expose Collision Channel to Unreal
+	 */
+	UPROPERTY(EditAnywhere, Category = "Beam Collision")
+	TEnumAsByte<ECollisionChannel> TraceChannelProperty = ECC_Pawn;
+
+	/*
 	 * IMC and Actions
 	 */
 
@@ -54,6 +60,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation and Sound")
 	UAnimMontage* FireAnimation;
 
-	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Electricity Beam")
+	
 
 };
