@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "EnhancedInputSubsystemInterface.h"
 #include "GameFramework/Character.h"
+#include "EnhancedInputSubsystems.h"
 #include "PlayerCharacter.generated.h"
 
 class USpringArmComponent;
@@ -48,6 +49,9 @@ public:
 	UInputMappingContext* IMC;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	UInputMappingContext* IMC_Terrarium;//Specifically for the terrarium section
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	UInputAction* MoveAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
@@ -78,6 +82,51 @@ public:
 	USkeletalMeshComponent* GetMeshPlayerCharacter() const;
 
 	UCameraComponent* GetPrimaryCameraComponent() const;
+
+
+	/*
+	 *Terrarium camera and control
+	 */
+	 //Springarm start position is saved at the start
+	FRotator SpringArmStartRotation;
+
+	 //Player controller and subsystem
+	APlayerController* PlayerController;
+	UEnhancedInputLocalPlayerSubsystem* Subsystem;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sideview position")
+	FRotator SideViewRotation = FRotator(0, 0, -100);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sideview position")
+	float StartSpringArmDistance = 500.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sideview position")
+	float SideViewSpringArmDistance = 800.0f;
+
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sideview position")
+	float SideViewIntSpeed = 2.0f;//Value decides how fast the springarm turns when changing position & rotation
+
+	//Timer 
+	FTimerHandle TimerHandle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Timer delay")
+	float Delay = 0.01f;
+
+	//Repositions springarm and switches controls
+	void TurnSpringarmToSideView();
+
+	//Returns springarm and control to default
+	void ReturnSpringarmToStartingPos();
+
+	/*Rotates the springarm relative to its parent and increases the springarm target length.
+	 *Turns off collision on the springarm. When it reaches its desired location, timer that is also used is cleared*/
+	void ChangeSpringarmWithTimer();
+
+	/*Rotates the springarm back to its start position relative to its parent and decreases the springarm target length.
+	 *Turns on collision on the springarm. When it reaches its desired location, timer that is used is cleared*/
+	void ReturnSpringarmWithTimer();
+
 
 protected:
 	// Called when the game starts or when spawned

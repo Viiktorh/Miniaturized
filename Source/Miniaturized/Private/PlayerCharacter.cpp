@@ -25,16 +25,18 @@ APlayerCharacter::APlayerCharacter()
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraSpringArm->SetupAttachment(RootComponent);
-	CameraSpringArm->TargetArmLength = 600.0f; // The camera follows at this distance behind the character	
+	CameraSpringArm->TargetArmLength = StartSpringArmDistance; // The camera follows at this distance behind the character	
 	CameraSpringArm->bUsePawnControlRotation = true; // Rotate the arm based on the controller
+	CameraSpringArm->bEnableCameraLag = true;//Makes the camera movement feel smoother
 
 	/*Camera Component*/
 	PrimaryCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
 	PrimaryCameraComponent->SetupAttachment(CameraSpringArm, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	PrimaryCameraComponent->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
-
+	PrimaryCameraComponent->AttachToComponent(CameraSpringArm, FAttachmentTransformRules::KeepRelativeTransform);//Attach camera to the springarm and set it relative to it as well
 	/*Skeletal Mesh Component*/
-	PlayerCharacterMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharMesh"));
+	PlayerCharacterMesh = GetMesh();
+	PlayerCharacterMesh->SetGenerateOverlapEvents(true);//Must be true for trigger to work properly
 }
 
 void APlayerCharacter::Move(const FInputActionValue& Value)
@@ -85,11 +87,14 @@ UCameraComponent* APlayerCharacter::GetPrimaryCameraComponent() const
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	SpringArmStartRotation = CameraSpringArm->GetRelativeRotation();
+	PlayerController = Cast<APlayerController>(Controller);
+	Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
 
 	//Adding the Input Context
-	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
+	if (PlayerController)
 	{
-		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+		if (Subsystem)
 		{
 			Subsystem->AddMappingContext(IMC, 0);
 		}
@@ -100,7 +105,7 @@ void APlayerCharacter::BeginPlay()
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	
 }
 
 // Called to bind functionality to input
@@ -117,3 +122,66 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	}
 }
 
+
+void APlayerCharacter::ChangeSpringarmWithTimer()
+{
+	if (CameraSpringArm->GetRelativeRotation().Yaw <= -89)
+	{
+		GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+		UE_LOG(LogTemp, Warning, TEXT(" Pitch is: %f, Yaw is: %f and Roll is: %f"), CameraSpringArm->GetRelativeRotation().Pitch, CameraSpringArm->GetRelativeRotation().Yaw, CameraSpringArm->GetRelativeRotation().Roll);
+		UE_LOG(LogTemp, Warning, TEXT("Timer Cleared"))
+	}
+	//Rotates and increases the springarm location relative to mesh, turns off springarm collision
+	CameraSpringArm->bDoCollisionTest = false;
+	CameraSpringArm->bUsePawnControlRotation = false;
+	CameraSpringArm->TargetArmLength = FMath::FInterpTo(CameraSpringArm->TargetArmLength, SideViewSpringArmDistance, GetWorld()->GetDeltaSeconds(), SideViewIntSpeed);
+	CameraSpringArm->SetRelativeRotation(FMath::RInterpTo(CameraSpringArm->GetRelativeRotation(), SideViewRotation, GetWorld()->GetDeltaSeconds(), SideViewIntSpeed));
+}
+void APlayerCharacter::ReturnSpringarmWithTimer()
+{
+	if (CameraSpringArm->GetRelativeRotation().Yaw >= -1 )
+	{
+		GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+		UE_LOG(LogTemp, Warning, TEXT("Pitch is: %f, Yaw is: %f and Roll is: %f"), CameraSpringArm->GetRelativeRotation().Pitch, CameraSpringArm->GetRelativeRotation().Yaw, CameraSpringArm->GetRelativeRotation().Roll);
+
+		UE_LOG(LogTemp, Warning, TEXT("Timer Cleared"))
+	}
+
+	//Rotates and increases the springarm location relative to mesh, returns collision to true
+	CameraSpringArm->SetRelativeRotation(FMath::RInterpTo(CameraSpringArm->GetRelativeRotation(), SpringArmStartRotation, GetWorld()->GetDeltaSeconds(), SideViewIntSpeed));
+	CameraSpringArm->TargetArmLength = FMath::FInterpTo(CameraSpringArm->TargetArmLength, StartSpringArmDistance, GetWorld()->GetDeltaSeconds(), SideViewIntSpeed);
+	CameraSpringArm->bUsePawnControlRotation = true;
+	CameraSpringArm->bDoCollisionTest = true;
+
+}
+
+//Called by trigger
+void APlayerCharacter::TurnSpringarmToSideView()
+{
+	//Turn camera to sideview and change IMC
+	
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &APlayerCharacter::ChangeSpringarmWithTimer, Delay, true);
+	if (PlayerController)
+	{
+		if (Subsystem)
+		{
+			Subsystem->RemoveMappingContext(IMC);
+			Subsystem->AddMappingContext(IMC_Terrarium, 0);
+		}
+	}
+	
+}
+//Called by trigger
+void APlayerCharacter::ReturnSpringarmToStartingPos()
+{
+	//Return control and camera to default
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &APlayerCharacter::ReturnSpringarmWithTimer, Delay, true);
+	if (PlayerController)
+	{
+		if (Subsystem)
+		{
+			Subsystem->RemoveMappingContext(IMC_Terrarium);
+			Subsystem->AddMappingContext(IMC, 0);
+		}
+	}
+}
