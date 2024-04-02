@@ -29,10 +29,16 @@ public:
 	
 	/*Health*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
-	float health;
+	float Health;
 
 	UFUNCTION(BlueprintCallable)
-	void TakeDamage(float damage);
+	virtual float TakeDamage
+	(
+		float DamageAmount,
+		struct FDamageEvent const& DamageEvent,
+		AController* EventInstigator,
+		AActor* DamageCauser
+	)override;
 
 	UFUNCTION()
 	void Die();

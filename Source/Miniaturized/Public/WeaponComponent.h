@@ -31,11 +31,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WeaponSettings")
 	FVector GuntipOffset;
 
+	UPROPERTY(EditDefaultsOnly)
+	float BaseDamage;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UDamageType> DamageType;
+
 	/*
 	 * Expose Collision Channel to Unreal
 	 */
 	UPROPERTY(EditAnywhere, Category = "Beam Collision")
-	TEnumAsByte<ECollisionChannel> TraceChannelProperty = ECC_Pawn;
+	TEnumAsByte<ECollisionChannel> TraceChannelProperty = ECC_Visibility;
 
 	/*
 	 * IMC and Actions

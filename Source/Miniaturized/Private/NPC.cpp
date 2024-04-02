@@ -8,7 +8,7 @@ ANPC::ANPC()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	health = 1.0f;
+	Health = 100.0f;
 	DieDelay = 2.0f;
 }
 
@@ -33,13 +33,15 @@ void ANPC::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
-void ANPC::TakeDamage(float damage)
+
+float ANPC::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,AActor* DamageCauser)
 {
-	health -= damage;
-	if (health <= 0.0f) {
-		Die();
+	Health -= DamageAmount;
+	if(Health <= 0)
+	{
+		Destroy();
 	}
-	GetWorld()->GetTimerManager().SetTimer(DieTimer, this, &ANPC::Die, DieDelay, false);
+	return DamageAmount;
 }
 
 void ANPC::Die()

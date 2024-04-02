@@ -8,9 +8,12 @@
 #include "Kismet/GameplayStatics.h"
 #include "ProfilingDebugging/CookStats.h"
 
+
 UWeaponComponent::UWeaponComponent()
 {
 	GuntipOffset = FVector(100.f, 10.f, 10.f);
+
+	
 }
 
 void UWeaponComponent::AttachComponentToPlayer(APlayerCharacter* TargetCharacter)
@@ -59,23 +62,34 @@ void UWeaponComponent::FireWeapon()
 	FRotator BeamRotation = PlayerController->PlayerCameraManager->GetCameraRotation();
 	FVector BeamStart = Character->GetActorLocation() + BeamRotation.RotateVector(GuntipOffset);
 	FVector ForwardVector = PlayerController->PlayerCameraManager->GetActorForwardVector();
-	FVector End = ((ForwardVector * 1800.f) + BeamStart);
+	FVector BeamEnd = ((ForwardVector * 1800.f) + BeamStart);
 	//Initialize Collision parameters
 	FCollisionQueryParams CollisionParams;
-
-	//Let the line trace ignore the Character 
-	CollisionParams.AddIgnoredActor(Character);
-
-	DrawDebugLine(GetWorld(), BeamStart, End, FColor::Blue, false, 1, 5);
 	
-	bool isHit = Character->ActorLineTraceSingle(OutHit, BeamStart, End, ECC_Pawn, CollisionParams);
 
-	if(isHit)
+	
+
+	GetWorld()->LineTraceSingleByChannel(OutHit, BeamStart, BeamEnd, TraceChannelProperty, CollisionParams);
+
+	//Draws a thick blue line if the trace hits something, a thick red line if nothing is hit.
+	DrawDebugLine(GetWorld(), BeamStart, BeamEnd, OutHit.bBlockingHit ? FColor::Blue : FColor::Red, false, 5.0f, 0, 10.0f);
+	UE_LOG(LogTemp, Log, TEXT("Tracing line: %s to %s"), *BeamStart.ToCompactString(), *BeamEnd.ToCompactString());
+
+
+	// If the trace hit something, bBlockingHit will be true,
+// and its fields will be filled with detailed info about what was hit
+	if (OutHit.bBlockingHit && IsValid(OutHit.GetActor()))
 	{
-		if(GEngine)
+		UE_LOG(LogTemp, Log, TEXT("Trace hit actor: %s"), *OutHit.GetActor()->GetName());
+		if (OutHit.GetActor()->ActorHasTag("Enemy"))
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("Hitting Component: %s"), *OutHit.GetActor()->GetName()));
+			UGameplayStatics::ApplyDamage(OutHit.GetActor(), 10, PlayerController, Character, DamageType);
+			//Draw a thin green line if the actor hit is Enemy
+			DrawDebugLine(GetWorld(), BeamStart, BeamEnd, FColor::Green, false, 5.f, 5);
 		}
+	}
+	else {
+		UE_LOG(LogTemp, Log, TEXT("No Actors were hit"));
 	}
 
 	// Play Sound
