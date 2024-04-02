@@ -43,7 +43,7 @@ APlayerCharacter::APlayerCharacter()
 
 void APlayerCharacter::Move(const FInputActionValue& Value)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Emerald, TEXT("Triggering the move Function"));
+	GEngine->AddOnScreenDebugMessage(-1, 0.3f, FColor::Emerald, TEXT("Triggering the move Function"));
 
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
@@ -64,6 +64,7 @@ void APlayerCharacter::LookAround(const FInputActionValue& Value)
 		AddControllerPitchInput((LookAroundVector.Y));
 	}
 }
+
 
 void APlayerCharacter::SetHasWeapon(bool bHasNewWeapon)
 {
@@ -139,6 +140,8 @@ void APlayerCharacter::Respawn()
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+
 
 }
 
