@@ -1,10 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
+//Test
 #pragma once
 
 #include "CoreMinimal.h"
 #include "EnhancedInputSubsystemInterface.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "EnhancedInputSubsystems.h"
 #include "PlayerCharacter.generated.h"
 
 struct FInputActionValue;
@@ -35,13 +37,25 @@ public:
 	UCameraComponent* PrimaryCameraComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	USpringArmComponent* CameraSpringArm;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USkeletalMeshComponent* PlayerCharacterMesh;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UCameraComponent* SecondCameraComponent;
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = Camera)
+	USpringArmComponent* SecondSpringArm;
 
 	/*
 	 * Input Mapping Context and Actions
 	*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	UInputMappingContext* IMC;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	UInputMappingContext* IMC_Terrarium;//Specifically for the terrarium section
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	UInputAction* MoveAction;
@@ -55,6 +69,7 @@ public:
 	void Move(const FInputActionValue& Value);
 
 	void LookAround(const FInputActionValue& Value);
+
 
 	/*
 	* Weapon
@@ -73,8 +88,88 @@ public:
 
 	UCameraComponent* GetPrimaryCameraComponent() const;
 
+	/*Health*/
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Health")
+	float Health;
+
+	/*Respawn*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Respawn")
+	FVector RespawnLocation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Respawn")
+	float RespawnDelay;
+
+	/*
+	 *Terrarium camera and control
+	 */
+	 //Springarm start position is saved at the start
+	FRotator SpringArmStartRotation;
+
+	 //Player controller and subsystem
+	APlayerController* PlayerController;
+	UEnhancedInputLocalPlayerSubsystem* Subsystem;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SideviewRotation")
+	FRotator SideViewRotation = FRotator(0, 0, -100);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FirstSpringarm")
+	float StartSpringArmDistance = 500.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SecondSpringarm")
+	float SecondSpringArmDistance = 300.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SideviewDistance")
+	float SideViewSpringArmDistance = 800.0f;
+
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sideview position")
+	float SideViewIntSpeed = 2.0f;//Value decides how fast the springarm turns when changing position & rotation
+
+	//Timer 
+	FTimerHandle TimerHandle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Timer delay")
+	float Delay = 0.01f;
+
+	//Repositions springarm and switches controls
+	void TurnToDifferentView(FString Tag);
+
+	//Returns springarm and control to default
+	void ReturnSpringarmToDefault(FString Tag);
+
+	/*Rotates the springarm relative to its parent and increases the springarm target length.
+	 *Turns off collision on the springarm. When it reaches its desired location, timer that is also used is cleared*/
+	void ChangeSpringarmWithTimer();
+
+	/*Rotates the springarm back to its start position relative to its parent and decreases the springarm target length.
+	 *Turns on collision on the springarm. When it reaches its desired location, timer that is used is cleared*/
+	void ReturnSpringarmWithTimer();
+
+	//Switch inputmapping
+	void SwitchToTerrariumImc() const;
+	void SwitchToDefaultImc() const;
+
+
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	/*Health and respawn*/
+
+	UFUNCTION(BlueprintCallable)
+	void TakeDamage(float DamageDealt);
+
+	UFUNCTION(BlueprintCallable)
+	void Heal(float HealingRestored);
+
+	UFUNCTION(BlueprintCallable)
+	void Die();
+
+	UFUNCTION(BlueprintCallable)
+	void Respawn();
+
+	FTimerHandle RespawnTimerHandle;
 
 };
