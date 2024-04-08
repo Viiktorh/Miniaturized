@@ -73,6 +73,8 @@ public:
 	USkeletalMeshComponent* GetMeshPlayerCharacter() const;
 
 	UCameraComponent* GetPrimaryCameraComponent() const;
+	
+	
 
 protected:
 	// Called when the game starts or when spawned
