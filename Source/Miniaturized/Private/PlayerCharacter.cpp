@@ -8,6 +8,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -46,7 +47,6 @@ APlayerCharacter::APlayerCharacter()
 
 	/*Health*/
 	Health = 1.0f;
-	RespawnLocation = FVector(0.0f, 0.0f, 0.0f);
 	RespawnDelay = 5.0f;
 
 	/*Second camera component*/
@@ -54,12 +54,15 @@ APlayerCharacter::APlayerCharacter()
 	SecondCameraComponent->SetupAttachment(SecondSpringArm, USpringArmComponent::SocketName);
 	SecondCameraComponent->bUsePawnControlRotation = false;
 	SecondCameraComponent->AttachToComponent(SecondSpringArm, FAttachmentTransformRules::KeepRelativeTransform);
-	//Deactivated by default
-	SecondCameraComponent->Deactivate();
+	SecondCameraComponent->Deactivate();//Deactivated by default
 
 	/*Skeletal Mesh Component*/
 	PlayerCharacterMesh = GetMesh();
 	PlayerCharacterMesh->SetGenerateOverlapEvents(true);//Must be true for trigger to work properly
+
+	/*Game save*/
+	SaveObject = Cast<UMainSaveGame>(UGameplayStatics::CreateSaveGameObject(UMainSaveGame::StaticClass()));
+	LoadObject = Cast<UMainSaveGame>(UGameplayStatics::CreateSaveGameObject(UMainSaveGame::StaticClass()));
 }
 
 void APlayerCharacter::Move(const FInputActionValue& Value)
@@ -107,6 +110,27 @@ UCameraComponent* APlayerCharacter::GetPrimaryCameraComponent() const
 	return PrimaryCameraComponent;
 }
 
+void APlayerCharacter::Save()
+{
+	SaveObject->PlayerLocation = GetActorLocation();
+	SaveObject->PlayerRotator = GetActorRotation();
+	UGameplayStatics::SaveGameToSlot(SaveObject, TEXT("Slot1"), 0);
+	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::White, TEXT("Data saved ... "));
+}
+
+void APlayerCharacter::Load()
+{
+	LoadObject = UGameplayStatics::LoadGameFromSlot(TEXT("Slot1"), 0);
+	if (!LoadObject)
+	{
+		Save();
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("No load, created load "));
+	}
+	SetActorLocation(SaveObject->PlayerLocation);
+	SetActorRotation(SaveObject->PlayerRotator);
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT(" Loaded."));
+}
+
 // Called when the game starts or when spawned
 void APlayerCharacter::BeginPlay()
 {
@@ -124,8 +148,8 @@ void APlayerCharacter::BeginPlay()
 		}
 	}
 
-	/*Respawn. Location resets */
-	RespawnLocation = GetActorLocation();
+	/*Respawn and load slot is set*/
+	Save();
 }
 
 /*float decided in blueprint*/
@@ -156,7 +180,7 @@ void APlayerCharacter::Die()
 void APlayerCharacter::Respawn()
 {
 	Health = 1.0f;
-	SetActorLocation(RespawnLocation);
+	Load();
 	GetWorldTimerManager().ClearTimer(RespawnTimerHandle);
 }
 
@@ -241,7 +265,7 @@ void APlayerCharacter::SwitchToDefaultImc() const
 }
 
 //Called by trigger
-void APlayerCharacter::TurnToDifferentView(FString Tag)
+void APlayerCharacter::RunOnTagOverlap(FString Tag)
 {
 	if (Tag.Len() == 0)
 	{
@@ -260,10 +284,14 @@ void APlayerCharacter::TurnToDifferentView(FString Tag)
 		SecondCameraComponent->Activate();
 		PrimaryCameraComponent->Deactivate();
 	}
+	if (Tag == "Checkpoint")
+	{
+		Save();
+	}
 	
 }
 //Called by trigger
-void APlayerCharacter::ReturnSpringarmToDefault(FString Tag)
+void APlayerCharacter::RunOnTagEndOverlap(FString Tag)
 {
 	if (Tag.Len() == 0)
 	{

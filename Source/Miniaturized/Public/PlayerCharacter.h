@@ -7,6 +7,7 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "MainSaveGame.h"
 #include "PlayerCharacter.generated.h"
 
 struct FInputActionValue;
@@ -93,13 +94,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Health")
 	float Health;
 
-	/*Respawn*/
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Respawn")
-	FVector RespawnLocation;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Respawn")
 	float RespawnDelay;
 
+	 /*GameSave*/
+	UMainSaveGame *SaveObject;
+	USaveGame *LoadObject;
+
+	UFUNCTION(BlueprintCallable)
+	void Save();
+	UFUNCTION(BlueprintCallable)
+	void Load();
 	/*
 	 *Terrarium camera and control
 	 */
@@ -133,10 +138,10 @@ public:
 	float Delay = 0.01f;
 
 	//Repositions springarm and switches controls
-	void TurnToDifferentView(FString Tag);
+	void RunOnTagOverlap(FString Tag);
 
 	//Returns springarm and control to default
-	void ReturnSpringarmToDefault(FString Tag);
+	void RunOnTagEndOverlap(FString Tag);
 
 	/*Rotates the springarm relative to its parent and increases the springarm target length.
 	 *Turns off collision on the springarm. When it reaches its desired location, timer that is also used is cleared*/

@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ // Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Trigger.h"
@@ -40,7 +40,7 @@ void ATrigger::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor)
 	if (OtherActor && OtherActor != this)
 	{
 		APlayerCharacter* character = Cast<APlayerCharacter>(OtherActor);
-		character->TurnToDifferentView(this->Tags[0].ToString());
+		character->RunOnTagOverlap(this->Tags[0].ToString());
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Emerald, TEXT("Begin Overlapp"));
 
 	}
@@ -56,7 +56,7 @@ void ATrigger::OnOverlapEnd(AActor* OverlappedActor, AActor* OtherActor)
 	if (OtherActor && OtherActor != this)
 	{
 		APlayerCharacter* character = Cast<APlayerCharacter>(OtherActor);
-		character->ReturnSpringarmToDefault(this->Tags[0].ToString());
+		character->RunOnTagEndOverlap(this->Tags[0].ToString());
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Emerald, TEXT("End Overlapp"));
 
 	}
