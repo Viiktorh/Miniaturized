@@ -12,7 +12,8 @@ UCLASS()
 class MINIATURIZED_API ACountdown : public AActor
 {
 	GENERATED_BODY()
-	
+	/* the inspiration for my code is: https://github.com/Taheri-meisam/March21CountDown.git */
+
 public:	
 	// Sets default values for this actor's properties
 	ACountdown();
@@ -20,6 +21,7 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
 
 public:	
 	// Called every frame
@@ -40,6 +42,7 @@ public:
 	USoundBase* CountdownSound{ nullptr };
 
 	bool bCanPickupPotion;
+
 	FString FormattedTime;
 
 	UPROPERTY(EditAnywhere)
@@ -50,6 +53,8 @@ public:
 
 	UFUNCTION()
 	void OnBoxBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-
+	bool bCollisionEnabled;
+	void OnBoxEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	
 	
 };

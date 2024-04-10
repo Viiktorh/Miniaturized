@@ -3,7 +3,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "PlayerCharacter.h"
 #include "Engine/World.h"
-#include "Components/TextRenderComponent.h"
+//#include "Components/TextRenderComponent.h"
+#include "GameFramework/Actor.h"
 #include "Countdown.h"
 
 // Sets default values
@@ -21,6 +22,8 @@ ACountdown::ACountdown()
 	/*trigger box*/
 	TriggerBoxTimer = CreateDefaultSubobject<UBoxComponent>(TEXT("TriggerBox"));
 	TriggerBoxTimer->SetupAttachment(RootComponent);
+	bCollisionEnabled = false;
+	bCanPickupPotion = false;
 }
 
 // Called when the game starts or when spawned
@@ -74,8 +77,14 @@ void ACountdown::CountdownFinished()
 
 void ACountdown::OnBoxBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	bCollisionEnabled = true;
 	GetWorld()->GetTimerManager().SetTimer(CountdownTimer, this, &ACountdown::CountdownBegin, 1.0f, true);
-	Destroy(); //want to destroy trigger box
+	SetActorEnableCollision(false); //want to destroy trigger box
 
+}
+
+void ACountdown::OnBoxEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	bCollisionEnabled = false;
 }
 
