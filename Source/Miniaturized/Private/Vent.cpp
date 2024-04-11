@@ -13,15 +13,14 @@ AVent::AVent()
 	VentMesh->SetMobility(EComponentMobility::Movable);
 
 	VentCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("VentCollision"));
-	RootComponent = VentCollision;
 	VentCollision->OnComponentBeginOverlap.AddDynamic(this, &AVent::OnBoxBeginOverlap);
 
 	bCanStop = false;
 	bCanStart = true;
+	bBoxIsPassed = false;
 
 	Speed = 15.0f;
-	//RotationDegree = DeltaTime * Speed;
-	//FRotator VentRotation = FRotator(0, RotationDegree, 0);
+	VentRotation = FRotator(0, RotationDegree, 0);
 }
 
 // Called when the game starts or when spawned
@@ -35,29 +34,31 @@ void AVent::BeginPlay()
 void AVent::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	RotationDegree = DeltaTime * Speed;
 }
 
-/*void AVent::RotateVent()
+void AVent::RotateVent(float DeltaTime)
 {
 	VentMesh->AddRelativeRotation(VentRotation);
-}*/
+}
 
 
-/*void AVent::StopRotation()
+void AVent::StopRotation(float DeltaTime)
 {
-	Speed -= ;
+	Speed --;
 	if (Speed <= 0) {
 		bCanStart = false;
 		Speed = 0;
 	}
 	VentMesh->AddRelativeRotation(VentRotation);
-}*/
+}
 
 
 void AVent::OnBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	bBoxIsPassed = true;
 	bCanStop = true;
+	VentCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	//StopRotation();
 
 }

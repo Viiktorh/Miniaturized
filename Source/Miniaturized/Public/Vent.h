@@ -36,12 +36,17 @@ public:
 	UBoxComponent* VentCollision;
 
 	
-	//void RotateVent();
+	void RotateVent(float DeltaTime);
 
-	
-	//void StopRotation();
+	bool bBoxIsPassed; //BOOLEAN WITH THE SAME NAME FOR TIMER TO ACTIVATE AFTER RETURNING TO CHECKPOINT
+
+	void StopRotation(float DeltaTime);
 
 	void OnBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	float Speed;
+
+	float RotationDegree;
+
+	FRotator VentRotation;
 };
