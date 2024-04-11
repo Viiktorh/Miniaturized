@@ -11,55 +11,80 @@ AVent::AVent()
 	VentMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("VentMesh"));
 	RootComponent = VentMesh;
 	VentMesh->SetMobility(EComponentMobility::Movable);
+	
 
 	VentCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("VentCollision"));
 	VentCollision->OnComponentBeginOverlap.AddDynamic(this, &AVent::OnBoxBeginOverlap);
+
 
 	bCanStop = false;
 	bCanStart = true;
 	bBoxIsPassed = false;
 
-	Speed = 15.0f;
-	VentRotation = FRotator(0, RotationDegree, 0);
+	Speed = 10.0f;
+	RotationDegree = Speed;
+	VentRotation = FRotator(0, 0, 0);
+	VentRotation.Pitch = RotationDegree;
+	
 }
 
 // Called when the game starts or when spawned
 void AVent::BeginPlay()
 {
 	Super::BeginPlay();
-	//RotateVent();
+	bCanStart = true;
+	
 }
 
 // Called every frame
 void AVent::Tick(float DeltaTime)
 {
+	
 	Super::Tick(DeltaTime);
-	RotationDegree = DeltaTime * Speed;
+	
+	if (bCanStart) {
+		RotateVent();
+	}
+	else {
+		StopRotation();
+	}
+	
+	
 }
 
-void AVent::RotateVent(float DeltaTime)
+void AVent::RotateVent()
 {
-	VentMesh->AddRelativeRotation(VentRotation);
+	VentMesh->AddWorldRotation(VentRotation);
 }
 
 
-void AVent::StopRotation(float DeltaTime)
+void AVent::StopRotation()
 {
 	Speed --;
 	if (Speed <= 0) {
 		bCanStart = false;
 		Speed = 0;
 	}
-	VentMesh->AddRelativeRotation(VentRotation);
+	VentMesh->AddWorldRotation(VentRotation);
 }
 
 
 void AVent::OnBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	bBoxIsPassed = true;
-	bCanStop = true;
-	VentCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	//StopRotation();
+	APlayerCharacter* Character = Cast<APlayerCharacter>(OtherActor);
+	if (Character != nullptr)
+	{
+		bCanStop = true;
+		bCanStart = false;
+		//OnComponentBeginOverlap.RemoveAll(this);
+	}
+	
 
+}
+
+void AVent::OnBoxEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	bBoxIsPassed = true;
+	VentCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 

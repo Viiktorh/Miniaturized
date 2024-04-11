@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "PlayerCharacter.h"
 #include "Vent.generated.h"
 
 UCLASS()
@@ -29,24 +30,28 @@ public:
 
 	bool bCanStart;
 
-	UPROPERTY(EditAnywhere,Category="Mesh")
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Mesh")
 	UStaticMeshComponent* VentMesh;
 
-	UPROPERTY(EditAnywhere, Category = "Collision")
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = "Collision")
 	UBoxComponent* VentCollision;
 
 	
-	void RotateVent(float DeltaTime);
+	void RotateVent();
 
 	bool bBoxIsPassed; //BOOLEAN WITH THE SAME NAME FOR TIMER TO ACTIVATE AFTER RETURNING TO CHECKPOINT
 
-	void StopRotation(float DeltaTime);
+	void StopRotation();
 
+	UFUNCTION()
 	void OnBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	
+	UFUNCTION()
+	void OnBoxEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	float Speed;
 
-	float RotationDegree;
+	int RotationDegree;
 
 	FRotator VentRotation;
 };
