@@ -1,5 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-//Test
+
 #pragma once
 
 #include "CoreMinimal.h"
@@ -43,10 +43,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USkeletalMeshComponent* PlayerCharacterMesh;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UCameraComponent* SecondCameraComponent;
 
-	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = Camera)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera)
 	USpringArmComponent* SecondSpringArm;
 
 	/*
@@ -89,9 +89,22 @@ public:
 
 	UCameraComponent* GetPrimaryCameraComponent() const;
 
+	/*Ammo*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	float CurrentAmmo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	float Min_Ammo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	float Max_Ammo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	float BatteryChargeDelay;
+
 	/*Health*/
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Health")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
 	float Health;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Respawn")
@@ -111,7 +124,7 @@ public:
 	 //Springarm start position is saved at the start
 	FRotator SpringArmStartRotation;
 
-	 //Player controller and subsystem
+	//Player controller and subsystem
 	APlayerController* PlayerController;
 	UEnhancedInputLocalPlayerSubsystem* Subsystem;
 
@@ -127,7 +140,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SideviewDistance")
 	float SideViewSpringArmDistance = 800.0f;
 
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sideview position")
 	float SideViewIntSpeed = 2.0f;//Value decides how fast the springarm turns when changing position & rotation
 
@@ -176,5 +189,14 @@ protected:
 	void Respawn();
 
 	FTimerHandle RespawnTimerHandle;
+
+	/*Ammo and shooting*/
+	UFUNCTION(BlueprintCallable)
+	void GetAmmo(float CollectedAmmo);
+
+	UFUNCTION(BlueprintCallable)
+	void LoosingCharge();
+
+	FTimerHandle BatteryChargeHandle;
 
 };

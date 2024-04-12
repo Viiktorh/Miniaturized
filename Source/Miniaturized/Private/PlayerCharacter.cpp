@@ -1,3 +1,4 @@
+
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
@@ -13,7 +14,7 @@
 // Sets default values
 APlayerCharacter::APlayerCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	// Rotate the character with the left/right rotation.
@@ -48,6 +49,12 @@ APlayerCharacter::APlayerCharacter()
 	/*Health*/
 	Health = 1.0f;
 	RespawnDelay = 5.0f;
+
+	/*Weapon and ammo*/
+	CurrentAmmo=0.0f;
+	Min_Ammo=0.0f;
+	Max_Ammo=3.0f;
+	BatteryChargeDelay = 3.0f;
 
 	/*Second camera component*/
 	SecondCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("SecondCameraComponent"));
@@ -141,12 +148,13 @@ void APlayerCharacter::BeginPlay()
 
 	//Adding the Input Context
 	if (PlayerController)
-	{
-		if (Subsystem)
 		{
-			Subsystem->AddMappingContext(IMC, 0);
+			if (Subsystem)
+				{
+					Subsystem->AddMappingContext(IMC, 0);
+				}
 		}
-	}
+
 
 	/*Respawn and load slot is set*/
 	Save();
@@ -184,13 +192,33 @@ void APlayerCharacter::Respawn()
 	GetWorldTimerManager().ClearTimer(RespawnTimerHandle);
 }
 
+void APlayerCharacter::GetAmmo(float CollectedAmmo)
+{
+	CurrentAmmo += CollectedAmmo;
+	if (CurrentAmmo >= Max_Ammo) {
+		CurrentAmmo = 3.0f;
+	}
+	GetWorld()->GetTimerManager().SetTimer(BatteryChargeHandle, this, &APlayerCharacter::LoosingCharge, BatteryChargeDelay, true);
+
+}
+
+void APlayerCharacter::LoosingCharge()
+{
+	if (CurrentAmmo > Min_Ammo) {
+		CurrentAmmo -= 0.3f;
+	}
+	
+	else {
+		CurrentAmmo = 0.0f;
+		GetWorldTimerManager().ClearTimer(BatteryChargeHandle);
+	}
+	
+}
+
 // Called every frame
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-
-
 }
 
 // Called to bind functionality to input
@@ -224,7 +252,7 @@ void APlayerCharacter::ChangeSpringarmWithTimer()
 }
 void APlayerCharacter::ReturnSpringarmWithTimer()
 {
-	if (CameraSpringArm->GetRelativeRotation().Yaw >= -1 )
+	if (CameraSpringArm->GetRelativeRotation().Yaw >= -1)
 	{
 		GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
 		UE_LOG(LogTemp, Warning, TEXT("Pitch is: %f, Yaw is: %f and Roll is: %f"), CameraSpringArm->GetRelativeRotation().Pitch, CameraSpringArm->GetRelativeRotation().Yaw, CameraSpringArm->GetRelativeRotation().Roll);
@@ -271,8 +299,8 @@ void APlayerCharacter::RunOnTagOverlap(FString Tag)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("No Tag found, add tag to trigger"));
 	}
-	
-	if(Tag == "Terrarium")
+
+	if (Tag == "Terrarium")
 	{
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &APlayerCharacter::ChangeSpringarmWithTimer, Delay, true);
 		SwitchToTerrariumImc();
@@ -302,7 +330,7 @@ void APlayerCharacter::RunOnTagEndOverlap(FString Tag)
 		//Return control and camera to default
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &APlayerCharacter::ReturnSpringarmWithTimer, Delay, true);
 		SwitchToDefaultImc();
-		
+
 	}
 	if (Tag == "InnerTerrarium")
 	{
