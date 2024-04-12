@@ -8,6 +8,7 @@
 #include "InputAction.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Vent.h"
 #include "Components/InputComponent.h"
 
 // Sets default values
@@ -127,6 +128,10 @@ void APlayerCharacter::BeginPlay()
 
 	/*Respawn. Location resets */
 	RespawnLocation = GetActorLocation();
+
+	/*interact*/
+	PlayerCharacterMesh->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::OnObjectBeginOverlap);
+
 }
 
 /*float decided in blueprint*/
@@ -239,6 +244,18 @@ void APlayerCharacter::SwitchToDefaultImc() const
 			Subsystem->AddMappingContext(IMC, 0);
 		}
 	}
+}
+
+void APlayerCharacter::OnObjectBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	AVent* Actor = Cast<AVent>(OtherActor);
+	if (Actor != nullptr)
+	{
+		TakeDamage(1.0f);
+		PlayerCharacterMesh->OnComponentBeginOverlap.RemoveAll(this);
+
+	}
+
 }
 
 //Called by trigger

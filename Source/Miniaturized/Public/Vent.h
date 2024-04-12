@@ -34,6 +34,9 @@ public:
 	UStaticMeshComponent* VentMesh;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = "Collision")
+	UBoxComponent* VentButtonCollision;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Collision")
 	UBoxComponent* VentCollision;
 
 	

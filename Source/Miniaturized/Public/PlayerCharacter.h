@@ -151,6 +151,9 @@ public:
 	void SwitchToDefaultImc() const;
 
 
+	/*overlap interact (currently: vent)*/
+	UFUNCTION()
+	void OnObjectBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 protected:
 	// Called when the game starts or when spawned
