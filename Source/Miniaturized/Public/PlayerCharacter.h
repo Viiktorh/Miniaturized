@@ -168,6 +168,11 @@ public:
 	void SwitchToTerrariumImc() const;
 	void SwitchToDefaultImc() const;
 
+	/*
+	 *Spring/Jumpad
+	 */
+	//Jump as high as you want
+	void JumpPad(double Forward, double HowHigh);
 
 
 protected:

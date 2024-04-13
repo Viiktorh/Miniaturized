@@ -292,6 +292,11 @@ void APlayerCharacter::SwitchToDefaultImc() const
 	}
 }
 
+void APlayerCharacter::JumpPad(double Forward, double HowHigh)
+{
+	LaunchCharacter(FVector(0,Forward,HowHigh),false,false);
+}
+
 //Called by trigger
 void APlayerCharacter::RunOnTagOverlap(FString Tag)
 {
