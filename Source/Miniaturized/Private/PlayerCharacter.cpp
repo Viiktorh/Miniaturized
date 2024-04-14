@@ -130,7 +130,7 @@ void APlayerCharacter::BeginPlay()
 	RespawnLocation = GetActorLocation();
 
 	/*interact*/
-	PlayerCharacterMesh->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::OnObjectBeginOverlap);
+	//PlayerCharacterMesh->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::OnObjectBeginOverlap);
 
 }
 
@@ -246,7 +246,7 @@ void APlayerCharacter::SwitchToDefaultImc() const
 	}
 }
 
-void APlayerCharacter::OnObjectBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+/*void APlayerCharacter::OnObjectBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	AVent* Actor = Cast<AVent>(OtherActor);
 	if (Actor != nullptr)
@@ -256,7 +256,8 @@ void APlayerCharacter::OnObjectBeginOverlap(UPrimitiveComponent* OverlappedCompo
 
 	}
 
-}
+}*/
+
 
 //Called by trigger
 void APlayerCharacter::TurnToDifferentView(FString Tag)

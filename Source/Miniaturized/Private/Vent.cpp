@@ -14,7 +14,7 @@ AVent::AVent()
 	
 
 	VentButtonCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("VentButtonCollision"));
-	VentButtonCollision->SetupAttachment(VentMesh);
+	//VentButtonCollision->SetupAttachment(VentMesh);
 	
 	VentCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("VentCollision"));
 	VentCollision->SetupAttachment(VentMesh);
@@ -37,7 +37,7 @@ void AVent::BeginPlay()
 	bCanStart = true;
 	
 	VentButtonCollision->OnComponentBeginOverlap.AddDynamic(this, &AVent::OnBoxBeginOverlap);
-	VentCollision->OnComponentBeginOverlap.AddDynamic(this, &AVent::OnBoxBeginOverlap);
+	//VentCollision->OnComponentBeginOverlap.AddDynamic(this, &AVent::OnBoxBeginOverlap);
 
 }
 
