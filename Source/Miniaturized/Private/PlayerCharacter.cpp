@@ -8,8 +8,8 @@
 #include "InputAction.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
-#include "Vent.h"
 #include "Components/InputComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -43,25 +43,32 @@ APlayerCharacter::APlayerCharacter()
 	PrimaryCameraComponent->AttachToComponent(CameraSpringArm, FAttachmentTransformRules::KeepRelativeTransform);
 	PrimaryCameraComponent->bUsePawnControlRotation = true;
 
-	/*Skeletal Mesh Component*/
-	PlayerCharacterMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharMesh"));
+	
 
 	/*Health*/
 	Health = 1.0f;
-	RespawnLocation = FVector(0.0f, 0.0f, 0.0f);
 	RespawnDelay = 5.0f;
+
+	/*Weapon and ammo*/
+	CurrentAmmo=0.0f;
+	Min_Ammo=0.0f;
+	Max_Ammo=3.0f;
+	BatteryChargeDelay = 3.0f;
 
 	/*Second camera component*/
 	SecondCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("SecondCameraComponent"));
 	SecondCameraComponent->SetupAttachment(SecondSpringArm, USpringArmComponent::SocketName);
 	SecondCameraComponent->bUsePawnControlRotation = false;
 	SecondCameraComponent->AttachToComponent(SecondSpringArm, FAttachmentTransformRules::KeepRelativeTransform);
-	//Deactivated by default
-	SecondCameraComponent->Deactivate();
+	SecondCameraComponent->Deactivate();//Deactivated by default
 
 	/*Skeletal Mesh Component*/
 	PlayerCharacterMesh = GetMesh();
 	PlayerCharacterMesh->SetGenerateOverlapEvents(true);//Must be true for trigger to work properly
+
+	/*Game save*/
+	SaveObject = Cast<UMainSaveGame>(UGameplayStatics::CreateSaveGameObject(UMainSaveGame::StaticClass()));
+	LoadObject = Cast<UMainSaveGame>(UGameplayStatics::CreateSaveGameObject(UMainSaveGame::StaticClass()));
 }
 
 void APlayerCharacter::Move(const FInputActionValue& Value)
@@ -109,6 +116,27 @@ UCameraComponent* APlayerCharacter::GetPrimaryCameraComponent() const
 	return PrimaryCameraComponent;
 }
 
+void APlayerCharacter::Save()
+{
+	SaveObject->PlayerLocation = GetActorLocation();
+	SaveObject->PlayerRotator = GetActorRotation();
+	UGameplayStatics::SaveGameToSlot(SaveObject, TEXT("Slot1"), 0);
+	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::White, TEXT("Data saved ... "));
+}
+
+void APlayerCharacter::Load()
+{
+	LoadObject = UGameplayStatics::LoadGameFromSlot(TEXT("Slot1"), 0);
+	if (!LoadObject)
+	{
+		Save();
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("No load, created load "));
+	}
+	SetActorLocation(SaveObject->PlayerLocation);
+	SetActorRotation(SaveObject->PlayerRotator);
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT(" Loaded."));
+}
+
 // Called when the game starts or when spawned
 void APlayerCharacter::BeginPlay()
 {
@@ -126,12 +154,9 @@ void APlayerCharacter::BeginPlay()
 				}
 		}
 
-	/*Respawn. Location resets */
-	RespawnLocation = GetActorLocation();
 
-	/*interact*/
-	//PlayerCharacterMesh->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::OnObjectBeginOverlap);
-
+	/*Respawn and load slot is set*/
+	Save();
 }
 
 /*float decided in blueprint*/
@@ -162,17 +187,37 @@ void APlayerCharacter::Die()
 void APlayerCharacter::Respawn()
 {
 	Health = 1.0f;
-	SetActorLocation(RespawnLocation);
+	Load();
 	GetWorldTimerManager().ClearTimer(RespawnTimerHandle);
+}
+
+void APlayerCharacter::GetAmmo(float CollectedAmmo)
+{
+	CurrentAmmo += CollectedAmmo;
+	if (CurrentAmmo >= Max_Ammo) {
+		CurrentAmmo = 3.0f;
+	}
+	GetWorld()->GetTimerManager().SetTimer(BatteryChargeHandle, this, &APlayerCharacter::LoosingCharge, BatteryChargeDelay, true);
+
+}
+
+void APlayerCharacter::LoosingCharge()
+{
+	if (CurrentAmmo > Min_Ammo) {
+		CurrentAmmo -= 0.3f;
+	}
+	
+	else {
+		CurrentAmmo = 0.0f;
+		GetWorldTimerManager().ClearTimer(BatteryChargeHandle);
+	}
+	
 }
 
 // Called every frame
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-
-
 }
 
 // Called to bind functionality to input
@@ -246,21 +291,8 @@ void APlayerCharacter::SwitchToDefaultImc() const
 	}
 }
 
-/*void APlayerCharacter::OnObjectBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	AVent* Actor = Cast<AVent>(OtherActor);
-	if (Actor != nullptr)
-	{
-		TakeDamage(1.0f);
-		PlayerCharacterMesh->OnComponentBeginOverlap.RemoveAll(this);
-
-	}
-
-}*/
-
-
 //Called by trigger
-void APlayerCharacter::TurnToDifferentView(FString Tag)
+void APlayerCharacter::RunOnTagOverlap(FString Tag)
 {
 	if (Tag.Len() == 0)
 	{
@@ -279,10 +311,14 @@ void APlayerCharacter::TurnToDifferentView(FString Tag)
 		SecondCameraComponent->Activate();
 		PrimaryCameraComponent->Deactivate();
 	}
-
+	if (Tag == "Checkpoint")
+	{
+		Save();
+	}
+	
 }
 //Called by trigger
-void APlayerCharacter::ReturnSpringarmToDefault(FString Tag)
+void APlayerCharacter::RunOnTagEndOverlap(FString Tag)
 {
 	if (Tag.Len() == 0)
 	{
