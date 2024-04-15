@@ -8,7 +8,7 @@ ANPC::ANPC()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	Health = 10.0f;
+	Health = 100.0f;
 	DieDelay = 2.0f;
 }
 
