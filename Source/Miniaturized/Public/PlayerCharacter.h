@@ -116,6 +116,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void Save();
+
 	UFUNCTION(BlueprintCallable)
 	void Load();
 	/*
