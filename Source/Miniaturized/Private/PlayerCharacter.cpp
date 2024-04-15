@@ -46,7 +46,7 @@ APlayerCharacter::APlayerCharacter()
 	
 
 	/*Health*/
-	Health = 1.0f;
+	Health = 100.0f;
 	RespawnDelay = 5.0f;
 
 	/*Weapon and ammo*/
