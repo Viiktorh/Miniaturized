@@ -6,10 +6,12 @@
 // Sets default values
 ANPC::ANPC()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	Health = 100.0f;
+	MaxHealth = 100.0f;
+	Health = MaxHealth;
 	DieDelay = 2.0f;
+
 }
 
 // Called when the game starts or when spawned

@@ -8,6 +8,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "MainSaveGame.h"
+#include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "PlayerCharacter.generated.h"
 
 struct FInputActionValue;
@@ -67,6 +68,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	UInputAction* LookAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	UInputAction* PushObject;
 	void Move(const FInputActionValue& Value);
 
 	void LookAround(const FInputActionValue& Value);
@@ -167,6 +170,33 @@ public:
 	//Switch inputmapping
 	void SwitchToTerrariumImc() const;
 	void SwitchToDefaultImc() const;
+
+	/*
+	 * Push and pull objects
+	 */
+	FHitResult Hit;
+	TEnumAsByte<ECollisionChannel> TraceObject = ECC_Pawn;
+	FVector TraceStart;
+	FVector TraceEnd;
+	FCollisionQueryParams QueryParams;
+	UPhysicsHandleComponent* PhysicsHandle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Traceline distance")
+	float TraceDistance = 100.0f;
+
+	bool IsGrabbing = false;
+	bool  IsPushable;
+
+	 //shoots a line in front of the character and saves what it hits to "Hit"
+	void LineTrace(float LineDistance, TEnumAsByte<ECollisionChannel> TraceChannel);
+	//Move object 
+	void Push();
+	//Use physicshandle to grab object 
+	void Grab();
+	//Decide whether an object is pushable and run push and grab to grab and push the object
+	void PushableObject();
+	//Release grabbed object
+	void ReleaseGrabbedObject();
 
 
 
