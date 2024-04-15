@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/HUD.h"
+#include "Components/Button.h"
 #include "MenuHUD.generated.h"
 
 /**
@@ -15,11 +16,33 @@ class MINIATURIZED_API AMenuHUD : public AHUD
 	GENERATED_BODY()
 	
 protected:
-	/*reference to the menu */
-	TSharedPtr<class SMainMenuWidget> MenuWidget;
 
-	/*menu is contained within this container*/
-	TSharedPtr<class SWidget> MenuWidgetContainer;
 
 	virtual void BeginPlay() override;
+
+public:
+	/*UPROPERTY();
+	UUserWidget* MenuHUD;
+
+	UPROPERTY()
+	UButton* Options;
+	
+	UPROPERTY()
+	UButton* Exit;
+	
+	UPROPERTY()
+	UButton* Resume; 
+	
+	UPROPERTY()
+	UButton* ReturnToLastCheckpoint;
+	
+	void SwitchWidgets();
+
+	bool ButtonIsPressed=false;
+
+	bool IsMenuOpen = false;
+*/
+	
+
+
 };

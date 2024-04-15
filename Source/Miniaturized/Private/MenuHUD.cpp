@@ -2,17 +2,27 @@
 
 
 #include "MenuHUD.h"
-#include "SMainMenuWidget.h"
-#include "Widgets/SWeakWidget.h"
 #include "Engine/Engine.h"
 
 void AMenuHUD::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (GEngine && GEngine->GameViewport) {
-		MenuWidget = SNew(SMainMenuWidget).OwningHUD(this);
-		GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(MenuWidgetContainer, SWeakWidget).PossiblyNullContent(MenuWidget.ToSharedRef()));
-	}
-
+	
+	//if (IsMenuOpen == true) {
+		//Options->OnClicked.AddDynamic(this, &UMenuHUD::OptionsClicked); 
+	//}
+	
 }
+
+/*
+void AMenuHUD::SwitchWidgets()
+{
+	if (GEngine && GEngine->GameViewport) {
+		//GEngine->GameViewport->AddViewportWidgetContent(SNew(MyWidgetPtr.ToSharedRef()));
+
+		//GEngine->GameViewport->RemoveViewportWidgetContent(SNew(MyWidgetPtr.ToSharedRef()));
+	}
+	
+}*/
+
