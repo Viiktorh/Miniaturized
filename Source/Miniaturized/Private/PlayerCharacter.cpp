@@ -167,6 +167,7 @@ void APlayerCharacter::LineTrace(float LineDistance, TEnumAsByte<ECollisionChann
 	else
 	{
 		IsPushable = false;
+		ReleaseGrabbedObject();
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Emerald, TEXT("NOT PUSHABle"));
 	}
 }
@@ -177,8 +178,9 @@ void APlayerCharacter::Push()
 	if (PhysicsHandle->GrabbedComponent)
 	{
 
-		//Move the object we're holding each frame
+		//Move the object grabbed in physicshandle
 		PhysicsHandle->SetTargetLocation(FVector(GetActorLocation().X + GetActorForwardVector().X * 100, GetActorLocation().Y + GetActorForwardVector().Y * 100, Hit.GetActor()->GetActorLocation().Z));
+		
 	}
 	else
 	{
@@ -197,7 +199,7 @@ void APlayerCharacter::Grab()
 	if (!IsGrabbing && Hit.GetActor()->Tags[0] == "PushableObject")
 	{
 		UE_LOG(LogTemp, Display, TEXT("Hit actor %s"), *Hit.GetActor()->GetName());
-		PhysicsHandle->GrabComponentAtLocationWithRotation(Hit.GetComponent(), NAME_None, Hit.GetComponent()->GetOwner()->GetActorLocation(), FRotator(0, 0, 0));
+		PhysicsHandle->GrabComponentAtLocationWithRotation(Hit.GetComponent(), NAME_None, Hit.GetComponent()->GetOwner()->GetActorLocation(), Hit.GetComponent()->GetOwner()->GetActorRotation());
 		IsGrabbing = true;
 	}
 	else
@@ -208,13 +210,14 @@ void APlayerCharacter::Grab()
 
 void APlayerCharacter::PushableObject()
 {
+	if (!IsPushable) { return; }
+
 	FVector Vel = this->GetVelocity();
 	FVector Forward = this->GetActorForwardVector();
 	FVector Right = this->GetActorRightVector();
 	float ForwardSpeed = FVector::DotProduct(Vel, Forward);
 	float RightSpeed = FVector::DotProduct(Vel, Right);
 
-	if (!IsPushable) { return; }
 	//Run different animation depending on speed
 	if (ForwardSpeed > 0)
 	{
