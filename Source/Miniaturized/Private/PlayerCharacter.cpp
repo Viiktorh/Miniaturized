@@ -44,7 +44,7 @@ APlayerCharacter::APlayerCharacter()
 	PrimaryCameraComponent->bUsePawnControlRotation = true;
 
 	
-
+	////////////////////////////////////////////////////// Bia start 
 	/*Health*/
 	Health = 1.0f;
 	RespawnDelay = 5.0f;
@@ -54,7 +54,7 @@ APlayerCharacter::APlayerCharacter()
 	Min_Ammo=0.0f;
 	Max_Ammo=3.0f;
 	BatteryChargeDelay = 3.0f;
-
+	//////////////////////////////////////////////////// Bia end 
 	/*Second camera component*/
 	SecondCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("SecondCameraComponent"));
 	SecondCameraComponent->SetupAttachment(SecondSpringArm, USpringArmComponent::SocketName);
@@ -137,6 +137,8 @@ void APlayerCharacter::Load()
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT(" Loaded."));
 }
 
+
+
 // Called when the game starts or when spawned
 void APlayerCharacter::BeginPlay()
 {
@@ -159,6 +161,7 @@ void APlayerCharacter::BeginPlay()
 	Save();
 }
 
+///////////////////////////////////////////////////Bia start 
 /*float decided in blueprint*/
 void APlayerCharacter::TakeDamage(float DamageDealt)
 {
@@ -211,8 +214,8 @@ void APlayerCharacter::LoosingCharge()
 		CurrentAmmo = 0.0f;
 		GetWorldTimerManager().ClearTimer(BatteryChargeHandle);
 	}
-	
 }
+////////////////////////////////////////////////// Bia end 
 
 // Called every frame
 void APlayerCharacter::Tick(float DeltaTime)

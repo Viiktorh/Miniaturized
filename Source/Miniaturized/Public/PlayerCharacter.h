@@ -71,7 +71,7 @@ public:
 
 	void LookAround(const FInputActionValue& Value);
 
-
+	//////////////////////////////////////////////////// Bia start 
 	/*
 	* Weapon
 	*/
@@ -109,6 +109,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Respawn")
 	float RespawnDelay;
+	////////////////////////////////////////////////////////// Bia end 
+
 
 	 /*GameSave*/
 	UMainSaveGame *SaveObject;
@@ -119,6 +121,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void Load();
+
 	/*
 	 *Terrarium camera and control
 	 */
@@ -175,6 +178,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+
+	/////////////////////////////////////////////// Bia start 
 	/*Health and respawn*/
 
 	UFUNCTION(BlueprintCallable)
@@ -199,5 +204,5 @@ protected:
 	void LoosingCharge();
 
 	FTimerHandle BatteryChargeHandle;
-
+	/////////////////////////////////////////////Bia end 
 };
