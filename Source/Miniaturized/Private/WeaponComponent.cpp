@@ -83,7 +83,7 @@ void UWeaponComponent::FireWeapon()
 		UE_LOG(LogTemp, Log, TEXT("Trace hit actor: %s"), *OutHit.GetActor()->GetName());
 		if (OutHit.GetActor()->ActorHasTag("Enemy"))
 		{
-			UGameplayStatics::ApplyDamage(OutHit.GetActor(), 10, PlayerController, Character, DamageType);
+			UGameplayStatics::ApplyDamage(OutHit.GetActor(), 0.1f, PlayerController, Character, DamageType);
 			//Draw a thin green line if the actor hit is Enemy
 			DrawDebugLine(GetWorld(), BeamStart, BeamEnd, FColor::Green, false, 5.f, 5);
 		}

@@ -69,6 +69,9 @@ APlayerCharacter::APlayerCharacter()
 	/*Game save*/
 	SaveObject = Cast<UMainSaveGame>(UGameplayStatics::CreateSaveGameObject(UMainSaveGame::StaticClass()));
 	LoadObject = Cast<UMainSaveGame>(UGameplayStatics::CreateSaveGameObject(UMainSaveGame::StaticClass()));
+
+	//For physics handle
+	PhysicsHandle = CreateDefaultSubobject<UPhysicsHandleComponent>(TEXT("PhysicsHandle"));
 }
 
 void APlayerCharacter::Move(const FInputActionValue& Value)
@@ -88,7 +91,7 @@ void APlayerCharacter::LookAround(const FInputActionValue& Value)
 {
 	FVector2D LookAroundVector = Value.Get<FVector2D>();
 
-	if (Controller != nullptr)
+	if (Controller != nullptr && !IsGrabbing)
 	{
 		AddControllerYawInput(LookAroundVector.X);
 		AddControllerPitchInput((LookAroundVector.Y));
@@ -135,6 +138,110 @@ void APlayerCharacter::Load()
 	SetActorLocation(SaveObject->PlayerLocation);
 	SetActorRotation(SaveObject->PlayerRotator);
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT(" Loaded."));
+}
+
+void APlayerCharacter::LineTrace(float LineDistance, TEnumAsByte<ECollisionChannel> TraceChannel)
+{
+	// where the trace starts and how far it goes
+	TraceStart = GetActorLocation();
+	TraceEnd = GetActorLocation() + GetActorForwardVector() * LineDistance;
+
+	// ignores this actor as to not block the trace
+	QueryParams.AddIgnoredActor(this);
+	//Runs a trace and return first actor hit within the channel to "Hit"
+	GetWorld()->LineTraceSingleByChannel(Hit, TraceStart, TraceEnd, TraceChannel, QueryParams);
+
+	//Shows the line and ensure it works
+	DrawDebugLine(GetWorld(), TraceStart, TraceEnd, Hit.bBlockingHit ? FColor::Green : FColor::Magenta, false, 5.0f, 0, 10.0f);
+	// UE_LOG(LogTemp, Log, TEXT("Tracing line: %s to %s"), *TraceStart.ToCompactString(), *TraceEnd.ToCompactString());
+	if (Hit.bBlockingHit)
+	{
+		if (!Hit.GetActor()->Tags.IsEmpty() && IsValid(Hit.GetActor()))
+		{
+
+			//TODO: Show UI that says that its pushable
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Emerald, TEXT("Pushable object"));
+			IsPushable = true;
+		}
+	}
+	else
+	{
+		IsPushable = false;
+		ReleaseGrabbedObject();
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Emerald, TEXT("NOT PUSHABle"));
+	}
+}
+
+void APlayerCharacter::Push()
+{
+	//if component grabbed
+	if (PhysicsHandle->GrabbedComponent)
+	{
+
+		//Move the object grabbed in physicshandle
+		PhysicsHandle->SetTargetLocation(FVector(GetActorLocation().X + GetActorForwardVector().X * 100, GetActorLocation().Y + GetActorForwardVector().Y * 100, Hit.GetActor()->GetActorLocation().Z));
+		
+	}
+	else
+	{
+		UE_LOG(LogTemp, Display, TEXT("Error in grabbing object"));
+	}
+}
+
+void APlayerCharacter::Grab()
+{
+	if (!PhysicsHandle)
+	{
+		UE_LOG(LogTemp, Display, TEXT("No physicshandle"));
+		return;
+	}
+
+	if (!IsGrabbing && Hit.GetActor()->Tags[0] == "PushableObject")
+	{
+		UE_LOG(LogTemp, Display, TEXT("Hit actor %s"), *Hit.GetActor()->GetName());
+		PhysicsHandle->GrabComponentAtLocationWithRotation(Hit.GetComponent(), NAME_None, Hit.GetComponent()->GetOwner()->GetActorLocation(), Hit.GetComponent()->GetOwner()->GetActorRotation());
+		IsGrabbing = true;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Display, TEXT("Nothing to grab or already grabbed an actor"));
+	}
+}
+
+void APlayerCharacter::PushableObject()
+{
+	if (!IsPushable) { return; }
+
+	FVector Vel = this->GetVelocity();
+	FVector Forward = this->GetActorForwardVector();
+	FVector Right = this->GetActorRightVector();
+	float ForwardSpeed = FVector::DotProduct(Vel, Forward);
+	float RightSpeed = FVector::DotProduct(Vel, Right);
+
+	//Run different animation depending on speed
+	if (ForwardSpeed > 0)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Emerald, TEXT("Pushing forward"));
+	}
+	if (ForwardSpeed < 0)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Emerald, TEXT("Pushing Backward"));
+	}
+	//TODO: Different animation on direction
+	Grab();
+	Push();
+}
+
+void APlayerCharacter::ReleaseGrabbedObject()
+{
+	if (!IsGrabbing)
+	{
+		UE_LOG(LogTemp, Display, TEXT("Nothing grabbed"));
+		return;
+	}
+	//TODO: Do we need to return to normal animation after changing?
+	PhysicsHandle->ReleaseComponent();
+	IsGrabbing = false;
 }
 
 // Called when the game starts or when spawned
@@ -218,6 +325,7 @@ void APlayerCharacter::LoosingCharge()
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	LineTrace(TraceDistance, TraceObject);
 }
 
 // Called to bind functionality to input
@@ -231,6 +339,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APlayerCharacter::LookAround);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
+		EnhancedInputComponent->BindAction(PushObject, ETriggerEvent::Completed, this, &APlayerCharacter::ReleaseGrabbedObject);
+		EnhancedInputComponent->BindAction(PushObject, ETriggerEvent::Triggered, this, &APlayerCharacter::PushableObject);
 	}
 }
 
