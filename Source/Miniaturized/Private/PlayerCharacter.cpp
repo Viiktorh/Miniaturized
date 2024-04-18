@@ -42,6 +42,7 @@ APlayerCharacter::APlayerCharacter()
 	PrimaryCameraComponent->AttachToComponent(CameraSpringArm, FAttachmentTransformRules::KeepRelativeTransform);
 	PrimaryCameraComponent->bUsePawnControlRotation = true;
 
+
 	/*Health*/
 	Health = 100.0f;
 	RespawnDelay = 5.0f;
