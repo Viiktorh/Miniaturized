@@ -5,10 +5,12 @@
 #include "CoreMinimal.h"
 #include "EnhancedInputSubsystemInterface.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "MainSaveGame.h"
+#include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "PlayerCharacter.generated.h"
 
-class USpringArmComponent;
 struct FInputActionValue;
 class UCameraComponent;
 class UInputAction;
@@ -36,16 +38,16 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UCameraComponent* PrimaryCameraComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USpringArmComponent* CameraSpringArm;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USkeletalMeshComponent* PlayerCharacterMesh;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UCameraComponent* SecondCameraComponent;
 
-	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = Camera)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera)
 	USpringArmComponent* SecondSpringArm;
 
 	/*
@@ -66,11 +68,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	UInputAction* LookAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	UInputAction* PushObject;
 	void Move(const FInputActionValue& Value);
 
 	void LookAround(const FInputActionValue& Value);
 
-	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraSpringArm; }
 
 	/*
 	* Weapon
@@ -89,14 +92,42 @@ public:
 
 	UCameraComponent* GetPrimaryCameraComponent() const;
 
+	/*Ammo*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	float CurrentAmmo;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	float Min_Ammo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	float Max_Ammo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	float BatteryChargeDelay;
+
+	/*Health*/
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
+	float Health;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Respawn")
+	float RespawnDelay;
+
+	 /*GameSave*/
+	UMainSaveGame *SaveObject;
+	USaveGame *LoadObject;
+
+	UFUNCTION(BlueprintCallable)
+	void Save();
+	UFUNCTION(BlueprintCallable)
+	void Load();
 	/*
 	 *Terrarium camera and control
 	 */
 	 //Springarm start position is saved at the start
 	FRotator SpringArmStartRotation;
 
-	 //Player controller and subsystem
+	//Player controller and subsystem
 	APlayerController* PlayerController;
 	UEnhancedInputLocalPlayerSubsystem* Subsystem;
 
@@ -112,7 +143,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SideviewDistance")
 	float SideViewSpringArmDistance = 800.0f;
 
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sideview position")
 	float SideViewIntSpeed = 2.0f;//Value decides how fast the springarm turns when changing position & rotation
 
@@ -123,10 +154,10 @@ public:
 	float Delay = 0.01f;
 
 	//Repositions springarm and switches controls
-	void TurnToDifferentView(FString Tag);
+	void RunOnTagOverlap(FString Tag);
 
 	//Returns springarm and control to default
-	void ReturnSpringarmToDefault(FString Tag);
+	void RunOnTagEndOverlap(FString Tag);
 
 	/*Rotates the springarm relative to its parent and increases the springarm target length.
 	 *Turns off collision on the springarm. When it reaches its desired location, timer that is also used is cleared*/
@@ -140,10 +171,68 @@ public:
 	void SwitchToTerrariumImc() const;
 	void SwitchToDefaultImc() const;
 
+	/*
+	 *Spring/Jumpad
+	 */
+	//Jump as high as you want
+	void JumpPad(double Forward, double HowHigh);
+	/*
+	 * Push and pull objects
+	 */
+	 
+	FHitResult Hit;
+	TEnumAsByte<ECollisionChannel> TraceObject = ECC_Pawn;
+	FVector TraceStart;
+	FVector TraceEnd;
+	FCollisionQueryParams QueryParams;
+	UPhysicsHandleComponent* PhysicsHandle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Traceline distance")
+	float TraceDistance = 100.0f;
+
+	bool IsGrabbing = false;
+	bool  IsPushable;
+
+	 //shoots a line in front of the character and saves what it hits to "Hit"
+	void LineTrace(float LineDistance, TEnumAsByte<ECollisionChannel> TraceChannel);
+	//Move object 
+	void Push();
+	//Use physicshandle to grab object 
+	void Grab();
+	//Decide whether an object is pushable and run push and grab to grab and push the object
+	void PushableObject();
+	//Release grabbed object
+	void ReleaseGrabbedObject();
+
 
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	/*Health and respawn*/
+
+	UFUNCTION(BlueprintCallable)
+	void TakeDamage(float DamageDealt);
+
+	UFUNCTION(BlueprintCallable)
+	void Heal(float HealingRestored);
+
+	UFUNCTION(BlueprintCallable)
+	void Die();
+
+	UFUNCTION(BlueprintCallable)
+	void Respawn();
+
+	FTimerHandle RespawnTimerHandle;
+
+	/*Ammo and shooting*/
+	UFUNCTION(BlueprintCallable)
+	void GetAmmo(float CollectedAmmo);
+
+	UFUNCTION(BlueprintCallable)
+	void LoosingCharge();
+
+	FTimerHandle BatteryChargeHandle;
 
 };
