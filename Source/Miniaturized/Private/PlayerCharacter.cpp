@@ -1,4 +1,4 @@
-
+  
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
@@ -7,7 +7,6 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputAction.h"
 #include "Camera/CameraComponent.h"
-#include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -34,7 +33,7 @@ APlayerCharacter::APlayerCharacter()
 	SecondSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SecondCameraBoom"));
 	SecondSpringArm->SetupAttachment(RootComponent);
 	SecondSpringArm->TargetArmLength = SecondSpringArmDistance;
-	SecondSpringArm->bUsePawnControlRotation = true;
+	SecondSpringArm->bUsePawnControlRotation = false;
 	SecondSpringArm->bEnableCameraLag = true;
 
 	/*Camera Component*/
@@ -42,8 +41,6 @@ APlayerCharacter::APlayerCharacter()
 	PrimaryCameraComponent->SetupAttachment(CameraSpringArm, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	PrimaryCameraComponent->AttachToComponent(CameraSpringArm, FAttachmentTransformRules::KeepRelativeTransform);
 	PrimaryCameraComponent->bUsePawnControlRotation = true;
-
-	
 
 	/*Health*/
 	Health = 100.0f;
@@ -66,10 +63,7 @@ APlayerCharacter::APlayerCharacter()
 	PlayerCharacterMesh = GetMesh();
 	PlayerCharacterMesh->SetGenerateOverlapEvents(true);//Must be true for trigger to work properly
 
-	/*Game save*/
-	SaveObject = Cast<UMainSaveGame>(UGameplayStatics::CreateSaveGameObject(UMainSaveGame::StaticClass()));
-	LoadObject = Cast<UMainSaveGame>(UGameplayStatics::CreateSaveGameObject(UMainSaveGame::StaticClass()));
-
+	
 	//For physics handle
 	PhysicsHandle = CreateDefaultSubobject<UPhysicsHandleComponent>(TEXT("PhysicsHandle"));
 }
@@ -121,8 +115,11 @@ UCameraComponent* APlayerCharacter::GetPrimaryCameraComponent() const
 
 void APlayerCharacter::Save()
 {
+	SaveObject = Cast<UMainSaveGame>(UGameplayStatics::CreateSaveGameObject(UMainSaveGame::StaticClass()));
 	SaveObject->PlayerLocation = GetActorLocation();
 	SaveObject->PlayerRotator = GetActorRotation();
+	SaveObject->PlayerCurrentAmmo = CurrentAmmo;
+	SaveObject->PlayerCurrentHealth = Health;
 	UGameplayStatics::SaveGameToSlot(SaveObject, TEXT("Slot1"), 0);
 	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::White, TEXT("Data saved ... "));
 }
@@ -137,6 +134,8 @@ void APlayerCharacter::Load()
 	}
 	SetActorLocation(SaveObject->PlayerLocation);
 	SetActorRotation(SaveObject->PlayerRotator);
+	Health = SaveObject->PlayerCurrentHealth;
+	CurrentAmmo = SaveObject->PlayerCurrentAmmo;
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT(" Loaded."));
 }
 
@@ -160,7 +159,7 @@ void APlayerCharacter::LineTrace(float LineDistance, TEnumAsByte<ECollisionChann
 		{
 
 			//TODO: Show UI that says that its pushable
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Emerald, TEXT("Pushable object"));
+			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Emerald, TEXT("Pushable object"));
 			IsPushable = true;
 		}
 	}
@@ -168,7 +167,7 @@ void APlayerCharacter::LineTrace(float LineDistance, TEnumAsByte<ECollisionChann
 	{
 		IsPushable = false;
 		ReleaseGrabbedObject();
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Emerald, TEXT("NOT PUSHABle"));
+		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Emerald, TEXT("NOT PUSHABle"));
 	}
 }
 
@@ -248,6 +247,11 @@ void APlayerCharacter::ReleaseGrabbedObject()
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	/*Game save*/
+	SaveObject = Cast<UMainSaveGame>(UGameplayStatics::CreateSaveGameObject(UMainSaveGame::StaticClass()));
+	LoadObject = Cast<UMainSaveGame>(UGameplayStatics::CreateSaveGameObject(UMainSaveGame::StaticClass()));
+	
 	SpringArmStartRotation = CameraSpringArm->GetRelativeRotation();
 	PlayerController = Cast<APlayerController>(Controller);
 	Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
@@ -347,14 +351,16 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 void APlayerCharacter::ChangeSpringarmWithTimer()
 {
-	if (CameraSpringArm->GetRelativeRotation().Yaw <= -89)
+	if (CameraSpringArm->GetRelativeRotation().Yaw <= -90)
 	{
 		GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
 		UE_LOG(LogTemp, Warning, TEXT(" Pitch is: %f, Yaw is: %f and Roll is: %f"), CameraSpringArm->GetRelativeRotation().Pitch, CameraSpringArm->GetRelativeRotation().Yaw, CameraSpringArm->GetRelativeRotation().Roll);
 		UE_LOG(LogTemp, Warning, TEXT("Timer Cleared"))
 	}
+	UE_LOG(LogTemp, Warning, TEXT(" Pitch is: %f, Yaw is: %f and Roll is: %f"), CameraSpringArm->GetRelativeRotation().Pitch, CameraSpringArm->GetRelativeRotation().Yaw, CameraSpringArm->GetRelativeRotation().Roll);
 	//Rotates and increases the springarm location relative to mesh, turns off springarm collision
 	CameraSpringArm->bDoCollisionTest = false;
+	bUseControllerRotationYaw = false;
 	CameraSpringArm->bUsePawnControlRotation = false;
 	CameraSpringArm->TargetArmLength = FMath::FInterpTo(CameraSpringArm->TargetArmLength, SideViewSpringArmDistance, GetWorld()->GetDeltaSeconds(), SideViewIntSpeed);
 	CameraSpringArm->SetRelativeRotation(FMath::RInterpTo(CameraSpringArm->GetRelativeRotation(), SideViewRotation, GetWorld()->GetDeltaSeconds(), SideViewIntSpeed));
@@ -374,6 +380,7 @@ void APlayerCharacter::ReturnSpringarmWithTimer()
 	CameraSpringArm->TargetArmLength = FMath::FInterpTo(CameraSpringArm->TargetArmLength, StartSpringArmDistance, GetWorld()->GetDeltaSeconds(), SideViewIntSpeed);
 	CameraSpringArm->bUsePawnControlRotation = true;
 	CameraSpringArm->bDoCollisionTest = true;
+	bUseControllerRotationYaw = true;
 
 }
 

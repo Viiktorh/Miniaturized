@@ -132,7 +132,7 @@ public:
 	UEnhancedInputLocalPlayerSubsystem* Subsystem;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SideviewRotation")
-	FRotator SideViewRotation = FRotator(0, 0, -100);
+	FRotator SideViewRotation = FRotator(0,-95,0);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FirstSpringarm")
 	float StartSpringArmDistance = 500.0f;

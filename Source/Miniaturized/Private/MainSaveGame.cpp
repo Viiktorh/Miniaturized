@@ -7,4 +7,6 @@ UMainSaveGame::UMainSaveGame()
 {
 	PlayerLocation = FVector::Zero();
 	PlayerRotator = FRotator::ZeroRotator;
+	PlayerCurrentHealth = 0.0f;
+	PlayerCurrentAmmo = 0.0f;
 }
