@@ -42,8 +42,6 @@ APlayerCharacter::APlayerCharacter()
 	PrimaryCameraComponent->AttachToComponent(CameraSpringArm, FAttachmentTransformRules::KeepRelativeTransform);
 	PrimaryCameraComponent->bUsePawnControlRotation = true;
 
-	/*Skeletal Mesh Component*/
-	PlayerCharacterMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharMesh"));
 
 	/*Health*/
 	Health = 1.0f;
