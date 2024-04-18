@@ -180,7 +180,13 @@ protected:
 	/*Health and respawn*/
 
 	UFUNCTION(BlueprintCallable)
-	void TakeDamage(float DamageDealt);
+	virtual float TakeDamage
+	(
+		float DamageAmount,
+		struct FDamageEvent const& DamageEvent,
+		AController* EventInstigator,
+		AActor* DamageCauser
+	)override;
 
 	UFUNCTION(BlueprintCallable)
 	void Heal(float HealingRestored);

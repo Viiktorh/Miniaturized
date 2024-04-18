@@ -9,6 +9,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
+#include "Vent.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -132,6 +133,8 @@ void APlayerCharacter::Load()
 		Save();
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("No load, created load "));
 	}
+	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Black, TEXT("Vent is working"));
+	bool bBoxIsPassed = false; //reactivate the vent;
 	SetActorLocation(SaveObject->PlayerLocation);
 	SetActorRotation(SaveObject->PlayerRotator);
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT(" Loaded."));
@@ -160,12 +163,14 @@ void APlayerCharacter::BeginPlay()
 }
 
 /*float decided in blueprint*/
-void APlayerCharacter::TakeDamage(float DamageDealt)
+
+float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	Health -= DamageDealt;
+	Health -= DamageAmount;
 	if (Health <= 0.0f) {
 		Die();
 	}
+	return DamageAmount;
 }
 
 /*float decided in blueprint*/
@@ -187,6 +192,8 @@ void APlayerCharacter::Die()
 void APlayerCharacter::Respawn()
 {
 	Health = 1.0f;
+	GEngine->AddOnScreenDebugMessage(-1, 0.3f, FColor::Emerald, TEXT("Triggering the RESAPWN Function"));
+
 	Load();
 	GetWorldTimerManager().ClearTimer(RespawnTimerHandle);
 }
