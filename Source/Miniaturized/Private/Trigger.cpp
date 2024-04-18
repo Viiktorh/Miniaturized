@@ -3,6 +3,7 @@
 
 #include "Trigger.h"
 #include "PlayerCharacter.h"
+#include "Components/StaticMeshComponent.h"
 #include "Components/BoxComponent.h"
 // Sets default values
 ATrigger::ATrigger()
@@ -10,13 +11,21 @@ ATrigger::ATrigger()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	//Root component
+	SceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("SceneComponent"));
+
+	//Static Mesh
+	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
+	StaticMeshComponent->SetupAttachment(SceneComponent);
+
 	//Create a collider for trigger
 	BoxCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionTrigger"));
 	BoxCollider->SetBoxExtent(FVector(32.0f, 32.0f, 32.0f));
 	BoxCollider->SetCollisionProfileName("Trigger");
 	BoxCollider->SetGenerateOverlapEvents(true);
-	SetRootComponent(BoxCollider);
+	BoxCollider->SetupAttachment(StaticMeshComponent);
 
+	SetRootComponent(SceneComponent);
 }
 
 // Called when the game starts or when spawned
