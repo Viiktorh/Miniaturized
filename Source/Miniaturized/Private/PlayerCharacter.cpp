@@ -44,7 +44,8 @@ APlayerCharacter::APlayerCharacter()
 
 
 	/*Health*/
-	Health = 100.0f;
+	MaxHealth = 100.0f;
+	Health = MaxHealth;
 	RespawnDelay = 5.0f;
 
 	/*Weapon and ammo*/
@@ -271,13 +272,16 @@ void APlayerCharacter::BeginPlay()
 	Save();
 }
 
-/*float decided in blueprint*/
-void APlayerCharacter::TakeDamage(float DamageDealt)
+
+
+
+float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	Health -= DamageDealt;
+	Health -= DamageAmount;
 	if (Health <= 0.0f) {
 		Die();
 	}
+	return DamageAmount;
 }
 
 /*float decided in blueprint*/
