@@ -10,6 +10,9 @@ ANPC::ANPC()
 	PrimaryActorTick.bCanEverTick = true;
 	MaxHealth = 200.0f;
 	Health = MaxHealth;
+
+	AntMaxHealth = 50.0f;
+	AntHealth = AntMaxHealth;
 	DieDelay = 2.0f;
 
 }
