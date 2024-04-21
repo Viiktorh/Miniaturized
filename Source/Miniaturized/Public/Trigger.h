@@ -22,7 +22,15 @@ protected:
 public:
 	UPROPERTY(VisibleAnywhere,BlueprintReadWrite)
 	class UBoxComponent* BoxCollider;
-	 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	USceneComponent* SceneComponent;
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* StaticMeshComponent;
+
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "StaticMesh")
+	//UStaticMesh *StaticMesh;
+
+
 	UFUNCTION()
 	void OnOverlapBegin(class AActor* OverlappedActor, class AActor* OtherActor);
 	UFUNCTION()

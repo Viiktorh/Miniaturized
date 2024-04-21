@@ -8,7 +8,7 @@ public class Miniaturized : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "Niagara"});
 
 		//Using Slate UI
 		PrivateDependencyModuleNames.AddRange(new string[] { "Slate","SlateCore" });
