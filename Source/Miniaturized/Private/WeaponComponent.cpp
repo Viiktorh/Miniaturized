@@ -89,12 +89,9 @@ void UWeaponComponent::FireWeapon()
 				NiagaraComp->SetVectorParameter(FName("BeamTarget"), OutHit.GetActor()->GetActorLocation());
 			}
 		}
-		//Apply damage if Actor is Enemy and draw a thin green line.
+		//Apply damage if Actor is Enemy.
 		if (OutHit.GetActor()->ActorHasTag("Enemy"))
 		{
-			UGameplayStatics::ApplyDamage(OutHit.GetActor(), 0.1f, PlayerController, Character, DamageType);
-			//Draw a thin green line if the actor hit is Enemy
-			DrawDebugLine(GetWorld(), BeamStart, BeamEnd, FColor::Green, false, 5.f, 5);
 			UGameplayStatics::ApplyDamage(OutHit.GetActor(), WeaponDamage, PlayerController, Character, DamageType);
 		}
 		else 
