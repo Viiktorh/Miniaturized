@@ -74,7 +74,7 @@ public:
 
 	void LookAround(const FInputActionValue& Value);
 
-	//////////////////////////////////////////////////// Bia start 
+
 	/*
 	* Weapon
 	*/
@@ -105,6 +105,16 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	float BatteryChargeDelay;
 
+	/*Viles*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vials")
+	float CurrentVials;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vials")
+	float Min_Vials;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vials")
+	float Max_Vials;
+
 	/*Health*/
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
@@ -115,8 +125,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Respawn")
 	float RespawnDelay;
-	////////////////////////////////////////////////////////// Bia end 
-
 
 	 /*GameSave*/
 	UMainSaveGame *SaveObject;
@@ -124,10 +132,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void Save();
-
 	UFUNCTION(BlueprintCallable)
 	void Load();
-
 	/*
 	 *Terrarium camera and control
 	 */
@@ -220,8 +226,6 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-
-	/////////////////////////////////////////////// Bia start 
 	/*Health and respawn*/
 
 	UFUNCTION(BlueprintCallable)
@@ -252,5 +256,9 @@ protected:
 	void LoosingCharge();
 
 	FTimerHandle BatteryChargeHandle;
-	/////////////////////////////////////////////Bia end 
+
+	/*Viles*/
+	UFUNCTION(BlueprintCallable)
+	void GetVials(float CollectedVials);
+
 };

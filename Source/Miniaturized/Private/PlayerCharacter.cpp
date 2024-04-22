@@ -54,6 +54,11 @@ APlayerCharacter::APlayerCharacter()
 	Max_Ammo=3.0f;
 	BatteryChargeDelay = 3.0f;
 
+	/*Viles*/
+	CurrentVials = 0.0f;
+	Min_Vials = 0.0f;
+	Max_Vials = 3.0f;
+
 	/*Second camera component*/
 	SecondCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("SecondCameraComponent"));
 	SecondCameraComponent->SetupAttachment(SecondSpringArm, USpringArmComponent::SocketName);
@@ -327,6 +332,14 @@ void APlayerCharacter::LoosingCharge()
 		GetWorldTimerManager().ClearTimer(BatteryChargeHandle);
 	}
 	
+}
+
+void APlayerCharacter::GetVials(float CollectedVials)
+{
+	CurrentVials += CollectedVials;
+	if (CurrentVials >= Max_Vials) {
+		CurrentVials = 3.0f;
+	}
 }
 
 // Called every frame
