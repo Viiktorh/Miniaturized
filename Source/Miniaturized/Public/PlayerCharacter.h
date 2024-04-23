@@ -8,6 +8,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "MainSaveGame.h"
+#include "cameraSwitchInterface.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "PlayerCharacter.generated.h"
 
@@ -18,7 +19,7 @@ class InputComponent;
 class InputAction;
 
 UCLASS()
-class MINIATURIZED_API APlayerCharacter : public ACharacter
+class MINIATURIZED_API APlayerCharacter : public ACharacter, public IcameraSwitchInterface
 {
 	GENERATED_BODY()
 
@@ -167,10 +168,11 @@ public:
 	float Delay = 0.01f;
 
 	//Repositions springarm and switches controls
-	void RunOnTagOverlap(FString Tag);
+	virtual void RunOnTagOverlap(FString Tag) override;
+	
 
 	//Returns springarm and control to default
-	void RunOnTagEndOverlap(FString Tag);
+	virtual void RunOnTagEndOverlap(FString Tag) override;
 
 	/*Rotates the springarm relative to its parent and increases the springarm target length.
 	 *Turns off collision on the springarm. When it reaches its desired location, timer that is also used is cleared*/
