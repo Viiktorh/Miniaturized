@@ -5,7 +5,9 @@
 #include "PlayerCharacter.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/BoxComponent.h"
-// Sets default values
+#include "cameraSwitchInterface.h"
+#include "Kismet/GameplayStatics.h"
+ // Sets default values
 ATrigger::ATrigger()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -34,8 +36,6 @@ void ATrigger::BeginPlay()
 	Super::BeginPlay();
 	OnActorBeginOverlap.AddDynamic(this, &ATrigger::OnOverlapBegin);
 	OnActorEndOverlap.AddDynamic(this, &ATrigger::OnOverlapEnd);
-
-	
 }
 
 
@@ -46,13 +46,14 @@ void ATrigger::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor)
 		UE_LOG(LogTemp, Warning, (TEXT("NO TAGS ON TRIGGER")));
 		return;
 	}
-	if (OtherActor && OtherActor != this)
+	if (OtherActor->GetClass()->ImplementsInterface(UcameraSwitchInterface::StaticClass()) && OtherActor != this)
 	{
-		APlayerCharacter* character = Cast<APlayerCharacter>(OtherActor);
-		character->RunOnTagOverlap(this->Tags[0].ToString());
+		Cast<IcameraSwitchInterface>(OtherActor)->RunOnTagOverlap(this->Tags[0].ToString());
+		//Interface->RunOnTagOverlap(this->Tags[0].ToString());
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Emerald, TEXT("Begin Overlapp"));
 
 	}
+	
 }
 
 void ATrigger::OnOverlapEnd(AActor* OverlappedActor, AActor* OtherActor)
@@ -62,10 +63,10 @@ void ATrigger::OnOverlapEnd(AActor* OverlappedActor, AActor* OtherActor)
 		UE_LOG(LogTemp, Warning, (TEXT("NO TAGS ON TRIGGER")));
 		return;
 	}
-	if (OtherActor && OtherActor != this)
+	if (OtherActor->GetClass()->ImplementsInterface(UcameraSwitchInterface::StaticClass()) && OtherActor != this )
 	{
-		APlayerCharacter* character = Cast<APlayerCharacter>(OtherActor);
-		character->RunOnTagEndOverlap(this->Tags[0].ToString());
+		Cast<IcameraSwitchInterface>(OtherActor)->RunOnTagEndOverlap(this->Tags[0].ToString());
+		//Interface->RunOnTagEndOverlap(this->Tags[0].ToString());
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Emerald, TEXT("End Overlapp"));
 
 	}
