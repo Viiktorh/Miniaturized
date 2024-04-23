@@ -72,13 +72,6 @@ void UWeaponComponent::FireWeapon()
 	
 	//Execute a LineTrace with OutHit as result
 	GetWorld()->LineTraceSingleByChannel(OutHit, BeamStart, BeamEnd, TraceChannelProperty, CollisionParams);
-	
-
-
-	////Draws a thick blue line if the trace hits something, a thick red line if nothing is hit.
-	//DrawDebugLine(GetWorld(), BeamStart, BeamEnd, OutHit.bBlockingHit ? FColor::Blue : FColor::Red, false, 5.0f, 0, 10.0f);
-	//UE_LOG(LogTemp, Log, TEXT("Tracing line: %s to %s"), *BeamStart.ToCompactString(), *BeamEnd.ToCompactString());
-
 
 	// If the trace hit something, bBlockingHit will be true,
 	// and its fields will be filled with detailed info about what was hit
@@ -86,7 +79,7 @@ void UWeaponComponent::FireWeapon()
 	{
 		//Debug
 		UE_LOG(LogTemp, Log, TEXT("Trace hit actor: %s"), *OutHit.GetActor()->GetName());
-		//Do this before applying damage or else risk writing to a nullptr when enemies die.
+		//Do this before applying damage or else risk checking a nullptr when enemies die.
 		if (OutHit.GetActor()->ActorHasTag("Enemy") && OutHit.GetActor() != nullptr)
 		{
 			UNiagaraComponent* NiagaraComp = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), WeaponBeam, BeamStart);
@@ -96,19 +89,14 @@ void UWeaponComponent::FireWeapon()
 				NiagaraComp->SetVectorParameter(FName("BeamTarget"), OutHit.GetActor()->GetActorLocation());
 			}
 		}
-		//Apply damage if Actor is Enemy and draw a thin green line.
+		//Apply damage if Actor is Enemy.
 		if (OutHit.GetActor()->ActorHasTag("Enemy"))
 		{
-			UGameplayStatics::ApplyDamage(OutHit.GetActor(), 0.1f, PlayerController, Character, DamageType);
-			//Draw a thin green line if the actor hit is Enemy
-			DrawDebugLine(GetWorld(), BeamStart, BeamEnd, FColor::Green, false, 5.f, 5);
 			UGameplayStatics::ApplyDamage(OutHit.GetActor(), WeaponDamage, PlayerController, Character, DamageType);
-			/*DrawDebugLine(GetWorld(), BeamStart, BeamEnd, FColor::Green, false, 5.f, 5);*/
 		}
 		else 
 		{
 			UNiagaraComponent* NiagaraComp = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), WeaponBeam, BeamStart);
-			/*UNiagaraComponent* NiagaraComp = UNiagaraFunctionLibrary::SpawnSystemAttached(WeaponBeam, OutHit.GetComponent(), FName("BeamTarget"), Character->GetActorLocation(), Character->GetActorRotation(), EAttachLocation::SnapToTarget, true);*/
 			if (NiagaraComp)
 			{
 				//BeamTarget is the end of the beam. Defined from the NS_WeaponBeam Niagara Comp in the unreal editor.
@@ -146,5 +134,3 @@ void UWeaponComponent::FireWeapon()
 		return;
 	}
 }
-
-//UNiagaraComponent* NiagaraComp = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), WeaponBeam, BeamStart);

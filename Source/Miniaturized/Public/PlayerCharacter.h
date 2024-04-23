@@ -105,6 +105,16 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	float BatteryChargeDelay;
 
+	/*Viles*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vials")
+	float CurrentVials;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vials")
+	float Min_Vials;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vials")
+	float Max_Vials;
+
 	/*Health*/
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
@@ -246,5 +256,9 @@ protected:
 	void LoosingCharge();
 
 	FTimerHandle BatteryChargeHandle;
+
+	/*Viles*/
+	UFUNCTION(BlueprintCallable)
+	void GetVials(float CollectedVials);
 
 };
