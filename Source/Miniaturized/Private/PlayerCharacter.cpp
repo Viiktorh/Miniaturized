@@ -368,12 +368,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 void APlayerCharacter::ChangeSpringarmWithTimer()
 {
-	if (CameraSpringArm->GetRelativeRotation().Yaw <= -90)
-	{
-		GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
-		UE_LOG(LogTemp, Warning, TEXT(" Pitch is: %f, Yaw is: %f and Roll is: %f"), CameraSpringArm->GetRelativeRotation().Pitch, CameraSpringArm->GetRelativeRotation().Yaw, CameraSpringArm->GetRelativeRotation().Roll);
-		UE_LOG(LogTemp, Warning, TEXT("Timer Cleared"))
-	}
+	
 	UE_LOG(LogTemp, Warning, TEXT(" Pitch is: %f, Yaw is: %f and Roll is: %f"), CameraSpringArm->GetRelativeRotation().Pitch, CameraSpringArm->GetRelativeRotation().Yaw, CameraSpringArm->GetRelativeRotation().Roll);
 	//Rotates and increases the springarm location relative to mesh, turns off springarm collision
 	CameraSpringArm->bDoCollisionTest = false;
@@ -381,6 +376,13 @@ void APlayerCharacter::ChangeSpringarmWithTimer()
 	CameraSpringArm->bUsePawnControlRotation = false;
 	CameraSpringArm->TargetArmLength = FMath::FInterpTo(CameraSpringArm->TargetArmLength, SideViewSpringArmDistance, GetWorld()->GetDeltaSeconds(), SideViewIntSpeed);
 	CameraSpringArm->SetRelativeRotation(FMath::RInterpTo(CameraSpringArm->GetRelativeRotation(), SideViewRotation, GetWorld()->GetDeltaSeconds(), SideViewIntSpeed));
+
+	if (CameraSpringArm->GetRelativeRotation().Yaw <= -90)
+	{
+		GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+		UE_LOG(LogTemp, Warning, TEXT(" Pitch is: %f, Yaw is: %f and Roll is: %f"), CameraSpringArm->GetRelativeRotation().Pitch, CameraSpringArm->GetRelativeRotation().Yaw, CameraSpringArm->GetRelativeRotation().Roll);
+		UE_LOG(LogTemp, Warning, TEXT("Timer Cleared"))
+	}
 }
 void APlayerCharacter::ReturnSpringarmWithTimer()
 {
@@ -459,10 +461,8 @@ void APlayerCharacter::RunOnTagOverlap(FString Tag)
 //Called by trigger
 void APlayerCharacter::RunOnTagEndOverlap(FString Tag)
 {
-	if (Tag.Len() == 0)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("No Tag found, add tag to trigger"));
-	}
+
+	
 	if (Tag == "Terrarium")
 	{
 		//Return control and camera to default
@@ -475,5 +475,10 @@ void APlayerCharacter::RunOnTagEndOverlap(FString Tag)
 		SwitchToTerrariumImc();
 		SecondCameraComponent->Deactivate();
 		PrimaryCameraComponent->Activate();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No matching Tag found, add tag to trigger"));
+		return;
 	}
 }
