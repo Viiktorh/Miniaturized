@@ -467,7 +467,7 @@ void APlayerCharacter::RunOnTagOverlap(FString Tag)
 
 	if (Tag == "Terrarium")
 	{
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &APlayerCharacter::ChangeSpringarmWithTimer, Delay, true);
+		//GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &APlayerCharacter::ChangeSpringarmWithTimer, Delay, true);
 		SwitchToTerrariumImc();
 	}
 
