@@ -4,15 +4,16 @@
 #include "WeaponComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Engine/StaticMeshSocket.h"
 #include "Kismet/GameplayStatics.h"
 
 
 
 UWeaponComponent::UWeaponComponent()
 {
-	GuntipOffset = FVector(100.f, 10.f, 10.f);
+	GuntipOffset = FVector();
+	GuntipOffset = USkeletalMeshComponent::GetSocketLocation(FName(TEXT("BeamSocket")));
 
-	
 }
 
 
@@ -82,7 +83,7 @@ void UWeaponComponent::FireWeapon()
 		//Do this before applying damage or else risk checking a nullptr when enemies die.
 		if (OutHit.GetActor()->ActorHasTag("Enemy") && OutHit.GetActor() != nullptr)
 		{
-			UNiagaraComponent* NiagaraComp = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), WeaponBeam, BeamStart);
+			UNiagaraComponent* NiagaraComp = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), WeaponBeam, USkeletalMeshComponent::GetSocketLocation(FName(TEXT("BeamSocket"))));
 			if (NiagaraComp)
 			{
 				//BeamTarget is the end of the beam. Defined from the NS_WeaponBeam Niagara Comp in the unreal editor.
@@ -96,7 +97,7 @@ void UWeaponComponent::FireWeapon()
 		}
 		else 
 		{
-			UNiagaraComponent* NiagaraComp = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), WeaponBeam, BeamStart);
+			UNiagaraComponent* NiagaraComp = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), WeaponBeam, USkeletalMeshComponent::GetSocketLocation(FName(TEXT("BeamSocket"))));
 			if (NiagaraComp)
 			{
 				//BeamTarget is the end of the beam. Defined from the NS_WeaponBeam Niagara Comp in the unreal editor.
@@ -107,7 +108,7 @@ void UWeaponComponent::FireWeapon()
 	else {
 		UE_LOG(LogTemp, Log, TEXT("No Actors were hit"));
 
-		UNiagaraComponent* NiagaraComp = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), WeaponBeam, BeamStart);
+		UNiagaraComponent* NiagaraComp = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), WeaponBeam, USkeletalMeshComponent::GetSocketLocation(FName(TEXT("BeamSocket"))));
 		if (NiagaraComp)
 		{
 			//BeamTarget is the end of the beam. Defined from the NS_WeaponBeam Niagara Comp in the unreal editor.
