@@ -8,6 +8,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "MainSaveGame.h"
+#include "cameraSwitchInterface.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "PlayerCharacter.generated.h"
 
@@ -18,7 +19,7 @@ class InputComponent;
 class InputAction;
 
 UCLASS()
-class MINIATURIZED_API APlayerCharacter : public ACharacter
+class MINIATURIZED_API APlayerCharacter : public ACharacter, public IcameraSwitchInterface
 {
 	GENERATED_BODY()
 
@@ -47,7 +48,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UCameraComponent* SecondCameraComponent;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera")
 	USpringArmComponent* SecondSpringArm;
 
 	/*
@@ -63,6 +64,9 @@ public:
 	UInputAction* MoveAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	UInputAction* MoveActionTerrarium;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	UInputAction* JumpAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
@@ -71,6 +75,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	UInputAction* PushObject;
 	void Move(const FInputActionValue& Value);
+
+	void MoveTerrarium(const FInputActionValue& Value);
 
 	void LookAround(const FInputActionValue& Value);
 
@@ -105,10 +111,23 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	float BatteryChargeDelay;
 
+	/*Viles*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vials")
+	float CurrentVials;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vials")
+	float Min_Vials;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vials")
+	float Max_Vials;
+
 	/*Health*/
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
 	float Health;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
+	float MaxHealth;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Respawn")
 	float RespawnDelay;
@@ -154,10 +173,11 @@ public:
 	float Delay = 0.01f;
 
 	//Repositions springarm and switches controls
-	void RunOnTagOverlap(FString Tag);
+	virtual void RunOnTagOverlap(FString Tag) override;
+	
 
 	//Returns springarm and control to default
-	void RunOnTagEndOverlap(FString Tag);
+	virtual void RunOnTagEndOverlap(FString Tag) override;
 
 	/*Rotates the springarm relative to its parent and increases the springarm target length.
 	 *Turns off collision on the springarm. When it reaches its desired location, timer that is also used is cleared*/
@@ -205,7 +225,10 @@ public:
 	void ReleaseGrabbedObject();
 
 
-
+	/*overlap interact (currently: vent)*/
+	/*UFUNCTION()
+	void OnObjectBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	*/
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -213,7 +236,13 @@ protected:
 	/*Health and respawn*/
 
 	UFUNCTION(BlueprintCallable)
-	void TakeDamage(float DamageDealt);
+	virtual float TakeDamage
+	(
+		float DamageAmount,
+		struct FDamageEvent const& DamageEvent,
+		AController* EventInstigator,
+		AActor* DamageCauser
+	)override;
 
 	UFUNCTION(BlueprintCallable)
 	void Heal(float HealingRestored);
@@ -234,5 +263,9 @@ protected:
 	void LoosingCharge();
 
 	FTimerHandle BatteryChargeHandle;
+
+	/*Viles*/
+	UFUNCTION(BlueprintCallable)
+	void GetVials(float CollectedVials);
 
 };

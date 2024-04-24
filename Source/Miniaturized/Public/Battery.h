@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Components/StaticMeshComponent.h"
 #include "Battery.generated.h"
 
 UCLASS()
@@ -26,11 +27,10 @@ public:
 	
 
 	/*static mesh to represent the pickup in the level*/
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Pickup", meta = (AllowPrivateAccess = "true"))
-	class UStaticMeshComponent* BatteryMesh;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Pickup")
+	UStaticMeshComponent* BatteryMesh;
 
-	/*returm the mesh for the pickup*/
-	FORCEINLINE class UStaticMeshComponent* Getmesh() const { return BatteryMesh; }
+	
 
 
 };

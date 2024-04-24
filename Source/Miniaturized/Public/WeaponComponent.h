@@ -7,8 +7,11 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Miniaturized/Public/PlayerCharacter.h"
 #include "GameFramework/PlayerController.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
 #include "WeaponComponent.generated.h"
 
+class UParticleEmitter;
 /**
  * 
  */
@@ -31,11 +34,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "WeaponSettings")
 	FVector GuntipOffset;
 
+
 	UPROPERTY(EditDefaultsOnly)
-	float BaseDamage;
+	float WeaponDamage = 10.f;
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UDamageType> DamageType;
+
 
 	/*
 	 * Expose Collision Channel to Unreal
@@ -51,9 +56,12 @@ public:
 	class UInputMappingContext* FireIMC;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	class UInputMappingContext* FireTerrariumIMC;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	class UInputAction* FireAction;
 
-	UFUNCTION(BlueprintCallable, Category = "Input")
+	UFUNCTION(BlueprintCallable, Category = "Weapon function")
 	void FireWeapon();
 
 	/*
@@ -65,6 +73,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation and Sound")
 	UAnimMontage* FireAnimation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation and Sound")
+	UNiagaraSystem* WeaponBeam;
 
 	
 

@@ -8,6 +8,7 @@
 #include "InputAction.h"
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -42,8 +43,10 @@ APlayerCharacter::APlayerCharacter()
 	PrimaryCameraComponent->AttachToComponent(CameraSpringArm, FAttachmentTransformRules::KeepRelativeTransform);
 	PrimaryCameraComponent->bUsePawnControlRotation = true;
 
+
 	/*Health*/
-	Health = 100.0f;
+	MaxHealth = 100.0f;
+	Health = MaxHealth;
 	RespawnDelay = 5.0f;
 
 	/*Weapon and ammo*/
@@ -51,6 +54,11 @@ APlayerCharacter::APlayerCharacter()
 	Min_Ammo=0.0f;
 	Max_Ammo=3.0f;
 	BatteryChargeDelay = 3.0f;
+
+	/*Viles*/
+	CurrentVials = 0.0f;
+	Min_Vials = 0.0f;
+	Max_Vials = 3.0f;
 
 	/*Second camera component*/
 	SecondCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("SecondCameraComponent"));
@@ -70,7 +78,6 @@ APlayerCharacter::APlayerCharacter()
 
 void APlayerCharacter::Move(const FInputActionValue& Value)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 0.3f, FColor::Emerald, TEXT("Triggering the move Function"));
 
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
@@ -78,6 +85,28 @@ void APlayerCharacter::Move(const FInputActionValue& Value)
 	{
 		AddMovementInput(GetActorForwardVector(), MovementVector.Y);
 		AddMovementInput(GetActorRightVector(), MovementVector.X);
+	}
+}
+void APlayerCharacter::MoveTerrarium(const FInputActionValue& Value)
+{
+	// input is a Vector2D
+	FVector2D MovementVector = Value.Get<FVector2D>();
+
+	if (Controller != nullptr)
+	{
+		// find out which way is forward
+		const FRotator Rotation = Controller->GetControlRotation();
+		const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+		// get forward vector
+		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+
+		// get right vector 
+		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+
+		// add movement 
+		AddMovementInput(ForwardDirection, MovementVector.Y);
+		AddMovementInput(RightDirection, MovementVector.X);
 	}
 }
 
@@ -150,8 +179,8 @@ void APlayerCharacter::LineTrace(float LineDistance, TEnumAsByte<ECollisionChann
 	//Runs a trace and return first actor hit within the channel to "Hit"
 	GetWorld()->LineTraceSingleByChannel(Hit, TraceStart, TraceEnd, TraceChannel, QueryParams);
 
-	//Shows the line and ensure it works
-	DrawDebugLine(GetWorld(), TraceStart, TraceEnd, Hit.bBlockingHit ? FColor::Green : FColor::Magenta, false, 5.0f, 0, 10.0f);
+	////Shows the line and ensure it works
+	//DrawDebugLine(GetWorld(), TraceStart, TraceEnd, Hit.bBlockingHit ? FColor::Green : FColor::Magenta, false, 5.0f, 0, 10.0f);
 	// UE_LOG(LogTemp, Log, TEXT("Tracing line: %s to %s"), *TraceStart.ToCompactString(), *TraceEnd.ToCompactString());
 	if (Hit.bBlockingHit)
 	{
@@ -270,13 +299,16 @@ void APlayerCharacter::BeginPlay()
 	Save();
 }
 
-/*float decided in blueprint*/
-void APlayerCharacter::TakeDamage(float DamageDealt)
+
+
+
+float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	Health -= DamageDealt;
+	Health -= DamageAmount;
 	if (Health <= 0.0f) {
 		Die();
 	}
+	return DamageAmount;
 }
 
 /*float decided in blueprint*/
@@ -325,6 +357,14 @@ void APlayerCharacter::LoosingCharge()
 	
 }
 
+void APlayerCharacter::GetVials(float CollectedVials)
+{
+	CurrentVials += CollectedVials;
+	if (CurrentVials >= Max_Vials) {
+		CurrentVials = 3.0f;
+	}
+}
+
 // Called every frame
 void APlayerCharacter::Tick(float DeltaTime)
 {
@@ -340,6 +380,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	if (EnhancedInputComponent)
 	{
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Move);
+		EnhancedInputComponent->BindAction(MoveActionTerrarium, ETriggerEvent::Triggered, this, &APlayerCharacter::MoveTerrarium);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APlayerCharacter::LookAround);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
@@ -351,12 +392,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 void APlayerCharacter::ChangeSpringarmWithTimer()
 {
-	if (CameraSpringArm->GetRelativeRotation().Yaw <= -90)
-	{
-		GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
-		UE_LOG(LogTemp, Warning, TEXT(" Pitch is: %f, Yaw is: %f and Roll is: %f"), CameraSpringArm->GetRelativeRotation().Pitch, CameraSpringArm->GetRelativeRotation().Yaw, CameraSpringArm->GetRelativeRotation().Roll);
-		UE_LOG(LogTemp, Warning, TEXT("Timer Cleared"))
-	}
+	
 	UE_LOG(LogTemp, Warning, TEXT(" Pitch is: %f, Yaw is: %f and Roll is: %f"), CameraSpringArm->GetRelativeRotation().Pitch, CameraSpringArm->GetRelativeRotation().Yaw, CameraSpringArm->GetRelativeRotation().Roll);
 	//Rotates and increases the springarm location relative to mesh, turns off springarm collision
 	CameraSpringArm->bDoCollisionTest = false;
@@ -364,6 +400,13 @@ void APlayerCharacter::ChangeSpringarmWithTimer()
 	CameraSpringArm->bUsePawnControlRotation = false;
 	CameraSpringArm->TargetArmLength = FMath::FInterpTo(CameraSpringArm->TargetArmLength, SideViewSpringArmDistance, GetWorld()->GetDeltaSeconds(), SideViewIntSpeed);
 	CameraSpringArm->SetRelativeRotation(FMath::RInterpTo(CameraSpringArm->GetRelativeRotation(), SideViewRotation, GetWorld()->GetDeltaSeconds(), SideViewIntSpeed));
+
+	if (CameraSpringArm->GetRelativeRotation().Yaw <= -90)
+	{
+		GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+		UE_LOG(LogTemp, Warning, TEXT(" Pitch is: %f, Yaw is: %f and Roll is: %f"), CameraSpringArm->GetRelativeRotation().Pitch, CameraSpringArm->GetRelativeRotation().Yaw, CameraSpringArm->GetRelativeRotation().Roll);
+		UE_LOG(LogTemp, Warning, TEXT("Timer Cleared"))
+	}
 }
 void APlayerCharacter::ReturnSpringarmWithTimer()
 {
@@ -381,7 +424,6 @@ void APlayerCharacter::ReturnSpringarmWithTimer()
 	CameraSpringArm->bUsePawnControlRotation = true;
 	CameraSpringArm->bDoCollisionTest = true;
 	bUseControllerRotationYaw = true;
-
 }
 
 void APlayerCharacter::SwitchToTerrariumImc() const
@@ -392,6 +434,8 @@ void APlayerCharacter::SwitchToTerrariumImc() const
 		{
 			Subsystem->RemoveMappingContext(IMC);
 			Subsystem->AddMappingContext(IMC_Terrarium, 0);
+			GetCharacterMovement()->bOrientRotationToMovement = true;
+			GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
 		}
 	}
 }
@@ -442,10 +486,8 @@ void APlayerCharacter::RunOnTagOverlap(FString Tag)
 //Called by trigger
 void APlayerCharacter::RunOnTagEndOverlap(FString Tag)
 {
-	if (Tag.Len() == 0)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("No Tag found, add tag to trigger"));
-	}
+
+	
 	if (Tag == "Terrarium")
 	{
 		//Return control and camera to default
@@ -458,5 +500,10 @@ void APlayerCharacter::RunOnTagEndOverlap(FString Tag)
 		SwitchToTerrariumImc();
 		SecondCameraComponent->Deactivate();
 		PrimaryCameraComponent->Activate();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No matching Tag found, add tag to trigger"));
+		return;
 	}
 }

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+
 #include "NPC.generated.h"
 
 UCLASS()
@@ -26,7 +27,7 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	
+	//////////////////////////////////////////////////////////Bia start 
 	/*Health*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
 	float Health;
@@ -35,6 +36,8 @@ public:
 	float MaxHealth;
 
 
+	//////////////////////////////////////////////////////////Bia end 
+	//////////// Bia&Viktor? 
 	UFUNCTION(BlueprintCallable)
 	virtual float TakeDamage
 	(
