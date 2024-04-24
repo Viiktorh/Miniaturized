@@ -26,15 +26,15 @@ public:
 	UBoxComponent* BoxComp;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	ACameraActor CameraToSwitchTo;
+	ACameraActor *CameraToSwitchTo;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	float BlendTime;
 
 
-	 void OnBeginOveralap(AActor* OtherActor);
-
+	 virtual void NotifyActorBeginOverlap(AActor *OtherActor);
+	 virtual void NotifyActorEndOverlap(AActor *OtherActor);
 	 //void (AActor* OtherActor);
-
+	
 
 };
