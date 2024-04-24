@@ -64,6 +64,9 @@ public:
 	UInputAction* MoveAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	UInputAction* MoveActionTerrarium;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	UInputAction* JumpAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
@@ -72,6 +75,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	UInputAction* PushObject;
 	void Move(const FInputActionValue& Value);
+
+	void MoveTerrarium(const FInputActionValue& Value);
 
 	void LookAround(const FInputActionValue& Value);
 
