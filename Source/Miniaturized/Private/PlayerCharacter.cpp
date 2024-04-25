@@ -8,6 +8,7 @@
 #include "InputAction.h"
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -86,6 +87,28 @@ void APlayerCharacter::Move(const FInputActionValue& Value)
 		AddMovementInput(GetActorRightVector(), MovementVector.X);
 	}
 }
+void APlayerCharacter::MoveTerrarium(const FInputActionValue& Value)
+{
+	// input is a Vector2D
+	FVector2D MovementVector = Value.Get<FVector2D>();
+
+	if (Controller != nullptr)
+	{
+		// find out which way is forward
+		const FRotator Rotation = Controller->GetControlRotation();
+		const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+		// get forward vector
+		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+
+		// get right vector 
+		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+
+		// add movement 
+		AddMovementInput(ForwardDirection, MovementVector.Y);
+		AddMovementInput(RightDirection, MovementVector.X);
+	}
+}
 
 void APlayerCharacter::LookAround(const FInputActionValue& Value)
 {
@@ -156,8 +179,8 @@ void APlayerCharacter::LineTrace(float LineDistance, TEnumAsByte<ECollisionChann
 	//Runs a trace and return first actor hit within the channel to "Hit"
 	GetWorld()->LineTraceSingleByChannel(Hit, TraceStart, TraceEnd, TraceChannel, QueryParams);
 
-	//Shows the line and ensure it works
-	DrawDebugLine(GetWorld(), TraceStart, TraceEnd, Hit.bBlockingHit ? FColor::Green : FColor::Magenta, false, 5.0f, 0, 10.0f);
+	////Shows the line and ensure it works
+	//DrawDebugLine(GetWorld(), TraceStart, TraceEnd, Hit.bBlockingHit ? FColor::Green : FColor::Magenta, false, 5.0f, 0, 10.0f);
 	// UE_LOG(LogTemp, Log, TEXT("Tracing line: %s to %s"), *TraceStart.ToCompactString(), *TraceEnd.ToCompactString());
 	if (Hit.bBlockingHit)
 	{
@@ -357,6 +380,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	if (EnhancedInputComponent)
 	{
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Move);
+		EnhancedInputComponent->BindAction(MoveActionTerrarium, ETriggerEvent::Triggered, this, &APlayerCharacter::MoveTerrarium);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APlayerCharacter::LookAround);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
@@ -400,7 +424,6 @@ void APlayerCharacter::ReturnSpringarmWithTimer()
 	CameraSpringArm->bUsePawnControlRotation = true;
 	CameraSpringArm->bDoCollisionTest = true;
 	bUseControllerRotationYaw = true;
-
 }
 
 void APlayerCharacter::SwitchToTerrariumImc() const
@@ -411,6 +434,8 @@ void APlayerCharacter::SwitchToTerrariumImc() const
 		{
 			Subsystem->RemoveMappingContext(IMC);
 			Subsystem->AddMappingContext(IMC_Terrarium, 0);
+			GetCharacterMovement()->bOrientRotationToMovement = true;
+			GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
 		}
 	}
 }
@@ -442,7 +467,7 @@ void APlayerCharacter::RunOnTagOverlap(FString Tag)
 
 	if (Tag == "Terrarium")
 	{
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &APlayerCharacter::ChangeSpringarmWithTimer, Delay, true);
+		//GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &APlayerCharacter::ChangeSpringarmWithTimer, Delay, true);
 		SwitchToTerrariumImc();
 	}
 

@@ -35,6 +35,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
 	float MaxHealth;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
+	float AntHealth;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
+	float AntMaxHealth;
 
 	//////////////////////////////////////////////////////////Bia end 
 	//////////// Bia&Viktor? 
