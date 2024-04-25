@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-
+#include "HealingObject.h"
 #include "NPC.generated.h"
 
 UCLASS()
@@ -35,11 +35,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
 	float MaxHealth;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
-	float AntHealth;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
-	float AntMaxHealth;
+	
 
 	//////////////////////////////////////////////////////////Bia end 
 	//////////// Bia&Viktor? 
