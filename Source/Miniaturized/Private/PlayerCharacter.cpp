@@ -48,6 +48,7 @@ APlayerCharacter::APlayerCharacter()
 	MaxHealth = 100.0f;
 	Health = MaxHealth;
 	RespawnDelay = 5.0f;
+	bIsEndOfGame = false;
 
 	/*Weapon and ammo*/
 	CurrentAmmo=0.0f;

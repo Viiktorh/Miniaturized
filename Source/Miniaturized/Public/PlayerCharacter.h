@@ -131,6 +131,11 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Respawn")
 	float RespawnDelay;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Respawn")
+	bool bIsEndOfGame;
+
+
 
 	 /*GameSave*/
 	UMainSaveGame *SaveObject;
