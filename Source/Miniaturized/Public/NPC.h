@@ -29,13 +29,14 @@ public:
 
 	//////////////////////////////////////////////////////////Bia start 
 	/*Health*/
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
 	float Health;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
 	float MaxHealth;
 
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
+	bool EnemyIsDead;
 
 	//////////////////////////////////////////////////////////Bia end 
 	//////////// Bia&Viktor? 
