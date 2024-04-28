@@ -437,7 +437,7 @@ void APlayerCharacter::SwitchToTerrariumImc()
 			Subsystem->RemoveMappingContext(IMC);
 			Subsystem->AddMappingContext(IMC_Terrarium, 0);
 			GetCharacterMovement()->bOrientRotationToMovement = true;
-			GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
+			GetCharacterMovement()->RotationRate = FRotator(0.0f, 200.0f, 0.0f);
 			bUseControllerRotationYaw = false;
 			
 		}
