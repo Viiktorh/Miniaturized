@@ -22,6 +22,7 @@ ACameraTriggerVol::ACameraTriggerVol()
 	BlendTime = 1.0f;
 }
 
+
 void ACameraTriggerVol::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	//Checks if overlapped object is the playercharacter
@@ -31,6 +32,8 @@ void ACameraTriggerVol::NotifyActorBeginOverlap(AActor* OtherActor)
 		if (APlayerController * PlayerController = Cast<APlayerController>(PlayerCharacter->GetController()))
 		{
 			PlayerController->SetViewTargetWithBlend(CameraToSwitchTo, BlendTime, EViewTargetBlendFunction::VTBlend_Linear);
+			PlayerCharacter->SwitchToTerrariumImc();
+			PlayerController->SetControlRotation(CameraToSwitchTo->GetActorRotation());
 		}
 		else
 		{
@@ -54,6 +57,7 @@ void ACameraTriggerVol::NotifyActorEndOverlap(AActor* OtherActor)
 		if (APlayerController* PlayerController = Cast<APlayerController>(PlayerCharacter->GetController()))
 		{
 			PlayerController->SetViewTargetWithBlend(PlayerController->GetPawn(), BlendTime, EViewTargetBlendFunction::VTBlend_Linear);
+			PlayerCharacter->SwitchToDefaultImc();
 		}
 		else
 		{

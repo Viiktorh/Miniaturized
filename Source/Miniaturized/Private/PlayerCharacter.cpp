@@ -76,6 +76,13 @@ APlayerCharacter::APlayerCharacter()
 	PhysicsHandle = CreateDefaultSubobject<UPhysicsHandleComponent>(TEXT("PhysicsHandle"));
 }
 
+// Called every frame
+void APlayerCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	LineTrace(TraceDistance, TraceObject);
+}
+
 void APlayerCharacter::Move(const FInputActionValue& Value)
 {
 
@@ -141,6 +148,7 @@ UCameraComponent* APlayerCharacter::GetPrimaryCameraComponent() const
 {
 	return PrimaryCameraComponent;
 }
+
 
 void APlayerCharacter::Save()
 {
@@ -365,12 +373,6 @@ void APlayerCharacter::GetVials(float CollectedVials)
 	}
 }
 
-// Called every frame
-void APlayerCharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-	LineTrace(TraceDistance, TraceObject);
-}
 
 // Called to bind functionality to input
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -389,44 +391,44 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	}
 }
 
+//
+//void APlayerCharacter::ChangeSpringarmWithTimer()
+//{
+//	
+//	UE_LOG(LogTemp, Warning, TEXT(" Pitch is: %f, Yaw is: %f and Roll is: %f"), CameraSpringArm->GetRelativeRotation().Pitch, CameraSpringArm->GetRelativeRotation().Yaw, CameraSpringArm->GetRelativeRotation().Roll);
+//	//Rotates and increases the springarm location relative to mesh, turns off springarm collision
+//	CameraSpringArm->bDoCollisionTest = false;
+//	bUseControllerRotationYaw = false;
+//	CameraSpringArm->bUsePawnControlRotation = false;
+//	CameraSpringArm->TargetArmLength = FMath::FInterpTo(CameraSpringArm->TargetArmLength, SideViewSpringArmDistance, GetWorld()->GetDeltaSeconds(), SideViewIntSpeed);
+//	CameraSpringArm->SetRelativeRotation(FMath::RInterpTo(CameraSpringArm->GetRelativeRotation(), SideViewRotation, GetWorld()->GetDeltaSeconds(), SideViewIntSpeed));
+//
+//	if (CameraSpringArm->GetRelativeRotation().Yaw <= -90)
+//	{
+//		GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+//		UE_LOG(LogTemp, Warning, TEXT(" Pitch is: %f, Yaw is: %f and Roll is: %f"), CameraSpringArm->GetRelativeRotation().Pitch, CameraSpringArm->GetRelativeRotation().Yaw, CameraSpringArm->GetRelativeRotation().Roll);
+//		UE_LOG(LogTemp, Warning, TEXT("Timer Cleared"))
+//	}
+//}
+//void APlayerCharacter::ReturnSpringarmWithTimer()
+//{
+//	if (CameraSpringArm->GetRelativeRotation().Yaw >= -1)
+//	{
+//		GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
+//		UE_LOG(LogTemp, Warning, TEXT("Pitch is: %f, Yaw is: %f and Roll is: %f"), CameraSpringArm->GetRelativeRotation().Pitch, CameraSpringArm->GetRelativeRotation().Yaw, CameraSpringArm->GetRelativeRotation().Roll);
+//
+//		UE_LOG(LogTemp, Warning, TEXT("Timer Cleared"))
+//	}
+//
+//	//Rotates and increases the springarm location relative to mesh, returns collision to true
+//	CameraSpringArm->SetRelativeRotation(FMath::RInterpTo(CameraSpringArm->GetRelativeRotation(), SpringArmStartRotation, GetWorld()->GetDeltaSeconds(), SideViewIntSpeed));
+//	CameraSpringArm->TargetArmLength = FMath::FInterpTo(CameraSpringArm->TargetArmLength, StartSpringArmDistance, GetWorld()->GetDeltaSeconds(), SideViewIntSpeed);
+//	CameraSpringArm->bUsePawnControlRotation = true;
+//	CameraSpringArm->bDoCollisionTest = true;
+//	bUseControllerRotationYaw = true;
+//}
 
-void APlayerCharacter::ChangeSpringarmWithTimer()
-{
-	
-	UE_LOG(LogTemp, Warning, TEXT(" Pitch is: %f, Yaw is: %f and Roll is: %f"), CameraSpringArm->GetRelativeRotation().Pitch, CameraSpringArm->GetRelativeRotation().Yaw, CameraSpringArm->GetRelativeRotation().Roll);
-	//Rotates and increases the springarm location relative to mesh, turns off springarm collision
-	CameraSpringArm->bDoCollisionTest = false;
-	bUseControllerRotationYaw = false;
-	CameraSpringArm->bUsePawnControlRotation = false;
-	CameraSpringArm->TargetArmLength = FMath::FInterpTo(CameraSpringArm->TargetArmLength, SideViewSpringArmDistance, GetWorld()->GetDeltaSeconds(), SideViewIntSpeed);
-	CameraSpringArm->SetRelativeRotation(FMath::RInterpTo(CameraSpringArm->GetRelativeRotation(), SideViewRotation, GetWorld()->GetDeltaSeconds(), SideViewIntSpeed));
-
-	if (CameraSpringArm->GetRelativeRotation().Yaw <= -90)
-	{
-		GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
-		UE_LOG(LogTemp, Warning, TEXT(" Pitch is: %f, Yaw is: %f and Roll is: %f"), CameraSpringArm->GetRelativeRotation().Pitch, CameraSpringArm->GetRelativeRotation().Yaw, CameraSpringArm->GetRelativeRotation().Roll);
-		UE_LOG(LogTemp, Warning, TEXT("Timer Cleared"))
-	}
-}
-void APlayerCharacter::ReturnSpringarmWithTimer()
-{
-	if (CameraSpringArm->GetRelativeRotation().Yaw >= -1)
-	{
-		GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
-		UE_LOG(LogTemp, Warning, TEXT("Pitch is: %f, Yaw is: %f and Roll is: %f"), CameraSpringArm->GetRelativeRotation().Pitch, CameraSpringArm->GetRelativeRotation().Yaw, CameraSpringArm->GetRelativeRotation().Roll);
-
-		UE_LOG(LogTemp, Warning, TEXT("Timer Cleared"))
-	}
-
-	//Rotates and increases the springarm location relative to mesh, returns collision to true
-	CameraSpringArm->SetRelativeRotation(FMath::RInterpTo(CameraSpringArm->GetRelativeRotation(), SpringArmStartRotation, GetWorld()->GetDeltaSeconds(), SideViewIntSpeed));
-	CameraSpringArm->TargetArmLength = FMath::FInterpTo(CameraSpringArm->TargetArmLength, StartSpringArmDistance, GetWorld()->GetDeltaSeconds(), SideViewIntSpeed);
-	CameraSpringArm->bUsePawnControlRotation = true;
-	CameraSpringArm->bDoCollisionTest = true;
-	bUseControllerRotationYaw = true;
-}
-
-void APlayerCharacter::SwitchToTerrariumImc() const
+void APlayerCharacter::SwitchToTerrariumImc()
 {
 	if (PlayerController)
 	{
@@ -436,11 +438,13 @@ void APlayerCharacter::SwitchToTerrariumImc() const
 			Subsystem->AddMappingContext(IMC_Terrarium, 0);
 			GetCharacterMovement()->bOrientRotationToMovement = true;
 			GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
+			bUseControllerRotationYaw = false;
+			
 		}
 	}
 }
 
-void APlayerCharacter::SwitchToDefaultImc() const
+void APlayerCharacter::SwitchToDefaultImc()
 {
 	if (PlayerController)
 	{
@@ -448,6 +452,10 @@ void APlayerCharacter::SwitchToDefaultImc() const
 		{
 			Subsystem->RemoveMappingContext(IMC_Terrarium);
 			Subsystem->AddMappingContext(IMC, 0);
+			GetCharacterMovement()->bOrientRotationToMovement = false;
+			GetCharacterMovement()->RotationRate = FRotator(0.0f, 0.0f, 0.0f);
+			bUseControllerRotationYaw = true;
+			
 		}
 	}
 }
@@ -491,7 +499,7 @@ void APlayerCharacter::RunOnTagEndOverlap(FString Tag)
 	if (Tag == "Terrarium")
 	{
 		//Return control and camera to default
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &APlayerCharacter::ReturnSpringarmWithTimer, Delay, true);
+		//GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &APlayerCharacter::ReturnSpringarmWithTimer, Delay, true);
 		SwitchToDefaultImc();
 
 	}

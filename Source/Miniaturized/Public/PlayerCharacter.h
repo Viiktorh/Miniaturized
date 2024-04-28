@@ -98,6 +98,7 @@ public:
 
 	UCameraComponent* GetPrimaryCameraComponent() const;
 
+
 	/*Ammo*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	float CurrentAmmo;
@@ -188,8 +189,8 @@ public:
 	void ReturnSpringarmWithTimer();
 
 	//Switch inputmapping
-	void SwitchToTerrariumImc() const;
-	void SwitchToDefaultImc() const;
+	void SwitchToTerrariumImc();
+	void SwitchToDefaultImc();
 
 	/*
 	 *Spring/Jumpad

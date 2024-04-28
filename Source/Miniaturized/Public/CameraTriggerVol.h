@@ -33,7 +33,7 @@ public:
 
 
 	 virtual void NotifyActorBeginOverlap(AActor *OtherActor) override;
-	 virtual void NotifyActorEndOverlap(AActor *OtherActor) override;
+	 virtual void NotifyActorEndOverlap(AActor* OtherActor) override;
 	 //void (AActor* OtherActor);
 	
 
