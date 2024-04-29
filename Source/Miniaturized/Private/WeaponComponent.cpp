@@ -147,8 +147,13 @@ void UWeaponComponent::FireWeapon()
 	
 }
 
- /*float UWeaponComponent::GetCurrentAmmo(float ReceivedCurrentAmmo)
+/*float UWeaponComponent::GetCurrentAmmo(float ReceivedCurrentAmmo, APlayerCharacter* AmmoOwner)
 {
-	CurrentAmmo=ReceivedCurrentAmmo;
-	return CurrentAmmo;
-}*/
+	APlayerController* PlayerController = Cast<APlayerController>(Character->GetAmmo(CollectedAmmo));
+	CurrentAmmo = ReceivedCurrentAmmo;
+	return ReceivedCurrentAmmo;
+}
+*/
+
+
+

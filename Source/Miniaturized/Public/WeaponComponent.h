@@ -79,6 +79,6 @@ public:
 	UNiagaraSystem* WeaponBeam;
 
 	/*ammo connection*/
-	//virtual float GetCurrentAmmo(float ReceivedCurrentAmmo);
+	//virtual float GetCurrentAmmo(float ReceivedCurrentAmmo, APlayerCharacter* AmmoOwner);
 
 };
