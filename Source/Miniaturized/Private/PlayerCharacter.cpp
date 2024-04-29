@@ -348,8 +348,7 @@ void APlayerCharacter::GetAmmo(float CollectedAmmo)
 	if (CurrentAmmo >= Max_Ammo) {
 		CurrentAmmo = 3.0f;
 	}
-	GetWorld()->GetTimerManager().SetTimer(BatteryChargeHandle, this, &APlayerCharacter::LoosingCharge, BatteryChargeDelay, true);
-
+	//GetWorld()->GetTimerManager().SetTimer(BatteryChargeHandle, this, &APlayerCharacter::LoosingCharge, BatteryChargeDelay, true);
 }
 
 void APlayerCharacter::LoosingCharge()
@@ -360,7 +359,7 @@ void APlayerCharacter::LoosingCharge()
 	
 	else {
 		CurrentAmmo = 0.0f;
-		GetWorldTimerManager().ClearTimer(BatteryChargeHandle);
+		//GetWorldTimerManager().ClearTimer(BatteryChargeHandle);
 	}
 	
 }

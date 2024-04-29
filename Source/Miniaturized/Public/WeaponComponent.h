@@ -9,6 +9,7 @@
 #include "GameFramework/PlayerController.h"
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"
+#include "PlayerCharacter.h"
 #include "WeaponComponent.generated.h"
 
 class UParticleEmitter;
@@ -77,6 +78,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation and Sound")
 	UNiagaraSystem* WeaponBeam;
 
-	
+	/*ammo connection*/
+	//virtual float GetCurrentAmmo(float ReceivedCurrentAmmo);
 
 };

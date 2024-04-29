@@ -13,7 +13,7 @@ UWeaponComponent::UWeaponComponent()
 {
 	GuntipOffset = FVector();
 	GuntipOffset = USkeletalMeshComponent::GetSocketLocation(FName(TEXT("BeamSocket")));
-
+	
 }
 
 
@@ -59,6 +59,7 @@ void UWeaponComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 
 void UWeaponComponent::FireWeapon()
 {
+	//LoosingCharge();
 	FHitResult OutHit;
 
 	APlayerController* PlayerController = Cast<APlayerController>(Character->GetController());
@@ -71,14 +72,14 @@ void UWeaponComponent::FireWeapon()
 	FCollisionQueryParams CollisionParams;
 
 	//Use Different LineTrace Parameters if the Character has the Terrarium IMC
-	if(Character->Subsystem->HasMappingContext(Character->IMC_Terrarium))
+	if (Character->Subsystem->HasMappingContext(Character->IMC_Terrarium))
 	{
 		BeamRotation = PlayerController->GetControlRotation();
 		BeamStart = Character->GetActorLocation() + BeamRotation.RotateVector(GuntipOffset);
 		ForwardVector = Character->GetActorForwardVector();
 		BeamEnd = ((ForwardVector * 1800.f) + BeamStart);
 	}
-	
+
 	//Execute a LineTrace with OutHit as result
 	GetWorld()->LineTraceSingleByChannel(OutHit, BeamStart, BeamEnd, TraceChannelProperty, CollisionParams);
 
@@ -103,7 +104,7 @@ void UWeaponComponent::FireWeapon()
 		{
 			UGameplayStatics::ApplyDamage(OutHit.GetActor(), WeaponDamage, PlayerController, Character, DamageType);
 		}
-		else 
+		else
 		{
 			UNiagaraComponent* NiagaraComp = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), WeaponBeam, USkeletalMeshComponent::GetSocketLocation(FName(TEXT("BeamSocket"))));
 			if (NiagaraComp)
@@ -142,4 +143,12 @@ void UWeaponComponent::FireWeapon()
 	{
 		return;
 	}
+		
+	
 }
+
+ /*float UWeaponComponent::GetCurrentAmmo(float ReceivedCurrentAmmo)
+{
+	CurrentAmmo=ReceivedCurrentAmmo;
+	return CurrentAmmo;
+}*/
