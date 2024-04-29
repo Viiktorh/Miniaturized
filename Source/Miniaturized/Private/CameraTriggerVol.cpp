@@ -11,7 +11,7 @@
 ACameraTriggerVol::ACameraTriggerVol()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 
 	BoxComp = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
@@ -22,19 +22,6 @@ ACameraTriggerVol::ACameraTriggerVol()
 	BlendTime = 1.0f;
 }
 
-// Called when the game starts or when spawned
-void ACameraTriggerVol::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
-// Called every frame
-void ACameraTriggerVol::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
 
 void ACameraTriggerVol::NotifyActorBeginOverlap(AActor* OtherActor)
 {
@@ -45,6 +32,8 @@ void ACameraTriggerVol::NotifyActorBeginOverlap(AActor* OtherActor)
 		if (APlayerController * PlayerController = Cast<APlayerController>(PlayerCharacter->GetController()))
 		{
 			PlayerController->SetViewTargetWithBlend(CameraToSwitchTo, BlendTime, EViewTargetBlendFunction::VTBlend_Linear);
+			PlayerCharacter->SwitchToTerrariumImc();
+			PlayerController->SetControlRotation(CameraToSwitchTo->GetActorRotation());
 		}
 		else
 		{
@@ -59,12 +48,16 @@ void ACameraTriggerVol::NotifyActorBeginOverlap(AActor* OtherActor)
 
 void ACameraTriggerVol::NotifyActorEndOverlap(AActor* OtherActor)
 {
+	//Only turn back if we're  out of the terrarium area
+	if (!ColliderCover){return;}
+
 	//Checks if overlapped object is the playercharacter
 	if (APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(OtherActor))
 	{
 		if (APlayerController* PlayerController = Cast<APlayerController>(PlayerCharacter->GetController()))
 		{
 			PlayerController->SetViewTargetWithBlend(PlayerController->GetPawn(), BlendTime, EViewTargetBlendFunction::VTBlend_Linear);
+			PlayerCharacter->SwitchToDefaultImc();
 		}
 		else
 		{

@@ -17,12 +17,9 @@ public:
 	ACameraTriggerVol();
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	
 
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 	UBoxComponent* BoxComp;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
@@ -31,9 +28,12 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	float BlendTime;
 
+	UPROPERTY(EditAnywhere, Category = "CameraSwitchSettings")
+	bool ColliderCover;
 
-	 virtual void NotifyActorBeginOverlap(AActor *OtherActor);
-	 virtual void NotifyActorEndOverlap(AActor *OtherActor);
+
+	 virtual void NotifyActorBeginOverlap(AActor *OtherActor) override;
+	 virtual void NotifyActorEndOverlap(AActor* OtherActor) override;
 	 //void (AActor* OtherActor);
 	
 

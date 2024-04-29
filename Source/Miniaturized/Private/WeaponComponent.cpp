@@ -70,6 +70,14 @@ void UWeaponComponent::FireWeapon()
 	//Initialize Collision parameters
 	FCollisionQueryParams CollisionParams;
 
+	//Use Different LineTrace Parameters if the Character has the Terrarium IMC
+	if(Character->Subsystem->HasMappingContext(Character->IMC_Terrarium))
+	{
+		BeamRotation = PlayerController->GetControlRotation();
+		BeamStart = Character->GetActorLocation() + BeamRotation.RotateVector(GuntipOffset);
+		ForwardVector = Character->GetActorForwardVector();
+		BeamEnd = ((ForwardVector * 1800.f) + BeamStart);
+	}
 	
 	//Execute a LineTrace with OutHit as result
 	GetWorld()->LineTraceSingleByChannel(OutHit, BeamStart, BeamEnd, TraceChannelProperty, CollisionParams);
