@@ -74,6 +74,11 @@ APlayerCharacter::APlayerCharacter()
 	
 	//For physics handle
 	PhysicsHandle = CreateDefaultSubobject<UPhysicsHandleComponent>(TEXT("PhysicsHandle"));
+
+	if (GetMovementComponent())
+	{
+		GetMovementComponent()->GetNavAgentPropertiesRef().bCanCrouch = true;
+	}
 }
 
 // Called every frame
