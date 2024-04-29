@@ -74,13 +74,19 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	UInputAction* PushObject;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	UInputAction* CrouchAction;
+
 	void Move(const FInputActionValue& Value);
 
 	void MoveTerrarium(const FInputActionValue& Value);
 
 	void LookAround(const FInputActionValue& Value);
 
+	void Crouch();
 
+	void UnCrouch();
 	/*
 	* Weapon
 	*/

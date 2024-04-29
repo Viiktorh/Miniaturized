@@ -60,6 +60,9 @@ APlayerCharacter::APlayerCharacter()
 	Min_Vials = 0.0f;
 	Max_Vials = 3.0f;
 
+	/*Crouch*/
+	FVector NewCollisionSize = FVector(5.0f, 5.0f, 10.0f);
+
 	/*Second camera component*/
 	SecondCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("SecondCameraComponent"));
 	SecondCameraComponent->SetupAttachment(SecondSpringArm, USpringArmComponent::SocketName);
@@ -126,6 +129,17 @@ void APlayerCharacter::LookAround(const FInputActionValue& Value)
 		AddControllerYawInput(LookAroundVector.X);
 		AddControllerPitchInput((LookAroundVector.Y));
 	}
+}
+
+void APlayerCharacter::Crouch()
+{
+	
+	//CollisionCylinder->SetWorldScale3D(NewCollisionSize);
+}
+
+void APlayerCharacter::UnCrouch()
+{
+	//CollisionCylinder->SetWorldScale3D(OriginalSize);
 }
 
 
@@ -388,6 +402,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 		EnhancedInputComponent->BindAction(PushObject, ETriggerEvent::Completed, this, &APlayerCharacter::ReleaseGrabbedObject);
 		EnhancedInputComponent->BindAction(PushObject, ETriggerEvent::Triggered, this, &APlayerCharacter::PushableObject);
+		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Crouch);
+		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Completed, this, &APlayerCharacter::UnCrouch);
 	}
 }
 
