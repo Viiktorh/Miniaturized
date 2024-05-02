@@ -79,8 +79,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	UInputAction* PushObject;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
-	UInputAction* CrouchAction;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	//UInputAction* CrouchAction;
 
 	void Move(const FInputActionValue& Value);
 
