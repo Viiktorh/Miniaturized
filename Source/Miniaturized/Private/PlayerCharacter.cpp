@@ -48,6 +48,7 @@ APlayerCharacter::APlayerCharacter()
 	MaxHealth = 100.0f;
 	Health = MaxHealth;
 	RespawnDelay = 5.0f;
+	bIsEndOfGame = false;
 
 	/*Weapon and ammo*/
 	CurrentAmmo=0.0f;
@@ -77,6 +78,11 @@ APlayerCharacter::APlayerCharacter()
 	
 	//For physics handle
 	PhysicsHandle = CreateDefaultSubobject<UPhysicsHandleComponent>(TEXT("PhysicsHandle"));
+
+	if (GetMovementComponent())
+	{
+		GetMovementComponent()->GetNavAgentPropertiesRef().bCanCrouch = true;
+	}
 }
 
 // Called every frame

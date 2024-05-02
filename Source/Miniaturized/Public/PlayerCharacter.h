@@ -33,6 +33,7 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+
 	/*
 	* Components
 	*/
@@ -65,6 +66,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	UInputAction* MoveActionTerrarium;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	UInputAction* CrouchAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	UInputAction* JumpAction;
@@ -138,6 +142,11 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Respawn")
 	float RespawnDelay;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Respawn")
+	bool bIsEndOfGame;
+
+
 
 	 /*GameSave*/
 	UMainSaveGame *SaveObject;
