@@ -11,7 +11,7 @@ ANPC::ANPC()
 	MaxHealth = 200.0f;
 	Health = MaxHealth;
 
-	
+	EnemyIsDead = false;
 	DieDelay = 2.0f;
 
 }
@@ -50,6 +50,7 @@ float ANPC::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, ACon
 
 void ANPC::Die()
 {
+	EnemyIsDead = true;
 	Destroy();
 	
 
