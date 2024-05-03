@@ -10,7 +10,7 @@ ANPC::ANPC()
 	PrimaryActorTick.bCanEverTick = true;
 	MaxHealth = 200.0f;
 	Health = MaxHealth;
-
+	//PlayerCharacterMesh=;
 	EnemyIsDead = false;
 	DieDelay = 2.0f;
 
@@ -51,8 +51,21 @@ float ANPC::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, ACon
 void ANPC::Die()
 {
 	EnemyIsDead = true;
+	if (DeathAnimation != nullptr)
+	{
+		//UAnimInstance* AnimInstance = ANPC->GetMeshPlayerCharacter()->GetAnimInstance();
+		/*if (AnimInstance != nullptr)
+		{
+			AnimInstance->Montage_Play(DeathAnimation, 1.0f);
+		}*/
+	}
 	Destroy();
 	
 
+}
+
+USkeletalMeshComponent* ANPC::GetEnemyMesh() const
+{
+	return nullptr;
 }
 

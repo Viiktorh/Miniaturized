@@ -343,9 +343,11 @@ float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 void APlayerCharacter::Heal(float HealingRestored)
 {
 	Health += HealingRestored;
-	if (Health >= 1.0f) {
-		Health = 1.0f;
+	if (Health >= 100.0f) {
+		Health = 100.0f;
 	}
+	
+	
 }
 
 /*calls respawn function with delay so the animation can be played later*/

@@ -27,7 +27,10 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	//////////////////////////////////////////////////////////Bia start 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	USkeletalMeshComponent* NPCMesh;
+
+	//////////////////////////////////////////////////////////
 	/*Health*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
 	float Health;
@@ -38,8 +41,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
 	bool EnemyIsDead;
 
-	//////////////////////////////////////////////////////////Bia end 
-	//////////// Bia&Viktor? 
+	//////////////////////////////////////////////////////////
+	//////////// 
 	UFUNCTION(BlueprintCallable)
 	virtual float TakeDamage
 	(
@@ -56,4 +59,9 @@ public:
 
 	UPROPERTY()
 	float DieDelay;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
+	UAnimMontage* DeathAnimation;
+
+	USkeletalMeshComponent* GetEnemyMesh() const;
 };
