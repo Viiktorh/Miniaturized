@@ -27,8 +27,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	USkeletalMeshComponent* NPCMesh;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	//USkeletalMeshComponent* NPCMesh=GetMesh();
 
 	//////////////////////////////////////////////////////////
 	/*Health*/
@@ -61,7 +61,11 @@ public:
 	float DieDelay;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
-	UAnimMontage* DeathAnimation;
+	UAnimMontage* NewDeathAnimation;
 
-	USkeletalMeshComponent* GetEnemyMesh() const;
+	//UFUNCTION(BlueprintCallable, Category = "Components|Animation", meta = (Keywords = "Animation", UnsafeDuringActorConstruction = "true"))
+	//void PlayAnimation(class UAnimationAsset* DeathAnimation, bool bLooping);
+
+	bool bLooping = true;
+	//USkeletalMeshComponent* GetMesh() const;
 };

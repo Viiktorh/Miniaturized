@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
+#include "Components/SkeletalMeshComponent.h"
+#include "Animation/AnimSingleNodeInstance.h"
 #include "NPC.h"
 
 // Sets default values
@@ -10,7 +11,8 @@ ANPC::ANPC()
 	PrimaryActorTick.bCanEverTick = true;
 	MaxHealth = 200.0f;
 	Health = MaxHealth;
-	//PlayerCharacterMesh=;
+	//NPCMesh=CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("NPCMesh"));
+
 	EnemyIsDead = false;
 	DieDelay = 2.0f;
 
@@ -41,9 +43,10 @@ void ANPC::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 float ANPC::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,AActor* DamageCauser)
 {
 	Health -= DamageAmount;
-	if(Health <= 0)
+	if(Health <= 0.0f)
 	{
-		Destroy();
+		Health = 0.0f;
+		Die();
 	}
 	return DamageAmount;
 }
@@ -51,21 +54,26 @@ float ANPC::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, ACon
 void ANPC::Die()
 {
 	EnemyIsDead = true;
-	if (DeathAnimation != nullptr)
-	{
-		//UAnimInstance* AnimInstance = ANPC->GetMeshPlayerCharacter()->GetAnimInstance();
-		/*if (AnimInstance != nullptr)
-		{
-			AnimInstance->Montage_Play(DeathAnimation, 1.0f);
-		}*/
-	}
+	//PlayAnimation(DeathAnimation,false);
 	Destroy();
 	
 
 }
 
-USkeletalMeshComponent* ANPC::GetEnemyMesh() const
+
+
+/*void USkeletalMeshComponent::PlayAnimation(class UAnimationAsset* DeathAnimation, bool bLooping)
 {
-	return nullptr;
+	SetAnimationMode(EAnimationMode::AnimationSingleNode);
+	SetAnimation(DeathAnimation);
+	Play(bLooping);
 }
+
+/*USkeletalMeshComponent* ANPC::GetMesh() const
+{
+	//USkeletalMeshComponent* NPCMesh = <USkeletalMesh>(this, TEXT("NPCMesh"));
+	return NPCMesh;
+}*/
+
+
 
