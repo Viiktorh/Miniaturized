@@ -114,7 +114,7 @@ void AVent::DieOnBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 	if (Character != nullptr)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Black, TEXT("you died"));
-		UGameplayStatics::ApplyDamage(Character, 1.f, Character->GetController(), Character, DamageType);
+		UGameplayStatics::ApplyDamage(Character, 100.f, Character->GetController(), Character, DamageType);
 		DeathCollision->OnComponentBeginOverlap.RemoveAll(this);
 	}
 }
