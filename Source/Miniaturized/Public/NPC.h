@@ -60,12 +60,20 @@ public:
 	UPROPERTY()
 	float DieDelay;
 
+	//animation 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
-	UAnimMontage* NewDeathAnimation;
+	UAnimMontage* DeathAnimation;
+
+	USkeletalMeshComponent* GetNPCMesh() const;
 
 	//UFUNCTION(BlueprintCallable, Category = "Components|Animation", meta = (Keywords = "Animation", UnsafeDuringActorConstruction = "true"))
 	//void PlayAnimation(class UAnimationAsset* DeathAnimation, bool bLooping);
 
-	bool bLooping = true;
+	//bool bLooping = true;
 	//USkeletalMeshComponent* GetMesh() const;
+
+	/*FVector EnemyLocation;
+	FRotator EnemyRotation;
+	FActorSpawnParameters SpawnInfo;
+	*/
 };

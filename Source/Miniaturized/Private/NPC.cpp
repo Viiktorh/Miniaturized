@@ -1,8 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
+#include "NPC.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Animation/AnimSingleNodeInstance.h"
-#include "NPC.h"
+#include "HealingObject.h"
+#include "Engine/World.h"
+
 
 // Sets default values
 ANPC::ANPC()
@@ -16,6 +18,12 @@ ANPC::ANPC()
 	EnemyIsDead = false;
 	DieDelay = 2.0f;
 
+	/*
+	FVector EnemyLocation(0.0f, 0.0f, 0.0f); //= NPCLocation;
+	FRotator EnemyRotation(0.0f, 0.0f, 0.0f);
+	*/
+	
+	
 }
 
 // Called when the game starts or when spawned
@@ -54,12 +62,51 @@ float ANPC::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, ACon
 void ANPC::Die()
 {
 	EnemyIsDead = true;
+	if (DeathAnimation != nullptr)
+	{
+		UAnimInstance* AnimInstance = this->GetNPCMesh()->GetAnimInstance();
+		if (AnimInstance != nullptr)
+		{
+			AnimInstance->Montage_Play(DeathAnimation, 1.0f);
+		}
+	}
+	//Destroy();
 	//PlayAnimation(DeathAnimation,false);
-	Destroy();
+	//stop movement to play animation
+	/*ANPC* Character = Cast<ANPC>(OtherActor);
+	if (Character != nullptr)
+	{
+		if (Character)
+		{
+			UCharacterMovementComponent* MovementComponent = Character->GetCharacterMovement();
+			if (GetMovementComponent)
+			{
+				GetMovementComponent->StopMovementImmediately();
+			}
+		}
+	}*/
+
+	ACharacter* NPC = this;
+	FVector Location = NPC->GetActorLocation();
+	//FVector Location = GetActorLocation();
+	float SpawnX = FMath::RandRange(Location.X + 10.0f, Location.X + 10.0f);
+	float SpawnY = FMath::RandRange(Location.Y + 10.0f, Location.Y + 10.0f);
+	float SpawnZ = FMath::RandRange(Location.Z + 1.0f, Location.Z + 10.0f);
+	FVector RespawnLocation = FVector(SpawnX, SpawnY, SpawnZ);
+
+	
+	
+	AHealingObject* SpawnedHealingObject = GetWorld()->SpawnActor<AHealingObject>(AHealingObject::StaticClass(), RespawnLocation, FRotator::ZeroRotator);
+	
+	
 	
 
 }
 
+USkeletalMeshComponent* ANPC::GetNPCMesh() const
+{
+	return GetMesh();
+}
 
 
 /*void USkeletalMeshComponent::PlayAnimation(class UAnimationAsset* DeathAnimation, bool bLooping)

@@ -65,4 +65,7 @@ public:
 	int RotationDegree;
 
 	FRotator VentRotation;
+
+
+	
 };
