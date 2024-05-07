@@ -17,6 +17,7 @@ ANPC::ANPC()
 
 	EnemyIsDead = false;
 	DieDelay = 2.0f;
+	bCanDrop = false;
 
 	/*
 	FVector EnemyLocation(0.0f, 0.0f, 0.0f); //= NPCLocation;
@@ -38,6 +39,25 @@ void ANPC::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (bCanDrop)
+	{
+		int PickUpDrop = 0;
+		if (PickUpDrop < 1)
+		{
+			FVector Location = GetActorLocation();
+			UWorld* World = GetWorld();
+			if (World != nullptr)
+			{
+				AActor* SpawnedHealingObject = World->SpawnActor<AActor>(HealthPickUp, Location, FRotator::ZeroRotator, SpawnInfo);
+				if (SpawnedHealingObject)
+				{
+					PickUpDrop++;
+				}
+			}
+		}
+		
+	}
+
 }
 
 // Called to bind functionality to input
@@ -53,7 +73,7 @@ float ANPC::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, ACon
 	Health -= DamageAmount;
 	if (Health <= 0.0f)
 	{
-		EnemyIsDead = true;
+		/*EnemyIsDead = true;*/
 		Health = 0.0f;
 		Die();
 	}
@@ -64,14 +84,14 @@ float ANPC::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, ACon
 
 void ANPC::Die()
 {
-	//EnemyIsDead = true;
-	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	EnemyIsDead = true;
+	UAnimInstance* AnimInstance = GetNPCMesh()->GetAnimInstance();
 	//UAnimInstance* AnimInstance = this->GetNPCMesh()->GetAnimInstance();
 	if (DeathAnimation != nullptr)
 	{
 			AnimInstance->Montage_Play(DeathAnimation, 1.0f);
 	}
-	//Destroy();
+	
 	
 	//stop movement to play animation
 	/*ANPC* Character = Cast<ANPC>(OtherActor);
@@ -88,14 +108,15 @@ void ANPC::Die()
 	}*/
 
 	ACharacter* NPC = this;
-	FVector Location = NPC->GetActorLocation();
+	FVector Location = GetActorLocation();
 	//FVector Location = GetActorLocation();
-	float SpawnX = FMath::RandRange(Location.X + 10.0f, Location.X + 10.0f);
-	float SpawnY = FMath::RandRange(Location.Y + 10.0f, Location.Y + 10.0f);
-	float SpawnZ = FMath::RandRange(Location.Z + 1.0f, Location.Z + 10.0f);
-	FVector RespawnLocation = FVector(SpawnX, SpawnY, SpawnZ);
-	AHealingObject* SpawnedHealingObject = GetWorld()->SpawnActor<AHealingObject>(AHealingObject::StaticClass(), RespawnLocation, FRotator::ZeroRotator);
+
+
+	
+	
+
 }
+
 
 USkeletalMeshComponent* ANPC::GetNPCMesh() const
 {

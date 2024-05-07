@@ -41,6 +41,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
 	bool EnemyIsDead;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
+	bool bCanDrop;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = "HealthPickUP")
+	TSubclassOf<AActor> HealthPickUp;
+
 	//////////////////////////////////////////////////////////
 	//////////// 
 	UFUNCTION(BlueprintCallable)
@@ -54,6 +60,8 @@ public:
 
 	UFUNCTION()
 	void Die();
+
+	
 
 	FTimerHandle DieTimer;
 
