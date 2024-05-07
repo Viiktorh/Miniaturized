@@ -66,14 +66,8 @@ public:
 
 	USkeletalMeshComponent* GetNPCMesh() const;
 
-	//UFUNCTION(BlueprintCallable, Category = "Components|Animation", meta = (Keywords = "Animation", UnsafeDuringActorConstruction = "true"))
-	//void PlayAnimation(class UAnimationAsset* DeathAnimation, bool bLooping);
-
-	//bool bLooping = true;
-	//USkeletalMeshComponent* GetMesh() const;
-
-	/*FVector EnemyLocation;
+	FVector EnemyLocation;
 	FRotator EnemyRotation;
 	FActorSpawnParameters SpawnInfo;
-	*/
+	
 };

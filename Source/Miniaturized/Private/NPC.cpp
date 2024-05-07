@@ -51,27 +51,28 @@ void ANPC::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 float ANPC::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,AActor* DamageCauser)
 {
 	Health -= DamageAmount;
-	if(Health <= 0.0f)
+	if (Health <= 0.0f)
 	{
+		EnemyIsDead = true;
 		Health = 0.0f;
 		Die();
 	}
 	return DamageAmount;
+	
+	
 }
 
 void ANPC::Die()
 {
-	EnemyIsDead = true;
+	//EnemyIsDead = true;
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	//UAnimInstance* AnimInstance = this->GetNPCMesh()->GetAnimInstance();
 	if (DeathAnimation != nullptr)
 	{
-		UAnimInstance* AnimInstance = this->GetNPCMesh()->GetAnimInstance();
-		if (AnimInstance != nullptr)
-		{
 			AnimInstance->Montage_Play(DeathAnimation, 1.0f);
-		}
 	}
 	//Destroy();
-	//PlayAnimation(DeathAnimation,false);
+	
 	//stop movement to play animation
 	/*ANPC* Character = Cast<ANPC>(OtherActor);
 	if (Character != nullptr)
@@ -93,14 +94,7 @@ void ANPC::Die()
 	float SpawnY = FMath::RandRange(Location.Y + 10.0f, Location.Y + 10.0f);
 	float SpawnZ = FMath::RandRange(Location.Z + 1.0f, Location.Z + 10.0f);
 	FVector RespawnLocation = FVector(SpawnX, SpawnY, SpawnZ);
-
-	
-	
 	AHealingObject* SpawnedHealingObject = GetWorld()->SpawnActor<AHealingObject>(AHealingObject::StaticClass(), RespawnLocation, FRotator::ZeroRotator);
-	
-	
-	
-
 }
 
 USkeletalMeshComponent* ANPC::GetNPCMesh() const
@@ -109,18 +103,6 @@ USkeletalMeshComponent* ANPC::GetNPCMesh() const
 }
 
 
-/*void USkeletalMeshComponent::PlayAnimation(class UAnimationAsset* DeathAnimation, bool bLooping)
-{
-	SetAnimationMode(EAnimationMode::AnimationSingleNode);
-	SetAnimation(DeathAnimation);
-	Play(bLooping);
-}
-
-/*USkeletalMeshComponent* ANPC::GetMesh() const
-{
-	//USkeletalMeshComponent* NPCMesh = <USkeletalMesh>(this, TEXT("NPCMesh"));
-	return NPCMesh;
-}*/
 
 
 
