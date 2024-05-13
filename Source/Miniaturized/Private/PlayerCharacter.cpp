@@ -169,6 +169,16 @@ UCameraComponent* APlayerCharacter::GetPrimaryCameraComponent() const
 	return PrimaryCameraComponent;
 }
 
+void APlayerCharacter::SetCurrentAmmo(float AmmoChange)
+{
+	CurrentAmmo = AmmoChange;
+}
+
+float APlayerCharacter::GetCurrentAmmo()
+{
+	return CurrentAmmo;
+}
+
 
 void APlayerCharacter::Save()
 {

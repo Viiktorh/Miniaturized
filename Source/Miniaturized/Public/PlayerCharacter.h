@@ -122,6 +122,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	float BatteryChargeDelay;
 
+	void SetCurrentAmmo(float AmmoChange);
+
+	float GetCurrentAmmo();
+
 	/*Viles*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vials")
 	float CurrentVials;
