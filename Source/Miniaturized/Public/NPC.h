@@ -27,18 +27,28 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	//////////////////////////////////////////////////////////Bia start 
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	//USkeletalMeshComponent* NPCMesh=GetMesh();
+
+	//////////////////////////////////////////////////////////
 	/*Health*/
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
 	float Health;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
 	float MaxHealth;
 
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
+	bool EnemyIsDead;
 
-	//////////////////////////////////////////////////////////Bia end 
-	//////////// Bia&Viktor? 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
+	bool bCanDrop;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = "HealthPickUP")
+	TSubclassOf<AActor> HealthPickUp;
+
+	//////////////////////////////////////////////////////////
+	//////////// 
 	UFUNCTION(BlueprintCallable)
 	virtual float TakeDamage
 	(
@@ -51,8 +61,21 @@ public:
 	UFUNCTION()
 	void Die();
 
+	
+
 	FTimerHandle DieTimer;
 
 	UPROPERTY()
 	float DieDelay;
+
+	//animation 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
+	UAnimMontage* DeathAnimation;
+
+	USkeletalMeshComponent* GetNPCMesh() const;
+
+	FVector EnemyLocation;
+	FRotator EnemyRotation;
+	FActorSpawnParameters SpawnInfo;
+	
 };
