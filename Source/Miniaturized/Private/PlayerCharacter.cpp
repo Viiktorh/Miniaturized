@@ -359,7 +359,7 @@ void APlayerCharacter::Die()
 /*resets health, location and timer */
 void APlayerCharacter::Respawn()
 {
-	Health = 1.0f;
+	
 	Load();
 	GetWorldTimerManager().ClearTimer(RespawnTimerHandle);
 }
