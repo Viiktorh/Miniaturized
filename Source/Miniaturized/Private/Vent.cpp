@@ -94,8 +94,8 @@ void AVent::StopRotation()
 
 void AVent::OnBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	APlayerCharacter* Character = Cast<APlayerCharacter>(OtherActor);
-	if (Character != nullptr)
+	ATerrariumKeyBox* Actor = Cast<ATerrariumKeyBox>(OtherActor);
+	if (Actor != nullptr)
 	{
 
 		GEngine->AddOnScreenDebugMessage(-1,2,FColor::Black,TEXT("Button is clicked"));

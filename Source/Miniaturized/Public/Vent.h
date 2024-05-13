@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
-#include "PlayerCharacter.h"
+#include "TerrariumKeyBox.h"
 #include "Vent.generated.h"
 
 UCLASS()
