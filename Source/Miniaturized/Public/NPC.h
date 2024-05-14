@@ -49,8 +49,6 @@ public:
 	UFUNCTION()
 	void Die();
 
-	FTimerHandle DieTimer;
-
 	/*spawn healing pickup*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
 	bool bCanDrop;
