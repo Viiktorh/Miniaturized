@@ -27,7 +27,7 @@ public:
 	UStaticMeshComponent* BoxMesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Collision")
-	UBoxComponent* BoxCollision;
+	class UBoxComponent* BoxCollision;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Collision")
 	USceneComponent* SceneComponent;

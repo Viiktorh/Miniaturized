@@ -175,10 +175,9 @@ void APlayerCharacter::Save()
 	SaveObject = Cast<UMainSaveGame>(UGameplayStatics::CreateSaveGameObject(UMainSaveGame::StaticClass()));
 	SaveObject->PlayerLocation = GetActorLocation();
 	SaveObject->PlayerRotator = GetActorRotation();
-	SaveObject->PlayerCurrentAmmo = CurrentAmmo;
-	SaveObject->PlayerCurrentHealth = Health;
 	UGameplayStatics::SaveGameToSlot(SaveObject, TEXT("Slot1"), 0);
 	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::White, TEXT("Data saved ... "));
+	UE_LOG(LogTemp, Warning, TEXT("Current ammo: %f"),CurrentAmmo);
 }
 
 void APlayerCharacter::Load()
@@ -191,8 +190,8 @@ void APlayerCharacter::Load()
 	}
 	SetActorLocation(SaveObject->PlayerLocation);
 	SetActorRotation(SaveObject->PlayerRotator);
-	Health = SaveObject->PlayerCurrentHealth;
-	CurrentAmmo = SaveObject->PlayerCurrentAmmo;
+	Health = MaxHealth;
+	CurrentAmmo = Max_Ammo;
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT(" Loaded."));
 }
 
@@ -292,7 +291,7 @@ void APlayerCharacter::ReleaseGrabbedObject()
 {
 	if (!IsGrabbing)
 	{
-		UE_LOG(LogTemp, Display, TEXT("Nothing grabbed"));
+		//UE_LOG(LogTemp, Display, TEXT("Nothing grabbed"));
 		return;
 	}
 	//TODO: Do we need to return to normal animation after changing?
@@ -353,15 +352,16 @@ void APlayerCharacter::Heal(float HealingRestored)
 /*calls respawn function with delay so the animation can be played later*/
 void APlayerCharacter::Die()
 {
-	GetWorld()->GetTimerManager().SetTimer(RespawnTimerHandle, this, &APlayerCharacter::Respawn, RespawnDelay, false);
+	//GetWorld()->GetTimerManager().SetTimer(RespawnTimerHandle, this, &APlayerCharacter::Respawn, RespawnDelay, false);
+	Respawn();
 }
 
 /*resets health, location and timer */
 void APlayerCharacter::Respawn()
 {
-	Health = 1.0f;
+	//Health = 1.0f;
 	Load();
-	GetWorldTimerManager().ClearTimer(RespawnTimerHandle);
+	//GetWorldTimerManager().ClearTimer(RespawnTimerHandle);
 }
 
 void APlayerCharacter::GetAmmo(float CollectedAmmo)
