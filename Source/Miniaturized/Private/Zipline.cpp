@@ -3,6 +3,8 @@
 
 #include "Zipline.h"
 
+#include "GameFramework/PawnMovementComponent.h"
+
 
 // Sets default values
 AZipline::AZipline()
@@ -21,7 +23,6 @@ AZipline::AZipline()
 
 	Start->SetCollisionProfileName("Trigger");
 	Start->SetGenerateOverlapEvents(true);
-
 }
 
 // Called when the game starts or when spawned
@@ -58,15 +59,18 @@ void AZipline::MoveAlongSpline(const float DeltaTime)
 	DistanceTravelled = (DeltaTime * Speed) + DistanceTravelled;
 	FVector ActorPosition = SplineComp->GetLocationAtDistanceAlongSpline(DistanceTravelled, ESplineCoordinateSpace::World);
 	ActorPosition.Z += ZOffset;
-	Player->SetActorLocation(ActorPosition);
+	if(Player != nullptr)
+	{
+		Player->SetActorLocation(ActorPosition);
+	}
 }
 
 void AZipline::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor)
 {
-	if (OtherActor && OtherActor != this)
+	Player = Cast<APlayerCharacter>(OtherActor);
+	if (Player != nullptr && OtherActor != this)
 	{
 		UE_LOG(LogTemp, Display, TEXT("Started zipline"));
-		Player = Cast<APlayerCharacter>(OtherActor);
 		SetActorTickEnabled(true);
 	}
 }
