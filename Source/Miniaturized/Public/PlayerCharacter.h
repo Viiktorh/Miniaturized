@@ -114,6 +114,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	float BatteryChargeDelay;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	float BatteryRechargeRate = 0.5f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	float BatteryRechargeLimit = 5.f;
+
 	void SetCurrentAmmo(float AmmoChange);
 
 	float GetCurrentAmmo();
@@ -247,10 +253,10 @@ protected:
 
 	/*Ammo and shooting*/
 	UFUNCTION(BlueprintCallable)
-	void GetAmmo(float CollectedAmmo);
+	void CollectAmmo(float CollectedAmmo);
 
 	UFUNCTION(BlueprintCallable)
-	void LoosingCharge();
+	void GainCharge();
 
 	FTimerHandle BatteryChargeHandle;
 
