@@ -43,14 +43,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USpringArmComponent* CameraSpringArm;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FirstSpringarm")
+	float StartSpringArmDistance = 500.0f;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USkeletalMeshComponent* PlayerCharacterMesh;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UCameraComponent* SecondCameraComponent;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera")
-	USpringArmComponent* SecondSpringArm;
 
 	/*
 	 * Input Mapping Context and Actions
@@ -78,9 +75,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	UInputAction* PushObject;
-	
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
-	//UInputAction* CrouchAction;
+
 
 	void Move(const FInputActionValue& Value);
 
@@ -88,9 +83,6 @@ public:
 
 	void LookAround(const FInputActionValue& Value);
 
-	void Crouch();
-
-	void UnCrouch();
 	/*
 	* Weapon
 	*/
@@ -121,6 +113,16 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	float BatteryChargeDelay;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	float BatteryRechargeRate = 0.5f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	float BatteryRechargeLimit = 5.f;
+
+	void SetCurrentAmmo(float AmmoChange);
+
+	float GetCurrentAmmo();
 
 	/*Viles*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vials")
@@ -166,21 +168,6 @@ public:
 	APlayerController* PlayerController;
 	UEnhancedInputLocalPlayerSubsystem* Subsystem;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SideviewRotation")
-	FRotator SideViewRotation = FRotator(0,-95,0);
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FirstSpringarm")
-	float StartSpringArmDistance = 500.0f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SecondSpringarm")
-	float SecondSpringArmDistance = 300.0f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SideviewDistance")
-	float SideViewSpringArmDistance = 800.0f;
-
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sideview position")
-	float SideViewIntSpeed = 2.0f;//Value decides how fast the springarm turns when changing position & rotation
 
 	//Timer 
 	FTimerHandle TimerHandle;
@@ -195,13 +182,6 @@ public:
 	//Returns springarm and control to default
 	virtual void RunOnTagEndOverlap(FString Tag) override;
 
-	/*Rotates the springarm relative to its parent and increases the springarm target length.
-	 *Turns off collision on the springarm. When it reaches its desired location, timer that is also used is cleared*/
-	void ChangeSpringarmWithTimer();
-
-	/*Rotates the springarm back to its start position relative to its parent and decreases the springarm target length.
-	 *Turns on collision on the springarm. When it reaches its desired location, timer that is used is cleared*/
-	void ReturnSpringarmWithTimer();
 
 	//Switch inputmapping
 	void SwitchToTerrariumImc();
@@ -273,10 +253,10 @@ protected:
 
 	/*Ammo and shooting*/
 	UFUNCTION(BlueprintCallable)
-	void GetAmmo(float CollectedAmmo);
+	void CollectAmmo(float CollectedAmmo);
 
 	UFUNCTION(BlueprintCallable)
-	void LoosingCharge();
+	void GainCharge();
 
 	FTimerHandle BatteryChargeHandle;
 

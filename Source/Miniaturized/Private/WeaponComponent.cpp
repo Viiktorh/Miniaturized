@@ -59,6 +59,17 @@ void UWeaponComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 
 void UWeaponComponent::FireWeapon()
 {
+	if (Character->GetCurrentAmmo() <= Character->Min_Ammo)
+	{
+		Character->SetCurrentAmmo(Character->Min_Ammo);
+		return;
+	}
+	if (Character->GetCurrentAmmo() >= Character->Min_Ammo)
+	{
+		float AmmoChange = Character->GetCurrentAmmo() - WeaponAmmoConsumption;
+		Character->SetCurrentAmmo(AmmoChange);
+	}
+
 	FHitResult OutHit;
 
 	APlayerController* PlayerController = Cast<APlayerController>(Character->GetController());
@@ -86,14 +97,14 @@ void UWeaponComponent::FireWeapon()
 	// and its fields will be filled with detailed info about what was hit
 	if (OutHit.bBlockingHit && IsValid(OutHit.GetActor()))
 	{
-		//Debug
-		UE_LOG(LogTemp, Log, TEXT("Trace hit actor: %s"), *OutHit.GetActor()->GetName());
+		//Attach the beam to the enemy
 		//Do this before applying damage or else risk checking a nullptr when enemies die.
 		if (OutHit.GetActor()->ActorHasTag("Enemy") && OutHit.GetActor() != nullptr)
 		{
 			UNiagaraComponent* NiagaraComp = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), WeaponBeam, USkeletalMeshComponent::GetSocketLocation(FName(TEXT("BeamSocket"))));
 			if (NiagaraComp)
 			{
+				//Sets the BeamTarget at the Actor Location
 				//BeamTarget is the end of the beam. Defined from the NS_WeaponBeam Niagara Comp in the unreal editor.
 				NiagaraComp->SetVectorParameter(FName("BeamTarget"), OutHit.GetActor()->GetActorLocation());
 			}
@@ -105,6 +116,7 @@ void UWeaponComponent::FireWeapon()
 		}
 		else 
 		{
+			//If something other than enemy is hit, attach beam to the hit location
 			UNiagaraComponent* NiagaraComp = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), WeaponBeam, USkeletalMeshComponent::GetSocketLocation(FName(TEXT("BeamSocket"))));
 			if (NiagaraComp)
 			{
@@ -114,8 +126,7 @@ void UWeaponComponent::FireWeapon()
 		}
 	}
 	else {
-		UE_LOG(LogTemp, Log, TEXT("No Actors were hit"));
-
+		//Attach the beam to the BeamEnd location
 		UNiagaraComponent* NiagaraComp = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), WeaponBeam, USkeletalMeshComponent::GetSocketLocation(FName(TEXT("BeamSocket"))));
 		if (NiagaraComp)
 		{
