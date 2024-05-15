@@ -1,8 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "Kismet/GameplayStatics.h"
-#include "PlayerCharacter.h"
-#include "Engine/World.h"
+
 #include "Countdown.h"
 
 // Sets default values
@@ -16,12 +14,12 @@ ACountdown::ACountdown()
 	CountdownText->SetTextRenderColor(FColor::Black);
 	CountdownText->SetText(FText::FromString("Your mix will be ready in 2 minutes "));
 	RootComponent = CountdownText;
-	bCanPickupPotion = false;
+	//bCanPickupPotion = false;
 	/*trigger box to activate timer*/
 	TriggerBoxTimer = CreateDefaultSubobject<UBoxComponent>(TEXT("TriggerBox"));
 	TriggerBoxTimer->SetupAttachment(RootComponent);
 	bCollisionEnabled = false;
-	bCanPickupPotion = false;
+	
 }
 
 // Called when the game starts or when spawned
@@ -29,11 +27,7 @@ void ACountdown::BeginPlay()
 {
 	Super::BeginPlay();
 	TriggerBoxTimer->OnComponentBeginOverlap.AddDynamic(this, &ACountdown::OnBoxBeginOverlap);
-	UWorld* World = GetWorld();
-	if (World) {
-		UGameplayStatics::PlaySound2D(World, CountdownSound, 1.f, 1.f, 0.f);
-	}
-
+	
 }
 
 // Called every frame
@@ -58,23 +52,42 @@ void ACountdown::CountdownBegin()
 void ACountdown::CountdownFinished()
 {
 	GetWorld()->GetTimerManager().ClearTimer(CountdownTimer);
-	Destroy();
+	//Destroy();
 	CountdownText->SetText(INVTEXT("You can collect potion!"));
-	bCanPickupPotion = true;
+	//bCanPickupPotion = true;
 }
 
 
 void ACountdown::OnBoxBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	bCollisionEnabled = true;
-	GetWorld()->GetTimerManager().SetTimer(CountdownTimer, this, &ACountdown::CountdownBegin, 1.0f, true);
-	SetActorEnableCollision(false); //want to destroy trigger box
+	APlayerCharacter* Character = Cast<APlayerCharacter>(OtherActor);
+	float Health = CharacterHealth->Health;
+	if (Character != nullptr) {
+		/*if (Health > 0) {
+			bCollisionEnabled = true;
+			GetWorld()->GetTimerManager().SetTimer(CountdownTimer, this, &ACountdown::CountdownBegin, 1.0f, true);
+			UWorld* World = GetWorld();
+			if (World) {
+				UGameplayStatics::PlaySound2D(World, CountdownSound, 1.f, 1.f, 0.f);
+			}
+			SetActorEnableCollision(false); //want to deactivate trigger box
+		}
+		else {
+			bCollisionEnabled = false;
+		}*/
 
+		bCollisionEnabled = true;
+		GetWorld()->GetTimerManager().SetTimer(CountdownTimer, this, &ACountdown::CountdownBegin, 1.0f, true);
+		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Black, TEXT("Button is clicked"));
+		SetActorEnableCollision(false);
+	}
+	
 }
 
-void ACountdown::OnBoxEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void ACountdown::OnBoxEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	bCollisionEnabled = false;
+	CountdownFinished();
 }
 
 

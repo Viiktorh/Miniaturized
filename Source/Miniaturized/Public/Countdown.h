@@ -6,6 +6,9 @@
 #include "GameFramework/Actor.h"
 #include "Components/TextRenderComponent.h"
 #include "Components/BoxComponent.h"
+#include "PlayerCharacter.h"
+#include "Kismet/GameplayStatics.h"
+#include "Engine/World.h"
 #include "Countdown.generated.h"
 
 UCLASS()
@@ -40,7 +43,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	USoundBase* CountdownSound{ nullptr };
 
-	bool bCanPickupPotion;
+	//bool bCanPickupPotion;
 	bool bCollisionEnabled;
 
 	FString FormattedTime;
@@ -52,10 +55,11 @@ public:
 
 	UFUNCTION()
 	void OnBoxBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-	
-	void OnBoxEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
+	UFUNCTION()
+	void OnBoxEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
+	APlayerCharacter* CharacterHealth;
 
 
 };
