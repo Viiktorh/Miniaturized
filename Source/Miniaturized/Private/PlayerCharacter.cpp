@@ -26,16 +26,9 @@ APlayerCharacter::APlayerCharacter()
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraSpringArm->SetupAttachment(RootComponent);
-	CameraSpringArm->TargetArmLength = StartSpringArmDistance; // The camera follows at this distance behind the character	
+	CameraSpringArm->TargetArmLength = StartSpringArmDistance; // The  camera follows at this distance behind the character	
 	CameraSpringArm->bUsePawnControlRotation = true; // Rotate the arm based on the controller
 	CameraSpringArm->bEnableCameraLag = true;//Makes the camera movement feel smoother
-
-	/*Second Springarm Component*/
-	SecondSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SecondCameraBoom"));
-	SecondSpringArm->SetupAttachment(RootComponent);
-	SecondSpringArm->TargetArmLength = SecondSpringArmDistance;
-	SecondSpringArm->bUsePawnControlRotation = false;
-	SecondSpringArm->bEnableCameraLag = true;
 
 	/*Camera Component*/
 	PrimaryCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
@@ -61,15 +54,6 @@ APlayerCharacter::APlayerCharacter()
 	Min_Vials = 0.0f;
 	Max_Vials = 3.0f;
 
-	/*Crouch*/
-	FVector NewCollisionSize = FVector(5.0f, 5.0f, 10.0f);
-
-	/*Second camera component*/
-	SecondCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("SecondCameraComponent"));
-	SecondCameraComponent->SetupAttachment(SecondSpringArm, USpringArmComponent::SocketName);
-	SecondCameraComponent->bUsePawnControlRotation = false;
-	SecondCameraComponent->AttachToComponent(SecondSpringArm, FAttachmentTransformRules::KeepRelativeTransform);
-	SecondCameraComponent->Deactivate();//Deactivated by default
 
 	/*Skeletal Mesh Component*/
 	PlayerCharacterMesh = GetMesh();
@@ -135,17 +119,6 @@ void APlayerCharacter::LookAround(const FInputActionValue& Value)
 		AddControllerYawInput(LookAroundVector.X);
 		AddControllerPitchInput((LookAroundVector.Y));
 	}
-}
-
-void APlayerCharacter::Crouch()
-{
-	
-	//CollisionCylinder->SetWorldScale3D(NewCollisionSize);
-}
-
-void APlayerCharacter::UnCrouch()
-{
-	//CollisionCylinder->SetWorldScale3D(OriginalSize);
 }
 
 
@@ -333,7 +306,7 @@ void APlayerCharacter::BeginPlay()
 		}
 
 
-	/*Respawn and load slot is set*/
+	/*Respawn and load slot is set at start of game*/
 	Save();
 }
 
@@ -420,47 +393,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 		EnhancedInputComponent->BindAction(PushObject, ETriggerEvent::Completed, this, &APlayerCharacter::ReleaseGrabbedObject);
 		EnhancedInputComponent->BindAction(PushObject, ETriggerEvent::Triggered, this, &APlayerCharacter::PushableObject);
-		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Crouch);
-		EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Completed, this, &APlayerCharacter::UnCrouch);
 	}
 }
-
-//
-//void APlayerCharacter::ChangeSpringarmWithTimer()
-//{
-//	
-//	UE_LOG(LogTemp, Warning, TEXT(" Pitch is: %f, Yaw is: %f and Roll is: %f"), CameraSpringArm->GetRelativeRotation().Pitch, CameraSpringArm->GetRelativeRotation().Yaw, CameraSpringArm->GetRelativeRotation().Roll);
-//	//Rotates and increases the springarm location relative to mesh, turns off springarm collision
-//	CameraSpringArm->bDoCollisionTest = false;
-//	bUseControllerRotationYaw = false;
-//	CameraSpringArm->bUsePawnControlRotation = false;
-//	CameraSpringArm->TargetArmLength = FMath::FInterpTo(CameraSpringArm->TargetArmLength, SideViewSpringArmDistance, GetWorld()->GetDeltaSeconds(), SideViewIntSpeed);
-//	CameraSpringArm->SetRelativeRotation(FMath::RInterpTo(CameraSpringArm->GetRelativeRotation(), SideViewRotation, GetWorld()->GetDeltaSeconds(), SideViewIntSpeed));
-//
-//	if (CameraSpringArm->GetRelativeRotation().Yaw <= -90)
-//	{
-//		GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
-//		UE_LOG(LogTemp, Warning, TEXT(" Pitch is: %f, Yaw is: %f and Roll is: %f"), CameraSpringArm->GetRelativeRotation().Pitch, CameraSpringArm->GetRelativeRotation().Yaw, CameraSpringArm->GetRelativeRotation().Roll);
-//		UE_LOG(LogTemp, Warning, TEXT("Timer Cleared"))
-//	}
-//}
-//void APlayerCharacter::ReturnSpringarmWithTimer()
-//{
-//	if (CameraSpringArm->GetRelativeRotation().Yaw >= -1)
-//	{
-//		GetWorld()->GetTimerManager().ClearTimer(TimerHandle);
-//		UE_LOG(LogTemp, Warning, TEXT("Pitch is: %f, Yaw is: %f and Roll is: %f"), CameraSpringArm->GetRelativeRotation().Pitch, CameraSpringArm->GetRelativeRotation().Yaw, CameraSpringArm->GetRelativeRotation().Roll);
-//
-//		UE_LOG(LogTemp, Warning, TEXT("Timer Cleared"))
-//	}
-//
-//	//Rotates and increases the springarm location relative to mesh, returns collision to true
-//	CameraSpringArm->SetRelativeRotation(FMath::RInterpTo(CameraSpringArm->GetRelativeRotation(), SpringArmStartRotation, GetWorld()->GetDeltaSeconds(), SideViewIntSpeed));
-//	CameraSpringArm->TargetArmLength = FMath::FInterpTo(CameraSpringArm->TargetArmLength, StartSpringArmDistance, GetWorld()->GetDeltaSeconds(), SideViewIntSpeed);
-//	CameraSpringArm->bUsePawnControlRotation = true;
-//	CameraSpringArm->bDoCollisionTest = true;
-//	bUseControllerRotationYaw = true;
-//}
 
 void APlayerCharacter::SwitchToTerrariumImc()
 {
@@ -509,16 +443,9 @@ void APlayerCharacter::RunOnTagOverlap(FString Tag)
 
 	if (Tag == "Terrarium")
 	{
-		//GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &APlayerCharacter::ChangeSpringarmWithTimer, Delay, true);
 		SwitchToTerrariumImc();
 	}
 
-	if (Tag == "InnerTerrarium")
-	{
-		SwitchToDefaultImc();
-		SecondCameraComponent->Activate();
-		PrimaryCameraComponent->Deactivate();
-	}
 	if (Tag == "Checkpoint")
 	{
 		Save();
@@ -536,12 +463,6 @@ void APlayerCharacter::RunOnTagEndOverlap(FString Tag)
 		//GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &APlayerCharacter::ReturnSpringarmWithTimer, Delay, true);
 		SwitchToDefaultImc();
 
-	}
-	if (Tag == "InnerTerrarium")
-	{
-		SwitchToTerrariumImc();
-		SecondCameraComponent->Deactivate();
-		PrimaryCameraComponent->Activate();
 	}
 	else
 	{
