@@ -26,16 +26,9 @@ APlayerCharacter::APlayerCharacter()
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraSpringArm->SetupAttachment(RootComponent);
-	CameraSpringArm->TargetArmLength = StartSpringArmDistance; // The camera follows at this distance behind the character	
+	CameraSpringArm->TargetArmLength = StartSpringArmDistance; // The  camera follows at this distance behind the character	
 	CameraSpringArm->bUsePawnControlRotation = true; // Rotate the arm based on the controller
 	CameraSpringArm->bEnableCameraLag = true;//Makes the camera movement feel smoother
-
-	/*Second Springarm Component*/
-	SecondSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SecondCameraBoom"));
-	SecondSpringArm->SetupAttachment(RootComponent);
-	SecondSpringArm->TargetArmLength = SecondSpringArmDistance;
-	SecondSpringArm->bUsePawnControlRotation = false;
-	SecondSpringArm->bEnableCameraLag = true;
 
 	/*Camera Component*/
 	PrimaryCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
@@ -61,15 +54,6 @@ APlayerCharacter::APlayerCharacter()
 	Min_Vials = 0.0f;
 	Max_Vials = 3.0f;
 
-	/*Crouch*/
-	FVector NewCollisionSize = FVector(5.0f, 5.0f, 10.0f);
-
-	/*Second camera component*/
-	SecondCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("SecondCameraComponent"));
-	SecondCameraComponent->SetupAttachment(SecondSpringArm, USpringArmComponent::SocketName);
-	SecondCameraComponent->bUsePawnControlRotation = false;
-	SecondCameraComponent->AttachToComponent(SecondSpringArm, FAttachmentTransformRules::KeepRelativeTransform);
-	SecondCameraComponent->Deactivate();//Deactivated by default
 
 	/*Skeletal Mesh Component*/
 	PlayerCharacterMesh = GetMesh();
@@ -322,7 +306,7 @@ void APlayerCharacter::BeginPlay()
 		}
 
 
-	/*Respawn and load slot is set*/
+	/*Respawn and load slot is set at start of game*/
 	Save();
 }
 
@@ -462,12 +446,6 @@ void APlayerCharacter::RunOnTagOverlap(FString Tag)
 		SwitchToTerrariumImc();
 	}
 
-	if (Tag == "InnerTerrarium")
-	{
-		SwitchToDefaultImc();
-		SecondCameraComponent->Activate();
-		PrimaryCameraComponent->Deactivate();
-	}
 	if (Tag == "Checkpoint")
 	{
 		Save();
@@ -485,12 +463,6 @@ void APlayerCharacter::RunOnTagEndOverlap(FString Tag)
 		//GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &APlayerCharacter::ReturnSpringarmWithTimer, Delay, true);
 		SwitchToDefaultImc();
 
-	}
-	if (Tag == "InnerTerrarium")
-	{
-		SwitchToTerrariumImc();
-		SecondCameraComponent->Deactivate();
-		PrimaryCameraComponent->Activate();
 	}
 	else
 	{

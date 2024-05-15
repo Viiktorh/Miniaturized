@@ -43,14 +43,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USpringArmComponent* CameraSpringArm;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FirstSpringarm")
+	float StartSpringArmDistance = 500.0f;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USkeletalMeshComponent* PlayerCharacterMesh;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UCameraComponent* SecondCameraComponent;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera")
-	USpringArmComponent* SecondSpringArm;
 
 	/*
 	 * Input Mapping Context and Actions
@@ -165,21 +162,6 @@ public:
 	APlayerController* PlayerController;
 	UEnhancedInputLocalPlayerSubsystem* Subsystem;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SideviewRotation")
-	FRotator SideViewRotation = FRotator(0,-95,0);
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FirstSpringarm")
-	float StartSpringArmDistance = 500.0f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SecondSpringarm")
-	float SecondSpringArmDistance = 300.0f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SideviewDistance")
-	float SideViewSpringArmDistance = 800.0f;
-
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sideview position")
-	float SideViewIntSpeed = 2.0f;//Value decides how fast the springarm turns when changing position & rotation
 
 	//Timer 
 	FTimerHandle TimerHandle;
