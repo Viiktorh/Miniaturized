@@ -21,9 +21,9 @@ void Aspring::BeginPlay()
 
 void Aspring::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor)
 {
-	if (OtherActor && OtherActor != this)
+	APlayerCharacter* character = Cast<APlayerCharacter>(OtherActor);
+	if (character != nullptr && OtherActor != this)
 	{
-		APlayerCharacter* character = Cast<APlayerCharacter>(OtherActor);
 		character->JumpPad(ForwardMomentum,HowHighMomentum);
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Emerald, TEXT("Begin Overlapp"));
 

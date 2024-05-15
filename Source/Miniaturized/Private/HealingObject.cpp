@@ -8,7 +8,7 @@ AHealingObject::AHealingObject()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	HealingMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BatteryMesh"));
+	HealingMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("HealingObjectMesh"));
 	RootComponent = HealingMesh;
 }
 

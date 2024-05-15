@@ -17,7 +17,4 @@ class MINIATURIZED_API UMainSaveGame : public USaveGame
 public:
 	FVector PlayerLocation;
 	FRotator PlayerRotator;
-	float PlayerCurrentAmmo;
-	float PlayerCurrentHealth;
-	
 };

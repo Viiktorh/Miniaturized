@@ -16,16 +16,16 @@ ATrigger::ATrigger()
 	//Root component
 	SceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("SceneComponent"));
 
-	//Static Mesh
-	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
-	StaticMeshComponent->SetupAttachment(SceneComponent);
-
 	//Create a collider for trigger
 	BoxCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionTrigger"));
 	BoxCollider->SetBoxExtent(FVector(32.0f, 32.0f, 32.0f));
 	BoxCollider->SetCollisionProfileName("Trigger");
 	BoxCollider->SetGenerateOverlapEvents(true);
-	BoxCollider->SetupAttachment(StaticMeshComponent);
+	BoxCollider->SetupAttachment(SceneComponent);
+
+	//Static Mesh
+	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
+	StaticMeshComponent->SetupAttachment(BoxCollider);
 
 	SetRootComponent(SceneComponent);
 }
