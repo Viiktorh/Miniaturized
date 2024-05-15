@@ -3,6 +3,8 @@
 
 #include "Zipline.h"
 
+#include "GameFramework/PawnMovementComponent.h"
+
 
 // Sets default values
 AZipline::AZipline()
@@ -21,7 +23,6 @@ AZipline::AZipline()
 
 	Start->SetCollisionProfileName("Trigger");
 	Start->SetGenerateOverlapEvents(true);
-
 }
 
 // Called when the game starts or when spawned
