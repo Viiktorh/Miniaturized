@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2024-05-15T18:03:20.228Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0" etag="5sycgnYR3R0Xxwyqq9Zm" version="24.4.0" type="github">
+<mxfile host="app.diagrams.net" modified="2024-05-15T19:00:01.325Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0" etag="1ufJx2rB1cewnHNmQvVV" version="24.4.0" type="github">
   <diagram name="Page-1" id="zdgaAKbWMqd8TMpTbGGf">
-    <mxGraphModel dx="5000" dy="1637" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2000" pageHeight="4000" math="0" shadow="0">
+    <mxGraphModel dx="4333" dy="1273" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2000" pageHeight="4000" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -572,25 +572,22 @@
           <mxGeometry x="3430" y="480" width="260" height="60" as="geometry" />
         </mxCell>
         <mxCell id="U6w3fJ5CWS-zOaDmGOTP-31" value="BP_PlayerCharacter" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="1830" y="1410" width="330" height="480" as="geometry" />
+          <mxGeometry x="1830" y="1410" width="330" height="420" as="geometry" />
         </mxCell>
-        <mxCell id="U6w3fJ5CWS-zOaDmGOTP-32" value="&lt;div&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;+/- CharacterMesh0 USkeletalMeshComponent*&amp;nbsp; BP&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;+/-&amp;nbsp; HornetController AIController*&amp;nbsp; BP&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;- Target: HornetController&amp;nbsp; BP&lt;/div&gt;&lt;div&gt;+ RandomLocation: vector&amp;nbsp; BP&lt;/div&gt;&lt;/div&gt;&lt;div&gt;+/- NewWalkSpeed: float BP&lt;/div&gt;&lt;div&gt;+/- CollisionCylinder: UCapsuleComponent*&amp;nbsp; BP&lt;/div&gt;&lt;div&gt;+/- HornetHitbox: USphereComponent*&amp;nbsp; BP&lt;span style=&quot;background-color: initial;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;+/- HornetCollision: UCapsuleComponent*&amp;nbsp; BP&lt;br&gt;&lt;/div&gt;&lt;div&gt;+/- HeadCollision: USphereComponent*&amp;nbsp; BP&lt;br&gt;&lt;/div&gt;&lt;div&gt;+/- HealthBar: UWidgetComponent* BP&lt;/div&gt;&lt;div&gt;+/- CharMoveComp: UCharacterMovementComponent* BP&amp;nbsp;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="U6w3fJ5CWS-zOaDmGOTP-31" vertex="1">
-          <mxGeometry y="26" width="330" height="184" as="geometry" />
+        <mxCell id="U6w3fJ5CWS-zOaDmGOTP-32" value="&lt;div&gt;#/- bMenuIsOpen: bool BP&lt;/div&gt;&lt;div&gt;#/- Menu: SwitchingMenu&amp;nbsp; BP&lt;/div&gt;&lt;div&gt;#/- CharacterHealth: CharacterHealth BP&lt;/div&gt;&lt;div&gt;#/- As BP Player Character: BP Player Character BP&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="U6w3fJ5CWS-zOaDmGOTP-31" vertex="1">
+          <mxGeometry y="26" width="330" height="64" as="geometry" />
         </mxCell>
         <mxCell id="U6w3fJ5CWS-zOaDmGOTP-33" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" parent="U6w3fJ5CWS-zOaDmGOTP-31" vertex="1">
-          <mxGeometry y="210" width="330" height="28" as="geometry" />
+          <mxGeometry y="90" width="330" height="28" as="geometry" />
         </mxCell>
-        <mxCell id="U6w3fJ5CWS-zOaDmGOTP-34" value="&lt;div&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;+/- UpdateWalkSpeed(float): void&amp;nbsp; &amp;nbsp; BP&amp;nbsp;&lt;/span&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;+/- GetUserWidgetObject( UWidgetComponent): UWidgetComponent BP&lt;/div&gt;&lt;div&gt;+/- SetHornetHealthBarOwner(UWidgetComponent): void&amp;nbsp; BP&lt;/div&gt;&lt;div&gt;&lt;div&gt;+/- SetMaxWalkSpeed(float, UCharacterMovementComponent): void&amp;nbsp; &amp;nbsp; BP&amp;nbsp;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;+/- DisableMovement(&lt;span style=&quot;background-color: initial;&quot;&gt;UCharacterMovementComponent): void BP&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;+/- PlayAnimation(USkeletalMeshComponent): UAnimationAsset&amp;nbsp; BP&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;+/- Delay(): void BP&lt;/span&gt;&lt;/div&gt;&lt;div&gt;+/- DelayUntilNextTick(): void&amp;nbsp; BP&lt;span style=&quot;background-color: initial;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;+/- DestroyActor(AActor*): void&amp;nbsp; BP&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="U6w3fJ5CWS-zOaDmGOTP-31" vertex="1">
-          <mxGeometry y="238" width="330" height="242" as="geometry" />
+        <mxCell id="U6w3fJ5CWS-zOaDmGOTP-34" value="&lt;div&gt;+/- EnhancedInputActionIA_OpenMenu(UserInput): void BP&lt;/div&gt;&lt;div&gt;+/- SetMenuIsOpen(bool): void BP&lt;/div&gt;&lt;div&gt;+/- SetInputModeGameAndUI(Player Controller, UUserWidget*, bool): void BP&lt;/div&gt;&lt;div&gt;+/- SetShowMouseCursor(PlayerController, bool): void BP&lt;/div&gt;&lt;div&gt;+/- SetGamePaused(bool): void BP&lt;/div&gt;&lt;div&gt;+/- BeginPlay(AActor): void BP&lt;/div&gt;&lt;div&gt;+/- GetPlayerPawn(GameplayStatics): APawn BP&lt;/div&gt;&lt;div&gt;+/- SetAsBPPlayerCharacter(BP Player Character): void BP&lt;/div&gt;&lt;div&gt;+/- SetCharacterHealth(CharacterHealth): UUserWidget BP&lt;/div&gt;&lt;div&gt;+/- AddToViewport(UUserWidget): void BP&lt;/div&gt;&lt;div&gt;+/- GetPlayerController(Gameplay Statics): Player Controller&amp;nbsp; BP&lt;/div&gt;&lt;div&gt;+/- SetMenu(Switching Menu): UUserWidget BP&lt;/div&gt;&lt;div&gt;+/- Tick(float): void BP&lt;/div&gt;&lt;div&gt;+/- SetVisibility(UUserWidget): void BP&lt;/div&gt;&lt;div&gt;+/- Crouch(Character, UserInput): void BP&lt;/div&gt;&lt;div&gt;+/- UnCrouch(Character, UserInput): void BP&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="U6w3fJ5CWS-zOaDmGOTP-31" vertex="1">
+          <mxGeometry y="118" width="330" height="302" as="geometry" />
         </mxCell>
         <mxCell id="U6w3fJ5CWS-zOaDmGOTP-37" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.484;entryY=1.005;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="1981.24" y="1407.39" as="sourcePoint" />
             <mxPoint x="1980.0000000000002" y="1339.9999999999998" as="targetPoint" />
           </mxGeometry>
-        </mxCell>
-        <mxCell id="U6w3fJ5CWS-zOaDmGOTP-38" value="not done&amp;nbsp;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="2080" y="2000" width="330" height="60" as="geometry" />
         </mxCell>
         <mxCell id="DrkGmGW7i-6Kr_7NaxUp-1" value="" style="endArrow=none;html=1;rounded=0;entryX=0.916;entryY=1.012;entryDx=0;entryDy=0;entryPerimeter=0;exitX=1.01;exitY=0.032;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="DrkGmGW7i-6Kr_7NaxUp-21" target="EcpB4iICE6naHUnbvn0D-18">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
@@ -647,10 +644,10 @@
         <mxCell id="DrkGmGW7i-6Kr_7NaxUp-16" value="&lt;div&gt;&lt;div&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;+/- UpdateWalkSpeed(float, BP Ant): void&amp;nbsp; &amp;nbsp; BP&amp;nbsp;&lt;/span&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;+/- ReceiveExecuteAI(BTTaskBlueprintBase, APawn,&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;AIController): void&amp;nbsp; BP&amp;nbsp;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;+/- FinishExecute(BTTaskBlueprintBase): void BP&lt;/span&gt;&lt;/div&gt;&lt;div&gt;+/- GetActorLocation(AActor): vector&amp;nbsp; BP&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;+/- GetRandomReachablePointInRadius(vector, float, NavigationSystemV1): vector&amp;nbsp; BP&lt;/div&gt;&lt;div&gt;+/- SetBlackboardValueAsVector(BlackboardKeySelector, BTFunctionLibrary, vector): void BP&lt;/div&gt;&lt;div&gt;+/- AIMoveTo(APawn, vector, float): void BP&lt;/div&gt;&lt;div&gt;+/- Delay(float): void BP&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="DrkGmGW7i-6Kr_7NaxUp-13">
           <mxGeometry y="108" width="330" height="172" as="geometry" />
         </mxCell>
-        <mxCell id="DrkGmGW7i-6Kr_7NaxUp-17" value="" style="endArrow=none;html=1;rounded=0;entryX=0.524;entryY=1.024;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" target="U6w3fJ5CWS-zOaDmGOTP-34">
+        <mxCell id="DrkGmGW7i-6Kr_7NaxUp-17" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="380" y="2320" as="sourcePoint" />
-            <mxPoint x="1730" y="1950" as="targetPoint" />
+            <mxPoint x="2000" y="1830" as="targetPoint" />
             <Array as="points">
               <mxPoint x="2003" y="2320" />
             </Array>
@@ -726,10 +723,10 @@
         <mxCell id="DrkGmGW7i-6Kr_7NaxUp-39" value="+/- EventConstruct(UUserWidget): void BP&lt;div&gt;+/- SetMenuSwitcher(WidgetSwitcher, MainMenu): void BP&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;+/- SetBackSwitcher(WidgetSwitcher, OptionsHUD): void BP&amp;nbsp;&lt;/span&gt;&amp;nbsp;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="DrkGmGW7i-6Kr_7NaxUp-36">
           <mxGeometry y="130" width="270" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="DrkGmGW7i-6Kr_7NaxUp-40" value="" style="endArrow=none;html=1;rounded=0;entryX=-0.002;entryY=0.289;entryDx=0;entryDy=0;entryPerimeter=0;exitX=1.016;exitY=0.743;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="EcpB4iICE6naHUnbvn0D-86" target="U6w3fJ5CWS-zOaDmGOTP-34">
+        <mxCell id="DrkGmGW7i-6Kr_7NaxUp-40" value="" style="endArrow=none;html=1;rounded=0;exitX=1.016;exitY=0.743;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="EcpB4iICE6naHUnbvn0D-86">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="1320" y="1720" as="sourcePoint" />
-            <mxPoint x="1830" y="1713.9800000000005" as="targetPoint" />
+            <mxPoint x="1830" y="1718" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="DrkGmGW7i-6Kr_7NaxUp-43" value="" style="endArrow=none;html=1;rounded=0;entryX=0.749;entryY=0.991;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.167;exitY=-0.009;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="DrkGmGW7i-6Kr_7NaxUp-36" target="EcpB4iICE6naHUnbvn0D-81">
@@ -760,10 +757,10 @@
         <mxCell id="DrkGmGW7i-6Kr_7NaxUp-48" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Helvetica; font-size: 11px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: nowrap; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;1&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="1800" y="1685" width="40" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="DrkGmGW7i-6Kr_7NaxUp-49" value="" style="endArrow=none;html=1;rounded=0;entryX=0.524;entryY=1.024;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.439;exitY=1.075;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="DrkGmGW7i-6Kr_7NaxUp-8">
+        <mxCell id="DrkGmGW7i-6Kr_7NaxUp-49" value="" style="endArrow=none;html=1;rounded=0;exitX=0.439;exitY=1.075;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="DrkGmGW7i-6Kr_7NaxUp-8">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="240" y="2304" as="sourcePoint" />
-            <mxPoint x="1863" y="1890" as="targetPoint" />
+            <mxPoint x="1863" y="1830" as="targetPoint" />
             <Array as="points">
               <mxPoint x="195" y="2100" />
               <mxPoint x="1863" y="2100" />
