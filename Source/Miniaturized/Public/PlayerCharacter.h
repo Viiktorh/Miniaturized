@@ -78,9 +78,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	UInputAction* PushObject;
-	
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
-	//UInputAction* CrouchAction;
+
 
 	void Move(const FInputActionValue& Value);
 
@@ -88,9 +86,6 @@ public:
 
 	void LookAround(const FInputActionValue& Value);
 
-	void Crouch();
-
-	void UnCrouch();
 	/*
 	* Weapon
 	*/
@@ -199,13 +194,6 @@ public:
 	//Returns springarm and control to default
 	virtual void RunOnTagEndOverlap(FString Tag) override;
 
-	/*Rotates the springarm relative to its parent and increases the springarm target length.
-	 *Turns off collision on the springarm. When it reaches its desired location, timer that is also used is cleared*/
-	void ChangeSpringarmWithTimer();
-
-	/*Rotates the springarm back to its start position relative to its parent and decreases the springarm target length.
-	 *Turns on collision on the springarm. When it reaches its desired location, timer that is used is cleared*/
-	void ReturnSpringarmWithTimer();
 
 	//Switch inputmapping
 	void SwitchToTerrariumImc();

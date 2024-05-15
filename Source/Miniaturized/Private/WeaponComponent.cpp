@@ -97,8 +97,6 @@ void UWeaponComponent::FireWeapon()
 	// and its fields will be filled with detailed info about what was hit
 	if (OutHit.bBlockingHit && IsValid(OutHit.GetActor()))
 	{
-		//Debug
-		UE_LOG(LogTemp, Log, TEXT("Trace hit actor: %s"), *OutHit.GetActor()->GetName());
 		//Attach the beam to the enemy
 		//Do this before applying damage or else risk checking a nullptr when enemies die.
 		if (OutHit.GetActor()->ActorHasTag("Enemy") && OutHit.GetActor() != nullptr)
@@ -118,6 +116,7 @@ void UWeaponComponent::FireWeapon()
 		}
 		else 
 		{
+			//If something other than enemy is hit, attach beam to the hit location
 			UNiagaraComponent* NiagaraComp = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), WeaponBeam, USkeletalMeshComponent::GetSocketLocation(FName(TEXT("BeamSocket"))));
 			if (NiagaraComp)
 			{
@@ -127,8 +126,7 @@ void UWeaponComponent::FireWeapon()
 		}
 	}
 	else {
-		UE_LOG(LogTemp, Log, TEXT("No Actors were hit"));
-
+		//Attach the beam to the BeamEnd location
 		UNiagaraComponent* NiagaraComp = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), WeaponBeam, USkeletalMeshComponent::GetSocketLocation(FName(TEXT("BeamSocket"))));
 		if (NiagaraComp)
 		{

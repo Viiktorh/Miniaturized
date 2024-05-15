@@ -43,7 +43,7 @@ public:
 
 
 	/*
-	 * Expose Collision Channel to Unreal
+	 * Expose Collision Channel to Unreal Editor
 	 */
 	UPROPERTY(EditAnywhere, Category = "Beam Collision")
 	TEnumAsByte<ECollisionChannel> TraceChannelProperty = ECC_Visibility;
