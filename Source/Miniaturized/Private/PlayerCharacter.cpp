@@ -46,7 +46,7 @@ APlayerCharacter::APlayerCharacter()
 	/*Weapon and ammo*/
 	CurrentAmmo=0.0f;
 	Min_Ammo=0.0f;
-	Max_Ammo=3.0f;
+	Max_Ammo=25.0f;
 	BatteryChargeDelay = 3.0f;
 
 	/*Viles*/
@@ -347,27 +347,21 @@ void APlayerCharacter::Respawn()
 	GetWorldTimerManager().ClearTimer(RespawnTimerHandle);
 }
 
-void APlayerCharacter::GetAmmo(float CollectedAmmo)
+void APlayerCharacter::CollectAmmo(float CollectedAmmo)
 {
 	CurrentAmmo += CollectedAmmo;
 	if (CurrentAmmo >= Max_Ammo) {
-		CurrentAmmo = 3.0f;
+		CurrentAmmo = Max_Ammo;
 	}
-	GetWorld()->GetTimerManager().SetTimer(BatteryChargeHandle, this, &APlayerCharacter::LoosingCharge, BatteryChargeDelay, true);
+	GetWorld()->GetTimerManager().SetTimer(BatteryChargeHandle, this, &APlayerCharacter::GainCharge, BatteryChargeDelay, true);
 
 }
 
-void APlayerCharacter::LoosingCharge()
+void APlayerCharacter::GainCharge()
 {
-	if (CurrentAmmo > Min_Ammo) {
-		CurrentAmmo -= 0.3f;
+	if (CurrentAmmo < BatteryRechargeLimit) {
+		CurrentAmmo += BatteryRechargeRate;
 	}
-	
-	else {
-		CurrentAmmo = 0.0f;
-		GetWorldTimerManager().ClearTimer(BatteryChargeHandle);
-	}
-	
 }
 
 void APlayerCharacter::GetVials(float CollectedVials)
