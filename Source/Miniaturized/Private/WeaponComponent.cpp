@@ -66,7 +66,7 @@ void UWeaponComponent::FireWeapon()
 	}
 	if (Character->GetCurrentAmmo() >= Character->Min_Ammo)
 	{
-		float AmmoChange = Character->GetCurrentAmmo() - .1f;
+		float AmmoChange = Character->GetCurrentAmmo() - WeaponAmmoConsumption;
 		Character->SetCurrentAmmo(AmmoChange);
 	}
 

@@ -35,10 +35,13 @@ public:
 	FVector GuntipOffset;
 
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditAnywhere, Category = "WeaponSettings")
 	float WeaponDamage = 10.f;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(VisibleAnywhere = "WeaponSettings")
+	float WeaponAmmoConsumption = 0.0166f; //0.0166 is ~ 1 ammo per second.
+
+	UPROPERTY(EditAnywhere)
 	TSubclassOf<UDamageType> DamageType;
 
 
