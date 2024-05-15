@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2024-05-15T19:00:01.325Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0" etag="1ufJx2rB1cewnHNmQvVV" version="24.4.0" type="github">
+<mxfile host="app.diagrams.net" modified="2024-05-15T19:14:35.934Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0" etag="7XXbQyIyZcaq8ITHvNAk" version="24.4.0" type="github">
   <diagram name="Page-1" id="zdgaAKbWMqd8TMpTbGGf">
-    <mxGraphModel dx="4333" dy="1273" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2000" pageHeight="4000" math="0" shadow="0">
+    <mxGraphModel dx="3500" dy="819" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2000" pageHeight="4000" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -690,7 +690,7 @@
           <mxGeometry y="108" width="330" height="172" as="geometry" />
         </mxCell>
         <mxCell id="DrkGmGW7i-6Kr_7NaxUp-31" value="BB_Ant&amp;nbsp; BP" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="-300" y="2730" width="330" height="110" as="geometry" />
+          <mxGeometry x="-1280" y="1910" width="330" height="110" as="geometry" />
         </mxCell>
         <mxCell id="DrkGmGW7i-6Kr_7NaxUp-32" value="&lt;div&gt;+/- Player: AActor*&amp;nbsp; BP&lt;/div&gt;&lt;div&gt;+/- bSeesThePlayer: bool&amp;nbsp; &amp;nbsp;BP&lt;/div&gt;&lt;div&gt;+/- PatrolLocation: vector BP&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="DrkGmGW7i-6Kr_7NaxUp-31">
           <mxGeometry y="26" width="330" height="44" as="geometry" />
@@ -844,6 +844,64 @@
         </mxCell>
         <mxCell id="DrkGmGW7i-6Kr_7NaxUp-61" value="1...*" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="1">
           <mxGeometry x="459.9960654309248" y="2600.0046950107635" as="geometry">
+            <mxPoint x="-54" y="-241" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DrkGmGW7i-6Kr_7NaxUp-62" value="BB_Hornet&amp;nbsp; BP" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-1270" y="2400" width="330" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="DrkGmGW7i-6Kr_7NaxUp-63" value="&lt;div&gt;+/- Player: AActor*&amp;nbsp; BP&lt;/div&gt;&lt;div&gt;+/- bSeesThePlayer: bool&amp;nbsp; &amp;nbsp;BP&lt;/div&gt;&lt;div&gt;+/- PatrolLocation: vector BP&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="DrkGmGW7i-6Kr_7NaxUp-62">
+          <mxGeometry y="26" width="330" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="DrkGmGW7i-6Kr_7NaxUp-64" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="DrkGmGW7i-6Kr_7NaxUp-62">
+          <mxGeometry y="70" width="330" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="DrkGmGW7i-6Kr_7NaxUp-65" value="&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="DrkGmGW7i-6Kr_7NaxUp-62">
+          <mxGeometry y="98" width="330" height="12" as="geometry" />
+        </mxCell>
+        <mxCell id="DrkGmGW7i-6Kr_7NaxUp-66" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="2100" y="349" as="sourcePoint" />
+            <mxPoint x="3300" y="500" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="2520" y="349" />
+              <mxPoint x="2520" y="470" />
+              <mxPoint x="2952" y="470" />
+              <mxPoint x="3300" y="470" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DrkGmGW7i-6Kr_7NaxUp-67" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="3330" y="500" as="sourcePoint" />
+            <mxPoint x="3310" y="50" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="3330" y="480" />
+              <mxPoint x="3400" y="480" />
+              <mxPoint x="3400" y="70" />
+              <mxPoint x="3310" y="70" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DrkGmGW7i-6Kr_7NaxUp-68" value="BP_Traps" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="3140" y="502" width="240" height="168" as="geometry" />
+        </mxCell>
+        <mxCell id="DrkGmGW7i-6Kr_7NaxUp-69" value="&lt;div&gt;&lt;div&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;+/- Collision: UBoxComponent*&amp;nbsp; BP&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;+/- Trap: UStaticMesh* BP&amp;nbsp;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="DrkGmGW7i-6Kr_7NaxUp-68">
+          <mxGeometry y="26" width="240" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="DrkGmGW7i-6Kr_7NaxUp-70" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="DrkGmGW7i-6Kr_7NaxUp-68">
+          <mxGeometry y="60" width="240" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="DrkGmGW7i-6Kr_7NaxUp-71" value="&lt;div&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;+/- ActorBeginOverlap(Actor): void BP&lt;/span&gt;&lt;/div&gt;&lt;div&gt;+/- DestroyActor(Actor):void&amp;nbsp; BP&lt;/div&gt;&lt;div&gt;+/- ApplyDamage(AActor*, float, Controller, DamageType): void BP&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="DrkGmGW7i-6Kr_7NaxUp-68">
+          <mxGeometry y="88" width="240" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="DrkGmGW7i-6Kr_7NaxUp-72" value="1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="3339.996065430925" y="730.0046950107633" as="geometry">
+            <mxPoint x="-54" y="-241" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DrkGmGW7i-6Kr_7NaxUp-73" value="1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="2176.666065430925" y="600.0046950107633" as="geometry">
             <mxPoint x="-54" y="-241" as="offset" />
           </mxGeometry>
         </mxCell>
