@@ -124,7 +124,7 @@ public:
 
 	float GetCurrentAmmo();
 
-	/*Viles*/
+	/*Vials*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vials")
 	float CurrentVials;
 
