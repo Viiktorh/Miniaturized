@@ -103,6 +103,7 @@ void AVent::OnBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* 
 		VentButtonCollision->OnComponentBeginOverlap.RemoveAll(this);
 		VentButtonCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		VentCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		DeathCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		bBoxIsPassed = true;
 	}
 }
@@ -114,7 +115,7 @@ void AVent::DieOnBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 	if (Character != nullptr)
 	{
 		UGameplayStatics::ApplyDamage(Character, 100.f, Character->GetController(), Character, DamageType); //applies damage equal to character's health to kill them
-		DeathCollision->OnComponentBeginOverlap.RemoveAll(this);
+		//DeathCollision->OnComponentBeginOverlap.RemoveAll(this);
 	}
 }
 
