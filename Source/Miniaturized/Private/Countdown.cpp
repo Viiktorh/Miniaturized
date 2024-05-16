@@ -47,6 +47,7 @@ void ACountdown::CountdownBegin()
 	if (Time <= 0) {
 		CountdownFinished();
 	}
+	
 }
 
 void ACountdown::CountdownFinished()
@@ -61,25 +62,29 @@ void ACountdown::CountdownFinished()
 void ACountdown::OnBoxBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	APlayerCharacter* Character = Cast<APlayerCharacter>(OtherActor);
-	float Health = CharacterHealth->Health;
+	
 	if (Character != nullptr) {
-		/*if (Health > 0) {
-			bCollisionEnabled = true;
+		bCollisionEnabled = true;
+		if (bCollisionEnabled) {
 			GetWorld()->GetTimerManager().SetTimer(CountdownTimer, this, &ACountdown::CountdownBegin, 1.0f, true);
+			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Black, TEXT("Button is clicked"));
+
 			UWorld* World = GetWorld();
 			if (World) {
 				UGameplayStatics::PlaySound2D(World, CountdownSound, 1.f, 1.f, 0.f);
 			}
 			SetActorEnableCollision(false); //want to deactivate trigger box
 		}
-		else {
+		
+		bool BoolHasRespawned = bHasRespawned->HasRespawned;
+		if (bHasRespawned) {
+			
 			bCollisionEnabled = false;
-		}*/
+			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Black, TEXT("Countdown should restart"));
 
-		bCollisionEnabled = true;
-		GetWorld()->GetTimerManager().SetTimer(CountdownTimer, this, &ACountdown::CountdownBegin, 1.0f, true);
-		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Black, TEXT("Button is clicked"));
-		SetActorEnableCollision(false);
+		}
+
+
 	}
 	
 }

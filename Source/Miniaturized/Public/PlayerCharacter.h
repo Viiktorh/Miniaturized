@@ -148,7 +148,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Respawn")
 	bool bIsEndOfGame;
 
-
+	bool HasRespawned = false;
 
 	 /*GameSave*/
 	UMainSaveGame *SaveObject;

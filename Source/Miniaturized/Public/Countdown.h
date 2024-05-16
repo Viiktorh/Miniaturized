@@ -59,7 +59,7 @@ public:
 	UFUNCTION()
 	void OnBoxEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
-	APlayerCharacter* CharacterHealth;
-
+	APlayerCharacter* bHasRespawned;
+	APlayerCharacter* CurrentVialsRef;
 
 };

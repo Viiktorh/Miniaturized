@@ -176,6 +176,7 @@ void APlayerCharacter::Load()
 	Health = MaxHealth;
 	CurrentAmmo = Max_Ammo;
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT(" Loaded."));
+	HasRespawned = true;
 }
 
 void APlayerCharacter::LineTrace(float LineDistance, TEnumAsByte<ECollisionChannel> TraceChannel)
@@ -344,6 +345,7 @@ void APlayerCharacter::Respawn()
 {
 	//Health = 1.0f;
 	Load();
+	
 	//GetWorldTimerManager().ClearTimer(RespawnTimerHandle);
 }
 
