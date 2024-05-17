@@ -49,7 +49,7 @@ APlayerCharacter::APlayerCharacter()
 	Max_Ammo=25.0f;
 	BatteryChargeDelay = 3.0f;
 
-	/*Viles*/
+	/*Vials*/
 	CurrentVials = 0.0f;
 	Min_Vials = 0.0f;
 	Max_Vials = 3.0f;
