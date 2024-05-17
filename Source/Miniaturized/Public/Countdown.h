@@ -34,6 +34,9 @@ public:
 	UFUNCTION()
 	void CountdownFinished();
 
+	UFUNCTION()
+	void ResetCountdown();
+
 	float Time = 60.0f;  // 120.0f
 
 	FTimerHandle CountdownTimer;
@@ -43,7 +46,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	USoundBase* CountdownSound{ nullptr };
 
-	//bool bCanPickupPotion;
+	
 	bool bCollisionEnabled;
 
 	FString FormattedTime;
@@ -59,7 +62,7 @@ public:
 	UFUNCTION()
 	void OnBoxEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
-	APlayerCharacter* bHasRespawned;
-	APlayerCharacter* CurrentVialsRef;
+	//APlayerCharacter* bHasRespawned;
+	//APlayerCharacter* CurrentVialsRef;
 
 };

@@ -9,6 +9,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "MainSaveGame.h"
 #include "cameraSwitchInterface.h"
+//#include "Countdown.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "PlayerCharacter.generated.h"
 
@@ -33,7 +34,9 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	//ACountdown* RefCountdown;
 
+	//void Call();
 	/*
 	* Components
 	*/

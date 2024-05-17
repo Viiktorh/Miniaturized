@@ -177,6 +177,10 @@ void APlayerCharacter::Load()
 	CurrentAmmo = Max_Ammo;
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT(" Loaded."));
 	HasRespawned = true;
+	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Black, TEXT("timer should restart"));
+	//Call();
+	
+
 }
 
 void APlayerCharacter::LineTrace(float LineDistance, TEnumAsByte<ECollisionChannel> TraceChannel)
@@ -391,6 +395,14 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(PushObject, ETriggerEvent::Triggered, this, &APlayerCharacter::PushableObject);
 	}
 }
+
+/*void APlayerCharacter::Call()
+{
+	if (RefCountdown) {
+		RefCountdown->ResetCountdown();
+	}
+	
+}*/
 
 void APlayerCharacter::SwitchToTerrariumImc()
 {
