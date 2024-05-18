@@ -195,10 +195,10 @@ public:
 	 */
 	//Jump as high as you want
 	void JumpPad(double Forward, double HowHigh);
+
 	/*
-	 * Push and pull objects
+	 * Push and pull objects parameters
 	 */
-	 
 	FHitResult Hit;
 	TEnumAsByte<ECollisionChannel> TraceObject = ECC_Pawn;
 	FVector TraceStart;

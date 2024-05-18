@@ -59,6 +59,7 @@ void UWeaponComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 
 void UWeaponComponent::FireWeapon()
 {
+	//Check for Ammo and reduce it
 	if (Character->GetCurrentAmmo() <= Character->Min_Ammo)
 	{
 		Character->SetCurrentAmmo(Character->Min_Ammo);
@@ -104,9 +105,9 @@ void UWeaponComponent::FireWeapon()
 			UNiagaraComponent* NiagaraComp = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), WeaponBeam, USkeletalMeshComponent::GetSocketLocation(FName(TEXT("BeamSocket"))));
 			if (NiagaraComp)
 			{
-				//Sets the BeamTarget at the Actor Location
+				//Sets the BeamTarget at the Component Location of the Enemy hit
 				//BeamTarget is the end of the beam. Defined from the NS_WeaponBeam Niagara Comp in the unreal editor.
-				NiagaraComp->SetVectorParameter(FName("BeamTarget"), OutHit.GetActor()->GetActorLocation());
+				NiagaraComp->SetVectorParameter(FName("BeamTarget"), OutHit.GetComponent()->GetComponentLocation());
 			}
 		}
 		//Apply damage if Actor is Enemy.
