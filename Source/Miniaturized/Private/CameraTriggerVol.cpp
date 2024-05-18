@@ -63,7 +63,6 @@ void ACameraTriggerVol::NotifyActorEndOverlap(AActor* OtherActor)
 		{
 			UE_LOG(LogTemp,Warning,TEXT("Error in casting playercontroller or changeing view target"))
 		}
-
 	}
 	else
 	{
