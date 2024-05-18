@@ -396,14 +396,6 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	}
 }
 
-/*void APlayerCharacter::Call()
-{
-	if (RefCountdown) {
-		RefCountdown->ResetCountdown();
-	}
-	
-}*/
-
 void APlayerCharacter::SwitchToTerrariumImc()
 {
 	if (PlayerController)
@@ -449,32 +441,9 @@ void APlayerCharacter::RunOnTagOverlap(FString Tag)
 		UE_LOG(LogTemp, Warning, TEXT("No Tag found, add tag to trigger"));
 	}
 
-	if (Tag == "Terrarium")
-	{
-		SwitchToTerrariumImc();
-	}
-
 	if (Tag == "Checkpoint")
 	{
 		Save();
 	}
 	
-}
-//Called by trigger
-void APlayerCharacter::RunOnTagEndOverlap(FString Tag)
-{
-
-	
-	if (Tag == "Terrarium")
-	{
-		//Return control and camera to default
-		//GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &APlayerCharacter::ReturnSpringarmWithTimer, Delay, true);
-		SwitchToDefaultImc();
-
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("No matching Tag found, add tag to trigger"));
-		return;
-	}
 }

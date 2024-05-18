@@ -27,9 +27,6 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* StaticMeshComponent;
 
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "StaticMesh")
-	//UStaticMesh *StaticMesh;
-
 
 	UFUNCTION()
 	void OnOverlapBegin(class AActor* OverlappedActor, class AActor* OtherActor);
