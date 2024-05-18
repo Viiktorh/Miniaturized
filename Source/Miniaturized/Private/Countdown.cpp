@@ -84,7 +84,7 @@ void ACountdown::OnBoxBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* 
 			if (Character->bTimerHasStarted == false) {
 				if (bCollisionEnabled) {
 					GetWorld()->GetTimerManager().SetTimer(CountdownTimer, this, &ACountdown::Countdown, 1.0f, true);
-					GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Black, TEXT("Button is clicked"));
+					
 					UWorld* World = GetWorld();
 					if (World) {
 						UGameplayStatics::PlaySound2D(World, CountdownSound, 1.f, 1.f, 0.f);
