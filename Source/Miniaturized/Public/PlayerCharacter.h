@@ -9,7 +9,6 @@
 #include "EnhancedInputSubsystems.h"
 #include "MainSaveGame.h"
 #include "cameraSwitchInterface.h"
-//#include "Countdown.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "PlayerCharacter.generated.h"
 
@@ -152,6 +151,7 @@ public:
 	bool bIsEndOfGame;
 
 	bool HasRespawned = false;
+	bool bTimerHasStarted = false;
 
 	 /*GameSave*/
 	UMainSaveGame *SaveObject;
