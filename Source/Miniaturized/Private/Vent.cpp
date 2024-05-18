@@ -44,7 +44,7 @@ void AVent::BeginPlay()
 
 	
 	VentButtonCollision->OnComponentBeginOverlap.AddDynamic(this, &AVent::OnBoxBeginOverlap);
-	VentButtonCollision->OnComponentEndOverlap.AddDynamic(this, &AVent::OnBoxEndOverlap);
+	//VentButtonCollision->OnComponentEndOverlap.AddDynamic(this, &AVent::OnBoxEndOverlap);
 	DeathCollision->OnComponentBeginOverlap.AddDynamic(this, &AVent::DieOnBoxBeginOverlap);
 
 	
@@ -81,7 +81,7 @@ void AVent::RotateVent()
 void AVent::StopRotation()
 {
 	
-	VentRotation.Pitch -=0.01f;
+	VentRotation.Pitch -=0.1f;
 	if (VentRotation.Pitch <= 0.0f) {
 		bCanStop = true;
 		VentRotation.Pitch = 0.0f;
@@ -98,12 +98,13 @@ void AVent::OnBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* 
 	if (Actor != nullptr)
 	{
 
-		GEngine->AddOnScreenDebugMessage(-1,2,FColor::Black,TEXT("Button is clicked"));
 		bCanStart = false;
 		
 		VentButtonCollision->OnComponentBeginOverlap.RemoveAll(this);
 		VentButtonCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		VentCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		DeathCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		bBoxIsPassed = true;
 	}
 }
 
@@ -113,22 +114,12 @@ void AVent::DieOnBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 	APlayerCharacter* Character = Cast<APlayerCharacter>(OtherActor);
 	if (Character != nullptr)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Black, TEXT("you died"));
-		
-		UGameplayStatics::ApplyDamage(Character, 100.f, Character->GetController(), Character, DamageType);
-		DeathCollision->OnComponentBeginOverlap.RemoveAll(this);
+		UGameplayStatics::ApplyDamage(Character, 100.f, Character->GetController(), Character, DamageType); //applies damage equal to character's health to kill them
+		//DeathCollision->OnComponentBeginOverlap.RemoveAll(this);
 	}
 }
 
-void AVent::OnBoxEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
-{
-	APlayerCharacter* Character = Cast<APlayerCharacter>(OtherActor);
-	if (Character != nullptr)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Black, TEXT("Vent is stopped"));
-		bBoxIsPassed = true;
-	}
-}
+
 
 
 

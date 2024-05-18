@@ -49,7 +49,7 @@ APlayerCharacter::APlayerCharacter()
 	Max_Ammo=25.0f;
 	BatteryChargeDelay = 3.0f;
 
-	/*Viles*/
+	/*Vials*/
 	CurrentVials = 0.0f;
 	Min_Vials = 0.0f;
 	Max_Vials = 3.0f;
@@ -176,6 +176,11 @@ void APlayerCharacter::Load()
 	Health = MaxHealth;
 	CurrentAmmo = Max_Ammo;
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT(" Loaded."));
+	HasRespawned = true;
+	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Black, TEXT("timer should restart"));
+	//Call();
+	
+
 }
 
 void APlayerCharacter::LineTrace(float LineDistance, TEnumAsByte<ECollisionChannel> TraceChannel)
@@ -344,6 +349,7 @@ void APlayerCharacter::Respawn()
 {
 	//Health = 1.0f;
 	Load();
+	
 	//GetWorldTimerManager().ClearTimer(RespawnTimerHandle);
 }
 
@@ -389,6 +395,14 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(PushObject, ETriggerEvent::Triggered, this, &APlayerCharacter::PushableObject);
 	}
 }
+
+/*void APlayerCharacter::Call()
+{
+	if (RefCountdown) {
+		RefCountdown->ResetCountdown();
+	}
+	
+}*/
 
 void APlayerCharacter::SwitchToTerrariumImc()
 {
