@@ -19,6 +19,7 @@ class MINIATURIZED_API ACountdown : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ACountdown();
+	APlayerCharacter* Character;
 
 protected:
 	// Called when the game starts or when spawned
@@ -29,7 +30,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION()
-	void CountdownBegin();
+	void Countdown();
 
 	UFUNCTION()
 	void CountdownFinished();
@@ -37,7 +38,7 @@ public:
 	UFUNCTION()
 	void ResetCountdown();
 
-	float Time = 60.0f;  // 120.0f
+	float Time = 120.0f;  
 
 	FTimerHandle CountdownTimer;
 
@@ -62,7 +63,5 @@ public:
 	UFUNCTION()
 	void OnBoxEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
-	//APlayerCharacter* bHasRespawned;
-	//APlayerCharacter* CurrentVialsRef;
 
 };

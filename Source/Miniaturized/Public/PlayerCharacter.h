@@ -151,6 +151,7 @@ public:
 	bool bIsEndOfGame;
 
 	bool HasRespawned = false;
+	bool bTimerHasStarted = false;
 
 	 /*GameSave*/
 	UMainSaveGame *SaveObject;

@@ -30,7 +30,6 @@ void ACountdown::BeginPlay()
 {
 	Super::BeginPlay();
 	TriggerBoxTimer->OnComponentBeginOverlap.AddDynamic(this, &ACountdown::OnBoxBeginOverlap);
-	
 }
 
 // Called every frame
@@ -40,7 +39,7 @@ void ACountdown::Tick(float DeltaTime)
 
 }
 
-void ACountdown::CountdownBegin()
+void ACountdown::Countdown()
 {
 	Time -= 1.0f;
 	int32 Minutes = static_cast<int32>(Time) / 60;
@@ -49,6 +48,9 @@ void ACountdown::CountdownBegin()
 	CountdownText->SetText(FText::FromString(FormattedTime));
 	if (Time <= 0) {
 		CountdownFinished();
+	}
+	if (Character->bTimerHasStarted == false) {
+		ResetCountdown();
 	}
 
 }
@@ -63,59 +65,44 @@ void ACountdown::ResetCountdown()
 {
 	GetWorld()->GetTimerManager().ClearTimer(CountdownTimer);
 	CountdownText->SetText(FText::FromString("Your mix will be ready in 2 minutes "));
+	Time = 120.0f;
+	bCollisionEnabled = true;
 }
 
 
 void ACountdown::OnBoxBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	APlayerCharacter* Character = Cast<APlayerCharacter>(OtherActor);
+	Character = Cast<APlayerCharacter>(OtherActor);
 	
 	if (Character != nullptr) {
 		
 		float CheckCurrentVials = Character->CurrentVials;
 		float MaxCurrentVials = Character->Max_Vials;
-		bool CheckIfRespawned = Character->HasRespawned;
 
 		if (CheckCurrentVials == MaxCurrentVials) {
 			
-			if (CheckIfRespawned == false) {
+			if (Character->bTimerHasStarted == false) {
 				if (bCollisionEnabled) {
-					GetWorld()->GetTimerManager().SetTimer(CountdownTimer, this, &ACountdown::CountdownBegin, 1.0f, true);
+					GetWorld()->GetTimerManager().SetTimer(CountdownTimer, this, &ACountdown::Countdown, 1.0f, true);
 					GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Black, TEXT("Button is clicked"));
-					//SetActorEnableCollision(false); //want to deactivate trigger box
 					UWorld* World = GetWorld();
 					if (World) {
 						UGameplayStatics::PlaySound2D(World, CountdownSound, 1.f, 1.f, 0.f);
 					}
+					Character->bTimerHasStarted = true;
 					bCollisionEnabled = false;
 				}
 			}
-			
-		
-			else {
-				SetActorEnableCollision(true);
-				if (bCollisionEnabled == false) {
-					GetWorld()->GetTimerManager().SetTimer(CountdownTimer, this, &ACountdown::CountdownBegin, 1.0f, true);
-					SetActorEnableCollision(false); //want to deactivate trigger box
-					UWorld* World = GetWorld();
-					if (World) {
-						UGameplayStatics::PlaySound2D(World, CountdownSound, 1.f, 1.f, 0.f);
-					}
-				}	
-			}	
 		}
 
 		else {
-			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Black, TEXT("not allowed"));
-		}
-
-		
+			CountdownText->SetText(FText::FromString("You don't have enough vials "));
+		}	
 	}
 }
 
 void ACountdown::OnBoxEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	//bCollisionEnabled = false;
 	CountdownFinished();
 }
 

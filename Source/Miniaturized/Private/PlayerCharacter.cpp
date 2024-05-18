@@ -340,7 +340,7 @@ void APlayerCharacter::Heal(float HealingRestored)
 /*calls respawn function with delay so the animation can be played later*/
 void APlayerCharacter::Die()
 {
-	//GetWorld()->GetTimerManager().SetTimer(RespawnTimerHandle, this, &APlayerCharacter::Respawn, RespawnDelay, false);
+	bTimerHasStarted = false;
 	Respawn();
 }
 
