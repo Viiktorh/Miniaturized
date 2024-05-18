@@ -10,9 +10,9 @@ ACountdown::ACountdown()
 	PrimaryActorTick.bCanEverTick = false;
 	CountdownText = CreateDefaultSubobject<UTextRenderComponent>(TEXT("Text"));
 	CountdownText->SetHorizontalAlignment(EHTA_Center);
-	CountdownText->SetWorldSize(250.0f);
-	CountdownText->SetTextRenderColor(FColor::Black);
-	CountdownText->SetText(FText::FromString("Your mix will be ready in 2 minutes "));
+	CountdownText->SetWorldSize(100.0f);
+	CountdownText->SetTextRenderColor(FColor::White);
+	CountdownText->SetText(FText::FromString("Press green button to start the mixer"));
 	RootComponent = CountdownText;
 	//bCanPickupPotion = false;
 	/*trigger box to activate timer*/
@@ -64,7 +64,7 @@ void ACountdown::CountdownFinished()
 void ACountdown::ResetCountdown()
 {
 	GetWorld()->GetTimerManager().ClearTimer(CountdownTimer);
-	CountdownText->SetText(FText::FromString("Your mix will be ready in 2 minutes "));
+	CountdownText->SetText(FText::FromString("Press green button to start the mixer"));
 	Time = 120.0f;
 	bCollisionEnabled = true;
 }
