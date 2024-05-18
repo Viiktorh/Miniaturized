@@ -447,3 +447,7 @@ void APlayerCharacter::RunOnTagOverlap(FString Tag)
 	}
 	
 }
+void APlayerCharacter::RunOnTagEndOverlap(FString Tag)
+{
+	return;
+}
