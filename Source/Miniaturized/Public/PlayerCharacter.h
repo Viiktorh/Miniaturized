@@ -151,6 +151,7 @@ public:
 	bool bTimerHasStarted = false;
 
 	 /*GameSave*/
+	UPROPERTY()
 	UMainSaveGame *SaveObject;
 	USaveGame *LoadObject;
 
