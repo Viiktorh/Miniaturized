@@ -33,7 +33,6 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-
 	/*
 	* Components
 	*/
@@ -124,7 +123,7 @@ public:
 
 	float GetCurrentAmmo();
 
-	/*Viles*/
+	/*Vials*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Vials")
 	float CurrentVials;
 
@@ -148,7 +147,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Respawn")
 	bool bIsEndOfGame;
 
-
+	bool HasRespawned = false;
+	bool bTimerHasStarted = false;
 
 	 /*GameSave*/
 	UMainSaveGame *SaveObject;
@@ -192,10 +192,10 @@ public:
 	 */
 	//Jump as high as you want
 	void JumpPad(double Forward, double HowHigh);
+
 	/*
-	 * Push and pull objects
+	 * Push and pull objects parameters
 	 */
-	 
 	FHitResult Hit;
 	TEnumAsByte<ECollisionChannel> TraceObject = ECC_Pawn;
 	FVector TraceStart;

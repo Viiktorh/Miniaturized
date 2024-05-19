@@ -49,7 +49,7 @@ APlayerCharacter::APlayerCharacter()
 	Max_Ammo=25.0f;
 	BatteryChargeDelay = 3.0f;
 
-	/*Viles*/
+	/*Vials*/
 	CurrentVials = 0.0f;
 	Min_Vials = 0.0f;
 	Max_Vials = 3.0f;
@@ -176,6 +176,11 @@ void APlayerCharacter::Load()
 	Health = MaxHealth;
 	CurrentAmmo = Max_Ammo;
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT(" Loaded."));
+	HasRespawned = true;
+	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Black, TEXT("timer should restart"));
+	//Call();
+	
+
 }
 
 void APlayerCharacter::LineTrace(float LineDistance, TEnumAsByte<ECollisionChannel> TraceChannel)
@@ -335,7 +340,7 @@ void APlayerCharacter::Heal(float HealingRestored)
 /*calls respawn function with delay so the animation can be played later*/
 void APlayerCharacter::Die()
 {
-	//GetWorld()->GetTimerManager().SetTimer(RespawnTimerHandle, this, &APlayerCharacter::Respawn, RespawnDelay, false);
+	bTimerHasStarted = false;
 	Respawn();
 }
 
@@ -344,6 +349,7 @@ void APlayerCharacter::Respawn()
 {
 	//Health = 1.0f;
 	Load();
+	
 	//GetWorldTimerManager().ClearTimer(RespawnTimerHandle);
 }
 
@@ -435,32 +441,13 @@ void APlayerCharacter::RunOnTagOverlap(FString Tag)
 		UE_LOG(LogTemp, Warning, TEXT("No Tag found, add tag to trigger"));
 	}
 
-	if (Tag == "Terrarium")
-	{
-		SwitchToTerrariumImc();
-	}
-
 	if (Tag == "Checkpoint")
 	{
 		Save();
 	}
 	
 }
-//Called by trigger
 void APlayerCharacter::RunOnTagEndOverlap(FString Tag)
 {
-
-	
-	if (Tag == "Terrarium")
-	{
-		//Return control and camera to default
-		//GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &APlayerCharacter::ReturnSpringarmWithTimer, Delay, true);
-		SwitchToDefaultImc();
-
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("No matching Tag found, add tag to trigger"));
-		return;
-	}
+	return;
 }
