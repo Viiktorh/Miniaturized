@@ -179,8 +179,6 @@ void APlayerCharacter::Load()
 	HasRespawned = true;
 	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Black, TEXT("timer should restart"));
 	//Call();
-	
-
 }
 
 void APlayerCharacter::LineTrace(float LineDistance, TEnumAsByte<ECollisionChannel> TraceChannel)
@@ -414,9 +412,4 @@ void APlayerCharacter::RunOnTagOverlap(FString Tag)
 	{
 		Save();
 	}
-	
-}
-void APlayerCharacter::RunOnTagEndOverlap(FString Tag)
-{
-	return;
 }
