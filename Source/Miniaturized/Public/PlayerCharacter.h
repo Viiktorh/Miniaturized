@@ -33,9 +33,6 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	//ACountdown* RefCountdown;
-
-	//void Call();
 	/*
 	* Components
 	*/
@@ -151,6 +148,7 @@ public:
 	bool bIsEndOfGame;
 
 	bool HasRespawned = false;
+	bool bTimerHasStarted = false;
 
 	 /*GameSave*/
 	UMainSaveGame *SaveObject;
