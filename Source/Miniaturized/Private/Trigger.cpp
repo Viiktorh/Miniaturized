@@ -46,6 +46,5 @@ void ATrigger::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor)
 	if (OtherActor->GetClass()->ImplementsInterface(UcameraSwitchInterface::StaticClass()) && OtherActor != this)
 	{
 		Cast<IcameraSwitchInterface>(OtherActor)->RunOnTagOverlap(this->Tags[0].ToString());
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Emerald, TEXT("Begin Overlapp"));
 	}
 }

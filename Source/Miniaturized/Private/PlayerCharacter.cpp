@@ -158,6 +158,7 @@ void APlayerCharacter::Save()
 	SaveObject = Cast<UMainSaveGame>(UGameplayStatics::CreateSaveGameObject(UMainSaveGame::StaticClass()));
 	SaveObject->PlayerLocation = GetActorLocation();
 	SaveObject->PlayerRotator = GetActorRotation();
+	
 	UGameplayStatics::SaveGameToSlot(SaveObject, TEXT("Slot1"), 0);
 	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::White, TEXT("Data saved ... "));
 	UE_LOG(LogTemp, Warning, TEXT("Current ammo: %f"),CurrentAmmo);
@@ -165,20 +166,18 @@ void APlayerCharacter::Save()
 
 void APlayerCharacter::Load()
 {
-	LoadObject = UGameplayStatics::LoadGameFromSlot(TEXT("Slot1"), 0);
-	if (!LoadObject)
-	{
-		Save();
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("No load, created load "));
-	}
+	/*LoadObject = UGameplayStatics::LoadGameFromSlot(TEXT("Slot1"), 0);*/
+	//if (LoadObject = nullptr)
+	//{
+	//	Save();
+	//	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("No load, created load "));
+	//}
 	SetActorLocation(SaveObject->PlayerLocation);
 	SetActorRotation(SaveObject->PlayerRotator);
 	Health = MaxHealth;
 	CurrentAmmo = Max_Ammo;
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT(" Loaded."));
 	HasRespawned = true;
-	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Black, TEXT("timer should restart"));
-	//Call();
+
 }
 
 void APlayerCharacter::LineTrace(float LineDistance, TEnumAsByte<ECollisionChannel> TraceChannel)
@@ -412,4 +411,5 @@ void APlayerCharacter::RunOnTagOverlap(FString Tag)
 	{
 		Save();
 	}
+	
 }
