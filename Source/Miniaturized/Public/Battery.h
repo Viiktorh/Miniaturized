@@ -27,7 +27,7 @@ public:
 	
 
 	/*static mesh to represent the pickup in the level*/
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Pickup")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pickup")
 	UStaticMeshComponent* BatteryMesh;
 
 	

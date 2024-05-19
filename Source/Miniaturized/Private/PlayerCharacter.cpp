@@ -158,6 +158,7 @@ void APlayerCharacter::Save()
 	SaveObject = Cast<UMainSaveGame>(UGameplayStatics::CreateSaveGameObject(UMainSaveGame::StaticClass()));
 	SaveObject->PlayerLocation = GetActorLocation();
 	SaveObject->PlayerRotator = GetActorRotation();
+	
 	UGameplayStatics::SaveGameToSlot(SaveObject, TEXT("Slot1"), 0);
 	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::White, TEXT("Data saved ... "));
 	UE_LOG(LogTemp, Warning, TEXT("Current ammo: %f"),CurrentAmmo);
