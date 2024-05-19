@@ -15,6 +15,8 @@ class MINIATURIZED_API UMainSaveGame : public USaveGame
 	GENERATED_BODY()
 	UMainSaveGame();
 public:
+	UPROPERTY()
 	FVector PlayerLocation;
+	UPROPERTY()
 	FRotator PlayerRotator;
 };

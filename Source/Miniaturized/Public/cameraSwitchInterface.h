@@ -29,7 +29,4 @@ public:
 	 */
 	UFUNCTION()
 	virtual void RunOnTagOverlap(FString Tag) {};
-	UFUNCTION()
-	virtual void RunOnTagEndOverlap(FString Tag) {};
-
 };
