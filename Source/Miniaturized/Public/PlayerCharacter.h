@@ -158,11 +158,6 @@ public:
 	void Save();
 	UFUNCTION(BlueprintCallable)
 	void Load();
-	/*
-	 *Terrarium camera and control
-	 */
-	 //Springarm start position is saved at the start
-	FRotator SpringArmStartRotation;
 
 	//Player controller and subsystem
 	APlayerController* PlayerController;
@@ -175,12 +170,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Timer delay")
 	float Delay = 0.01f;
 
-	//Repositions springarm and switches controls
+	//Checks for tags when overlaping and runs code accordingly
 	virtual void RunOnTagOverlap(FString Tag) override;
-	
-
-	//Returns springarm and control to default
-	virtual void RunOnTagEndOverlap(FString Tag) override;
 
 
 	//Switch inputmapping

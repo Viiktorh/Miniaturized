@@ -2,11 +2,10 @@
 
 
 #include "Trigger.h"
-#include "PlayerCharacter.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/BoxComponent.h"
 #include "cameraSwitchInterface.h"
-#include "Kismet/GameplayStatics.h"
+
  // Sets default values
 ATrigger::ATrigger()
 {
@@ -35,9 +34,7 @@ void ATrigger::BeginPlay()
 {
 	Super::BeginPlay();
 	OnActorBeginOverlap.AddDynamic(this, &ATrigger::OnOverlapBegin);
-	OnActorEndOverlap.AddDynamic(this, &ATrigger::OnOverlapEnd);
 }
-
 
 void ATrigger::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor)
 {
@@ -50,23 +47,5 @@ void ATrigger::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor)
 	{
 		Cast<IcameraSwitchInterface>(OtherActor)->RunOnTagOverlap(this->Tags[0].ToString());
 		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Emerald, TEXT("Begin Overlapp"));
-
-	}
-	
-}
-
-void ATrigger::OnOverlapEnd(AActor* OverlappedActor, AActor* OtherActor)
-{
-	if (this->Tags.IsEmpty())
-	{
-		UE_LOG(LogTemp, Warning, (TEXT("NO TAGS ON TRIGGER")));
-		return;
-	}
-	if (OtherActor->GetClass()->ImplementsInterface(UcameraSwitchInterface::StaticClass()) && OtherActor != this )
-	{
-		Cast<IcameraSwitchInterface>(OtherActor)->RunOnTagEndOverlap(this->Tags[0].ToString());
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Emerald, TEXT("End Overlapp"));
-
 	}
 }
-

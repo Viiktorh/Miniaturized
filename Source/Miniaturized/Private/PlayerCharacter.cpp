@@ -201,17 +201,18 @@ void APlayerCharacter::LineTrace(float LineDistance, TEnumAsByte<ECollisionChann
 	{
 		if (!Hit.GetActor()->Tags.IsEmpty() && IsValid(Hit.GetActor()))
 		{
-
-			//TODO: Show UI that says that its pushable
-			//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Emerald, TEXT("Pushable object"));
-			IsPushable = true;
+			if (Hit.GetActor()->Tags[0] == "PushableObject")
+			{
+				//TODO: Show UI that says that its pushable
+				GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Emerald, TEXT("Pushable object"));
+				IsPushable = true;
+			}
 		}
 	}
 	else
 	{
 		IsPushable = false;
 		ReleaseGrabbedObject();
-		//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Emerald, TEXT("NOT PUSHABle"));
 	}
 }
 
@@ -227,62 +228,31 @@ void APlayerCharacter::Push()
 	}
 	else
 	{
-		UE_LOG(LogTemp, Display, TEXT("Error in grabbing object"));
+		UE_LOG(LogTemp, Display, TEXT("No object grabbed"));
 	}
 }
 
 void APlayerCharacter::Grab()
 {
-	if (!PhysicsHandle)
-	{
-		UE_LOG(LogTemp, Display, TEXT("No physicshandle"));
-		return;
-	}
+	if (!PhysicsHandle){ return; }
 
-	if (!IsGrabbing && Hit.GetActor()->Tags[0] == "PushableObject")
-	{
-		UE_LOG(LogTemp, Display, TEXT("Hit actor %s"), *Hit.GetActor()->GetName());
-		PhysicsHandle->GrabComponentAtLocationWithRotation(Hit.GetComponent(), NAME_None, Hit.GetComponent()->GetOwner()->GetActorLocation(), Hit.GetComponent()->GetOwner()->GetActorRotation());
-		IsGrabbing = true;
-	}
-	else
-	{
-		UE_LOG(LogTemp, Display, TEXT("Nothing to grab or already grabbed an actor"));
-	}
+	PhysicsHandle->GrabComponentAtLocationWithRotation(Hit.GetComponent(), NAME_None, Hit.GetComponent()->GetOwner()->GetActorLocation(), Hit.GetComponent()->GetOwner()->GetActorRotation());
+	IsGrabbing = true;
+	
 }
 
 void APlayerCharacter::PushableObject()
 {
 	if (!IsPushable) { return; }
 
-	FVector Vel = this->GetVelocity();
-	FVector Forward = this->GetActorForwardVector();
-	FVector Right = this->GetActorRightVector();
-	float ForwardSpeed = FVector::DotProduct(Vel, Forward);
-	float RightSpeed = FVector::DotProduct(Vel, Right);
-
-	//Run different animation depending on speed
-	if (ForwardSpeed > 0)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Emerald, TEXT("Pushing forward"));
-	}
-	if (ForwardSpeed < 0)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Emerald, TEXT("Pushing Backward"));
-	}
-	//TODO: Different animation on direction
-	Grab();
-	Push();
+	if (IsGrabbing) { Push(); }
+	 else { Grab(); }
 }
 
 void APlayerCharacter::ReleaseGrabbedObject()
 {
-	if (!IsGrabbing)
-	{
-		//UE_LOG(LogTemp, Display, TEXT("Nothing grabbed"));
-		return;
-	}
-	//TODO: Do we need to return to normal animation after changing?
+	if (!IsGrabbing) { return; }
+	
 	PhysicsHandle->ReleaseComponent();
 	IsGrabbing = false;
 }
@@ -295,8 +265,7 @@ void APlayerCharacter::BeginPlay()
 	/*Game save*/
 	SaveObject = Cast<UMainSaveGame>(UGameplayStatics::CreateSaveGameObject(UMainSaveGame::StaticClass()));
 	LoadObject = Cast<UMainSaveGame>(UGameplayStatics::CreateSaveGameObject(UMainSaveGame::StaticClass()));
-	
-	SpringArmStartRotation = CameraSpringArm->GetRelativeRotation();
+
 	PlayerController = Cast<APlayerController>(Controller);
 	Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
 
