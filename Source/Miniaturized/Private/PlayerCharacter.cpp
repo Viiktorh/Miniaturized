@@ -160,8 +160,8 @@ void APlayerCharacter::Save()
 	SaveObject->PlayerRotator = GetActorRotation();
 	
 	UGameplayStatics::SaveGameToSlot(SaveObject, TEXT("Slot1"), 0);
+	//Left in on purpose, for the player to see that progress is saved
 	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::White, TEXT("Data saved ... "));
-	UE_LOG(LogTemp, Warning, TEXT("Current ammo: %f"),CurrentAmmo);
 }
 
 void APlayerCharacter::Load()
@@ -171,7 +171,6 @@ void APlayerCharacter::Load()
 	Health = MaxHealth;
 	CurrentAmmo = Max_Ammo;
 	HasRespawned = true;
-
 }
 
 void APlayerCharacter::LineTrace(float LineDistance, TEnumAsByte<ECollisionChannel> TraceChannel)

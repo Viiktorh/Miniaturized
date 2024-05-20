@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "spring.h"
 #include "PlayerCharacter.h"
 // Sets default values
@@ -24,8 +23,6 @@ void Aspring::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor)
 	if (character != nullptr && OtherActor != this)
 	{
 		character->JumpPad(ForwardMomentum,HowHighMomentum);
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Emerald, TEXT("Begin Overlapp"));
-
 	}
 }
 

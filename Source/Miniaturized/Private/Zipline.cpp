@@ -2,7 +2,6 @@
 
 #include "Zipline.h"
 
-
 // Sets default values
 AZipline::AZipline()
 {
@@ -67,7 +66,6 @@ void AZipline::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor)
 	Player = Cast<APlayerCharacter>(OtherActor);
 	if (Player != nullptr && OtherActor != this)
 	{
-		UE_LOG(LogTemp, Display, TEXT("Started zipline"));
 		SetActorTickEnabled(true);
 	}
 }
