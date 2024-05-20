@@ -102,7 +102,7 @@ void UWeaponComponent::FireWeapon()
 		//Do this before applying damage or else risk writing to a nullptr when enemies die.
 		if (OutHit.GetActor()->ActorHasTag("Enemy") && OutHit.GetActor() != nullptr)
 		{
-			//BeamSocket is defined inside the mesh of the weapon SkeletalMesh.
+			//BeamSocket is the start of the beam and is defined inside the mesh of the weapon SkeletalMesh.
 			UNiagaraComponent* NiagaraComp = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), WeaponBeam, USkeletalMeshComponent::GetSocketLocation(FName(TEXT("BeamSocket"))));
 			if (NiagaraComp)
 			{
@@ -115,20 +115,20 @@ void UWeaponComponent::FireWeapon()
 		}
 		else 
 		{
-			//If something other than enemy is hit, attach beam to the hit location
 			UNiagaraComponent* NiagaraComp = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), WeaponBeam, USkeletalMeshComponent::GetSocketLocation(FName(TEXT("BeamSocket"))));
 			if (NiagaraComp)
 			{
+				//If something other than enemy is hit, attach beam to the hit location
 				//BeamTarget is the end of the beam. Defined from the NS_WeaponBeam Niagara Comp in the unreal editor.
 				NiagaraComp->SetVectorParameter(FName("BeamTarget"), OutHit.Location);
 			}
 		}
 	}
 	else {
-		//Attach the beam to the BeamEnd location
 		UNiagaraComponent* NiagaraComp = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), WeaponBeam, USkeletalMeshComponent::GetSocketLocation(FName(TEXT("BeamSocket"))));
 		if (NiagaraComp)
 		{
+			//Attach the beam to the BeamEnd location if nothing is hit
 			//BeamTarget is the end of the beam. Defined from the NS_WeaponBeam Niagara Comp in the unreal editor.
 			NiagaraComp->SetVectorParameter(FName("BeamTarget"), BeamEnd);
 		}
