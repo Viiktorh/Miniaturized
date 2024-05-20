@@ -18,12 +18,6 @@ ANPC::ANPC()
 	bCanDrop = false;
 }
 
-// Called when the game starts or when spawned
-void ANPC::BeginPlay()
-{
-	Super::BeginPlay();
-}
-
 // Called every frame
 void ANPC::Tick(float DeltaTime)
 {
@@ -48,14 +42,6 @@ void ANPC::Tick(float DeltaTime)
 	}
 }
 
-// Called to bind functionality to input
-void ANPC::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-}
-
-
 float ANPC::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,AActor* DamageCauser)
 {
 	Health -= DamageAmount;
@@ -65,8 +51,6 @@ float ANPC::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, ACon
 		Die();
 	}
 	return DamageAmount;
-	
-	
 }
 
 void ANPC::Die()

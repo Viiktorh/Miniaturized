@@ -153,7 +153,6 @@ public:
 	 /*GameSave*/
 	UPROPERTY()
 	UMainSaveGame *SaveObject;
-	USaveGame *LoadObject;
 
 	UFUNCTION(BlueprintCallable)
 	void Save();
@@ -197,8 +196,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Traceline distance")
 	float TraceDistance = 100.0f;
-
+	UPROPERTY()
 	bool IsGrabbing = false;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "IsPushable Check")
 	bool  IsPushable;
 
 	 //shoots a line in front of the character and saves what it hits to "Hit"
@@ -211,7 +211,6 @@ public:
 	void PushableObject();
 	//Release grabbed object
 	void ReleaseGrabbedObject();
-
 
 	/*overlap interact (currently: vent)*/
 	/*UFUNCTION()

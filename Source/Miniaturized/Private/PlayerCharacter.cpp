@@ -166,12 +166,6 @@ void APlayerCharacter::Save()
 
 void APlayerCharacter::Load()
 {
-	/*LoadObject = UGameplayStatics::LoadGameFromSlot(TEXT("Slot1"), 0);*/
-	//if (LoadObject = nullptr)
-	//{
-	//	Save();
-	//	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, TEXT("No load, created load "));
-	//}
 	SetActorLocation(SaveObject->PlayerLocation);
 	SetActorRotation(SaveObject->PlayerRotator);
 	Health = MaxHealth;
@@ -200,8 +194,6 @@ void APlayerCharacter::LineTrace(float LineDistance, TEnumAsByte<ECollisionChann
 		{
 			if (Hit.GetActor()->Tags[0] == "PushableObject")
 			{
-				//TODO: Show UI that says that its pushable
-				GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Emerald, TEXT("Pushable object"));
 				IsPushable = true;
 			}
 		}
@@ -218,10 +210,8 @@ void APlayerCharacter::Push()
 	//if component grabbed
 	if (PhysicsHandle->GrabbedComponent)
 	{
-
 		//Move the object grabbed in physicshandle
-		PhysicsHandle->SetTargetLocation(FVector(GetActorLocation().X + GetActorForwardVector().X * 100, GetActorLocation().Y + GetActorForwardVector().Y * 100, Hit.GetActor()->GetActorLocation().Z));
-		
+		PhysicsHandle->SetTargetLocation(FVector(GetActorLocation().X + GetActorForwardVector().X * 100,GetActorLocation().Y + GetActorForwardVector().Y* 100,Hit.GetComponent()->GetOwner()->GetActorLocation().Z));
 	}
 	else
 	{
@@ -233,7 +223,9 @@ void APlayerCharacter::Grab()
 {
 	if (!PhysicsHandle){ return; }
 
-	PhysicsHandle->GrabComponentAtLocationWithRotation(Hit.GetComponent(), NAME_None, Hit.GetComponent()->GetOwner()->GetActorLocation(), Hit.GetComponent()->GetOwner()->GetActorRotation());
+	//Grab the object and set slightly in front of the player
+	FVector GrabLocation = FVector(Hit.ImpactPoint.X, Hit.ImpactPoint.Y, Hit.GetComponent()->GetOwner()->GetActorLocation().Z);
+	PhysicsHandle->GrabComponentAtLocationWithRotation(Hit.GetComponent(), NAME_None,GrabLocation,Hit.GetComponent()->GetOwner()->GetActorRotation());
 	IsGrabbing = true;
 	
 }
@@ -261,7 +253,6 @@ void APlayerCharacter::BeginPlay()
 
 	/*Game save*/
 	SaveObject = Cast<UMainSaveGame>(UGameplayStatics::CreateSaveGameObject(UMainSaveGame::StaticClass()));
-	LoadObject = Cast<UMainSaveGame>(UGameplayStatics::CreateSaveGameObject(UMainSaveGame::StaticClass()));
 
 	PlayerController = Cast<APlayerController>(Controller);
 	Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
@@ -274,8 +265,6 @@ void APlayerCharacter::BeginPlay()
 					Subsystem->AddMappingContext(IMC, 0);
 				}
 		}
-
-
 	/*Respawn and load slot is set at start of game*/
 	Save();
 }
@@ -299,8 +288,6 @@ void APlayerCharacter::Heal(float HealingRestored)
 	if (Health >= 100.0f) {
 		Health = 100.0f;
 	}
-	
-	
 }
 
 /*calls respawn function with delay so the animation can be played later*/
@@ -313,10 +300,7 @@ void APlayerCharacter::Die()
 /*resets health, location and timer */
 void APlayerCharacter::Respawn()
 {
-	//Health = 1.0f;
 	Load();
-	
-	//GetWorldTimerManager().ClearTimer(RespawnTimerHandle);
 }
 
 void APlayerCharacter::CollectAmmo(float CollectedAmmo)
