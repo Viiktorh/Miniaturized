@@ -89,7 +89,7 @@ void APlayerCharacter::Move(const FInputActionValue& Value)
 }
 void APlayerCharacter::MoveTerrarium(const FInputActionValue& Value)
 {
-	// input is a Vector2D
+
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
 	if (Controller != nullptr)
