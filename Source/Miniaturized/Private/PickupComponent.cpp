@@ -3,6 +3,7 @@
 
 #include "PickupComponent.h"
 
+//This code is used for the Weapon Pickup
 UPickupComponent::UPickupComponent()
 {
 	SphereRadius = 30.f;
