@@ -31,7 +31,7 @@ void UWeaponComponent::AttachComponentToPlayer(APlayerCharacter* TargetCharacter
 
 	Character->SetHasWeapon(true);
 
-		//Adding the Input Context
+		//Adding the Input Context to Player
 	if (APlayerController* PlayerController = Cast<APlayerController>(Character->GetController()))
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
@@ -95,13 +95,14 @@ void UWeaponComponent::FireWeapon()
 	GetWorld()->LineTraceSingleByChannel(OutHit, BeamStart, BeamEnd, TraceChannelProperty, CollisionParams);
 
 	// If the trace hit something, bBlockingHit will be true,
-	// and its fields will be filled with detailed info about what was hit
+	// and its fields will be filled with detailed info about what actor was hit
 	if (OutHit.bBlockingHit && IsValid(OutHit.GetActor()))
 	{
 		//Attach the beam to the enemy
-		//Do this before applying damage or else risk checking a nullptr when enemies die.
+		//Do this before applying damage or else risk writing to a nullptr when enemies die.
 		if (OutHit.GetActor()->ActorHasTag("Enemy") && OutHit.GetActor() != nullptr)
 		{
+			//BeamSocket is defined inside the mesh of the weapon SkeletalMesh.
 			UNiagaraComponent* NiagaraComp = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), WeaponBeam, USkeletalMeshComponent::GetSocketLocation(FName(TEXT("BeamSocket"))));
 			if (NiagaraComp)
 			{
@@ -109,10 +110,7 @@ void UWeaponComponent::FireWeapon()
 				//BeamTarget is the end of the beam. Defined from the NS_WeaponBeam Niagara Comp in the unreal editor.
 				NiagaraComp->SetVectorParameter(FName("BeamTarget"), OutHit.GetComponent()->GetComponentLocation());
 			}
-		}
-		//Apply damage if Actor is Enemy.
-		if (OutHit.GetActor()->ActorHasTag("Enemy"))
-		{
+			//Apply damage if Actor is Enemy.
 			UGameplayStatics::ApplyDamage(OutHit.GetActor(), WeaponDamage, PlayerController, Character, DamageType);
 		}
 		else 
