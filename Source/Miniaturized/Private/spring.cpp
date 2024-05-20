@@ -3,7 +3,6 @@
 
 #include "spring.h"
 #include "PlayerCharacter.h"
-#include "Components/BoxComponent.h"
 // Sets default values
 Aspring::Aspring()
 {
