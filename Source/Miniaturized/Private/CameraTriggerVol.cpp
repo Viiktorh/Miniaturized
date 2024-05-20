@@ -2,10 +2,8 @@
 
 
 #include "CameraTriggerVol.h"
-#include "cameraSwitchInterface.h"
 #include "PlayerCharacter.h"
 #include "Camera/CameraActor.h"
-
 
 // Sets default values
 ACameraTriggerVol::ACameraTriggerVol()
@@ -16,7 +14,6 @@ ACameraTriggerVol::ACameraTriggerVol()
 
 	BoxComp = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
 	BoxComp->SetupAttachment(RootComponent);
-
 
 	CameraToSwitchTo = CreateDefaultSubobject<ACameraActor>(TEXT("LeCapitan"));
 	BlendTime = 1.0f;
@@ -61,7 +58,7 @@ void ACameraTriggerVol::NotifyActorEndOverlap(AActor* OtherActor)
 		}
 		else
 		{
-			UE_LOG(LogTemp,Warning,TEXT("Error in casting playercontroller or changeing view target"))
+			UE_LOG(LogTemp,Warning,TEXT("Error in casting playercontroller or changing view target"))
 		}
 	}
 	else
@@ -69,5 +66,3 @@ void ACameraTriggerVol::NotifyActorEndOverlap(AActor* OtherActor)
 		UE_LOG(LogTemp, Warning, TEXT("Error in casting to playercharacter"))
 	}
 }
-
-

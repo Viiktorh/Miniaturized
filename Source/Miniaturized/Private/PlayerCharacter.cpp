@@ -160,8 +160,8 @@ void APlayerCharacter::Save()
 	SaveObject->PlayerRotator = GetActorRotation();
 	
 	UGameplayStatics::SaveGameToSlot(SaveObject, TEXT("Slot1"), 0);
+	//Left in on purpose, for the player to see that progress is saved
 	GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::White, TEXT("Data saved ... "));
-	UE_LOG(LogTemp, Warning, TEXT("Current ammo: %f"),CurrentAmmo);
 }
 
 void APlayerCharacter::Load()
@@ -171,7 +171,6 @@ void APlayerCharacter::Load()
 	Health = MaxHealth;
 	CurrentAmmo = Max_Ammo;
 	HasRespawned = true;
-
 }
 
 void APlayerCharacter::LineTrace(float LineDistance, TEnumAsByte<ECollisionChannel> TraceChannel)
@@ -185,9 +184,8 @@ void APlayerCharacter::LineTrace(float LineDistance, TEnumAsByte<ECollisionChann
 	//Runs a trace and return first actor hit within the channel to "Hit"
 	GetWorld()->LineTraceSingleByChannel(Hit, TraceStart, TraceEnd, TraceChannel, QueryParams);
 
-	////Shows the line and ensure it works
+	////Shows the line for debugging
 	//DrawDebugLine(GetWorld(), TraceStart, TraceEnd, Hit.bBlockingHit ? FColor::Green : FColor::Magenta, false, 5.0f, 0, 10.0f);
-	// UE_LOG(LogTemp, Log, TEXT("Tracing line: %s to %s"), *TraceStart.ToCompactString(), *TraceEnd.ToCompactString());
 	if (Hit.bBlockingHit)
 	{
 		if (!Hit.GetActor()->Tags.IsEmpty() && IsValid(Hit.GetActor()))
@@ -211,7 +209,9 @@ void APlayerCharacter::Push()
 	if (PhysicsHandle->GrabbedComponent)
 	{
 		//Move the object grabbed in physicshandle
-		PhysicsHandle->SetTargetLocation(FVector(GetActorLocation().X + GetActorForwardVector().X * 100,GetActorLocation().Y + GetActorForwardVector().Y* 100,Hit.GetComponent()->GetOwner()->GetActorLocation().Z));
+		PhysicsHandle->SetTargetLocation(FVector(GetActorLocation().X + GetActorForwardVector().X * 100,
+		                                         GetActorLocation().Y + GetActorForwardVector().Y * 100,
+		                                         Hit.GetComponent()->GetOwner()->GetActorLocation().Z));
 	}
 	else
 	{
@@ -225,7 +225,8 @@ void APlayerCharacter::Grab()
 
 	//Grab the object and set slightly in front of the player
 	FVector GrabLocation = FVector(Hit.ImpactPoint.X, Hit.ImpactPoint.Y, Hit.GetComponent()->GetOwner()->GetActorLocation().Z);
-	PhysicsHandle->GrabComponentAtLocationWithRotation(Hit.GetComponent(), NAME_None,GrabLocation,Hit.GetComponent()->GetOwner()->GetActorRotation());
+	PhysicsHandle->GrabComponentAtLocationWithRotation(Hit.GetComponent(), NAME_None, GrabLocation,
+	                                                   Hit.GetComponent()->GetOwner()->GetActorRotation());
 	IsGrabbing = true;
 	
 }
@@ -391,9 +392,5 @@ void APlayerCharacter::RunOnTagOverlap(FString Tag)
 		UE_LOG(LogTemp, Warning, TEXT("No Tag found, add tag to trigger"));
 	}
 
-	if (Tag == "Checkpoint")
-	{
-		Save();
-	}
-	
+	if (Tag == "Checkpoint") { Save();}
 }
